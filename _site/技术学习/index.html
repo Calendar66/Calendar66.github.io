@@ -244,7 +244,7 @@
 </ul>
             <hr>
             <span>
-                Copyright © 2024 | <a href="/">Calendar</a>
+                Copyright © 2025 | <a href="/">Calendar</a>
             </span>
         </div>
     </div>
@@ -415,16 +415,18 @@ glGenerateMipmap
 思路：输入纹理A，将纹理B作为帧缓冲的颜色附件，纹理B的分辨率是纹理A的$\frac{1}{2}$。
 准备阶段：
 width, height
-For mipmapLevel = 0 to mipmapLevelMax
+For mipmapLevel = 0 to mipmapLevelMax:
     Create Texture[mipmapLevel] with width ,height
     Create Framebuffer[mipmapLevel] with Texture[mipmapLevel]
     width, height = width / 2, height / 2
 
+
 渲染阶段：
-For mipmapLevel = 0 to mipmapLevelMax
+For mipmapLevel = 0 to mipmapLevelMax:
     Bind Framebuffer[mipmapLevel]
     Bind Texture[mipmapLevel-1]
     Render
+
 
 Vulkan Mipmap生成
 重复调用vkCmdBlitImage命令，将mipmapLevel-1的图像blit到mipmapLevel。

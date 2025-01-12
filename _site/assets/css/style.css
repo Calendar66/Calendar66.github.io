@@ -1,13 +1,32 @@
+@font-face {
+  font-family: "LXGWWenKai";
+  src: url("/assets/fonts/LXGWWenKai-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "LXGWWenKai";
+  src: url("/assets/fonts/LXGWWenKai-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "LXGWWenKai";
+  src: url("/assets/fonts/LXGWWenKai-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
 html, body {
   margin: 0;
   padding: 0;
+  font-family: "LXGWWenKai", "Times", "Times New Roman", serif;
 }
 
 .fonts-loaded a, .fonts-loaded span, .fonts-loaded p {
-  font-family: "Nunito Sans", "Lucida Sans", sans-serif;
+  font-family: "LXGWWenKai", "Times", "Times New Roman", serif;
 }
 .fonts-loaded h1, .fonts-loaded h2, .fonts-loaded h3 {
-  font-family: "Lato", Helvetica, sans-serif;
+  font-family: "LXGWWenKai", "Times", "Times New Roman", serif;
 }
 .fonts-loaded mark {
   font-family: "Righteous", sans-serif;
@@ -22,12 +41,12 @@ a, span, p, h1, h2, h3, i {
 }
 
 a, span, p {
-  font-family: "Lucida Sans", sans-serif;
+  font-family: "LXGWWenKai", "Times", "Times New Roman", serif;
 }
 
 h1, h2, h3, mark {
   margin: 0;
-  font-family: Helvetica, sans-serif;
+  font-family: "LXGWWenKai", "Times", "Times New Roman", serif;
 }
 
 mark {

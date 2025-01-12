@@ -273,7 +273,7 @@
 </ul>
             <hr>
             <span>
-                Copyright © 2024 | <a href="/">Calendar</a>
+                Copyright © 2025 | <a href="/">Calendar</a>
             </span>
         </div>
     </div>
@@ -374,7 +374,7 @@
 <p>图像降采样(Image Downsampling)是指通过减少图像的像素数量来降低图像分辨率的过程。具体来说，它是将高分辨率的原始图像转换为较低分辨率的图像，同时尽可能保持图像的视觉质量和关键信息。</p>
 <div style="text-align: center;">
     <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250111165135.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p>图 1：区域均值降采样。</p>
+    <p style="text-align: center;">图 1：区域均值降采样。</p>
 </div>
 
 <p>常见的图像降采样方法包括：</p>
@@ -430,7 +430,7 @@
 <h3 id="双线性插值理论">双线性插值理论</h3>
 <div style="text-align: center;">
     <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250112143008.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p>图 2：双线性插值。</p>
+    <p style="text-align: center;">图 2：双线性插值。</p>
 </div>
 
 <p>双线性插值需要使用最近的四个像素进行插值，计算公式如下：<br>
@@ -442,13 +442,13 @@
 I(0.5,0.5) = \frac{I(0, 0) + I(1, 0) + I(0, 1) + I(1, 1)}{4} \phantom{* (1-0.5) * I(0, 0) + 0.5 * (1-0.5) * I(1, 0) + (1-0.5) * 0.5 * I(0, 1) + 0.5 * 0.5 * I(1, 1)}\)</p>
 <div style="text-align: center;">
     <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250111174608.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p>图 3：图像分辨率降低一半时，双线性插值等价于区域平均。</p>
+    <p style="text-align: center;">图 3：图像分辨率降低一半时，双线性插值等价于区域平均。</p>
 </div>
 
 <p>然而，当降采样比率较大时($\frac{width_{original}}{width_{downsampled}} &gt; 2$)，双线性插值会”遗漏”一些像素，从而带来图像质量的显著损失。如下图所示，蓝色的像素是原始图像中的像素，深色的像素是降采样后对应回原图的区域，橙色圆形是该区域的中心，对橙色圆形进行双线性插值时参与的只有蓝色圆形所示的点，其他像素被”遗漏”。</p>
 <div style="text-align: center;">
     <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250111175256.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p>图 4：降采样样比率较大时，双线性插值会"遗漏"一些像素。</p>
+    <p style="text-align: center;">图 4：降采样样比率较大时，双线性插值会"遗漏"一些像素。</p>
 </div>
 
 <p>因此，为了保证降采样图像的质量，逐级降采样是更好的选择。所谓逐级降采样，是指将图像先降采样到$\frac{1}{2}$，再降采样到$\frac{1}{4}$，再降采样到$\frac{1}{8}$，以此类推。</p>
@@ -482,18 +482,20 @@ I(0.5,0.5) = \frac{I(0, 0) + I(1, 0) + I(0, 1) + I(1, 1)}{4} \phantom{* (1-0.5) 
 
 <h2 id="逐级降采样">逐级降采样</h2>
 <p>思路：输入纹理A，将纹理B作为帧缓冲的颜色附件，纹理B的分辨率是纹理A的$\frac{1}{2}$。<br>
-<strong>准备阶段：</strong><br>
-width, height<br>
-For mipmapLevel = 0 to mipmapLevelMax<br>
-    Create Texture[mipmapLevel] with width ,height<br>
-    Create Framebuffer[mipmapLevel] with Texture[mipmapLevel]<br>
-    width, height = width / 2, height / 2</p>
+<strong>准备阶段：</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>width, height
+For mipmapLevel = 0 to mipmapLevelMax:
+    Create Texture[mipmapLevel] with width ,height
+    Create Framebuffer[mipmapLevel] with Texture[mipmapLevel]
+    width, height = width / 2, height / 2
+</code></pre></div></div>
 
-<p><strong>渲染阶段：</strong><br>
-For mipmapLevel = 0 to mipmapLevelMax<br>
-    Bind Framebuffer[mipmapLevel]<br>
-    Bind Texture[mipmapLevel-1]<br>
-    Render</p>
+<p><strong>渲染阶段：</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For mipmapLevel = 0 to mipmapLevelMax:
+    Bind Framebuffer[mipmapLevel]
+    Bind Texture[mipmapLevel-1]
+    Render
+</code></pre></div></div>
 
 <h2 id="vulkan-mipmap生成">Vulkan Mipmap生成</h2>
 <p>重复调用<code class="language-plaintext highlighter-rouge">vkCmdBlitImage</code>命令，将mipmapLevel-1的图像blit到mipmapLevel。</p>
