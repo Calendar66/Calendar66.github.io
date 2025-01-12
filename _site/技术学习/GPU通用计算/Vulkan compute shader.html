@@ -7,25 +7,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>
     
-        Classic Literature #2: Don Quixote
+        Vulkan Compute Shader
     
 </title>
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Classic Literature #2: Don Quixote | example.com</title>
+<title>Vulkan Compute Shader | Calendar’s Blog</title>
 <meta name="generator" content="Jekyll v4.3.4">
-<meta property="og:title" content="Classic Literature #2: Don Quixote">
+<meta property="og:title" content="Vulkan Compute Shader">
 <meta property="og:locale" content="en_US">
-<meta name="description" content="About the book Author: Miguel de Cervantes Original title: El ingenioso hidalgo don Quixote de la Mancha Country: Spain Genre: Novel Publication date: 1605 (Part One) 1615 (Part Two)">
-<meta property="og:description" content="About the book Author: Miguel de Cervantes Original title: El ingenioso hidalgo don Quixote de la Mancha Country: Spain Genre: Novel Publication date: 1605 (Part One) 1615 (Part Two)">
-<link rel="canonical" href="http://localhost:4000/Category%20B/Subcategory%20b/Subsubcategory%202/post-05.html">
-<meta property="og:url" content="http://localhost:4000/Category%20B/Subcategory%20b/Subsubcategory%202/post-05.html">
-<meta property="og:site_name" content="example.com">
+<meta name="description" content="Reference">
+<meta property="og:description" content="Reference">
+<link rel="canonical" href="http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html">
+<meta property="og:url" content="http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html">
+<meta property="og:site_name" content="Calendar’s Blog">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2023-12-05T00:00:00+08:00">
+<meta property="article:published_time" content="2024-03-12T00:00:00+08:00">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="Classic Literature #2: Don Quixote">
+<meta property="twitter:title" content="Vulkan Compute Shader">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-12-05T00:00:00+08:00","datePublished":"2023-12-05T00:00:00+08:00","description":"About the book Author: Miguel de Cervantes Original title: El ingenioso hidalgo don Quixote de la Mancha Country: Spain Genre: Novel Publication date: 1605 (Part One) 1615 (Part Two)","headline":"Classic Literature #2: Don Quixote","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/Category%20B/Subcategory%20b/Subsubcategory%202/post-05.html"},"url":"http://localhost:4000/Category%20B/Subcategory%20b/Subsubcategory%202/post-05.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-03-12T00:00:00+08:00","datePublished":"2024-03-12T00:00:00+08:00","description":"Reference","headline":"Vulkan Compute Shader","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html"},"url":"http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -75,10 +75,21 @@
 </script>
 
 <meta name="baseurl" content="">
-<meta name="description" content="Satellite - jekyll blog theme">
-        <link rel="preload" href="/assets/img/profile.webp" as="image">
+<meta name="description" content="A graduate student majoring in computer graphics from Xiamen University.">
+        <link rel="preload" href="/assets/img/profile.jpg" as="image">
         <link rel="stylesheet" href="/assets/css/style.css">
         
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+              tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+              }
+            });
+          </script>
+              
+            <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
             
                 <script data-goatcounter="https://byanko77.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
             
@@ -91,7 +102,7 @@
             
                 <style>
                         .thumbnail {
-                            background-image: url("/assets/img/La-Mancha.jpg");
+                            background-image: url("https://paminerva.github.io/docs/LearnVulkan/images/02/F/hardware-model.png");
                         }
                     
                 </style>
@@ -110,7 +121,7 @@
         <h1 class="site-tab">
             <a href="/" class="site-name">
                 <img src="/assets/img/icon/house.webp" alt="" loading="lazy">
-                <mark>example.com</mark>
+                <mark>Calendar's Blog</mark>
             </a>
             <button id="btn-brightness" aria-label="brightness-button">
                 <svg class="ico-dark" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg>
@@ -124,7 +135,7 @@
             </button>
         </h1>
         <a href="/" class="site-avatar" aria-label="site-avatar">
-            <img src="/assets/img/profile.webp" loading="lazy" alt="homepage" aria-label="homepage-button">
+            <img src="/assets/img/profile.jpg" loading="lazy" alt="homepage" aria-label="homepage-button">
         </a>
     </div>
     <div class="side-info">
@@ -161,6 +172,12 @@
 
         
     
+
+        
+    
+
+        
+    
             
             
 
@@ -168,6 +185,15 @@
     
             
             
+
+        
+    
+
+        
+    
+
+        
+    
 
         
     
@@ -183,37 +209,67 @@
     
 
     <ul class="nav-list">
-<li id="nav-first" aria-label="Category A">
+<li id="nav-first" aria-label="技术学习">
             <div class="nav-item">
-                <a href="/Category%20A/" class="nav-list-link nav-lh">
+                <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/" class="nav-list-link nav-lh">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
-                    <span>Category A</span>
-                </a><button class="nav-list-expander" aria-label="toggle items in Category A category" aria-pressed="false">
+                    <span>技术学习</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in 技术学习 category" aria-pressed="false">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
                 </button>
 </div>
-<ul class="nav-list"><li id="nav-second" aria-label="Subcategory a">
+<ul class="nav-list">
+<li id="nav-second" aria-label="图像降采样">
                     <div class="nav-item">
-                        <a href="/Category%20A/Subcategory%20a/" class="nav-list-link nav-sh">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html" class="nav-list-link nav-sh">
                             <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
-                            <span>Subcategory a</span>
+                            <span>图像降采样</span>
                         </a>
 </div>
-</li></ul>
 </li>
-<li id="nav-first" aria-label="Category B">
+<li id="nav-second" aria-label="GPU通用计算">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>GPU通用计算</span>
+                        </a><button class="nav-list-expander" aria-label="toggle items in GPU通用计算 category" aria-pressed="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                        </button>
+</div>
+<ul class="nav-list">
+<li id="nav-third" aria-label="Vulkan compute shader">
+                                <div class="nav-item">
+                                    <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>Vulkan compute shader</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="integral Image计算">
+                                <div class="nav-item">
+                                    <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>integral Image计算</span>
+                                    </a>
+                                </div>
+                            </li>
+</ul>
+</li>
+</ul>
+</li>
+<li id="nav-first" aria-label="模糊阴影视效研究">
             <div class="nav-item">
-                <a href="/Category%20B/" class="nav-list-link nav-lh">
+                <a href="/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/" class="nav-list-link nav-lh">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
-                    <span>Category B</span>
-                </a><button class="nav-list-expander" aria-label="toggle items in Category B category" aria-pressed="false">
+                    <span>模糊阴影视效研究</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in 模糊阴影视效研究 category" aria-pressed="false">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
                 </button>
 </div>
 <ul class="nav-list">
 <li id="nav-second" aria-label="Subcategory b">
                     <div class="nav-item">
-                        <a href="/Category%20B/Subcategory%20b/" class="nav-list-link nav-sh">
+                        <a href="/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20b/" class="nav-list-link nav-sh">
                             <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
                             <span>Subcategory b</span>
                         </a><button class="nav-list-expander" aria-label="toggle items in Subcategory b category" aria-pressed="false">
@@ -223,7 +279,7 @@
 <ul class="nav-list">
 <li id="nav-third" aria-label="Subsubcategory 1">
                                 <div class="nav-item">
-                                    <a href="/Category%20B/Subcategory%20b/Subsubcategory%201/index.html" class="nav-list-link nav-sh">
+                                    <a href="/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20b/Subsubcategory%201/index.html" class="nav-list-link nav-sh">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
                                         <span>Subsubcategory 1</span>
                                     </a>
@@ -231,7 +287,7 @@
                             </li>
 <li id="nav-third" aria-label="Subsubcategory 2">
                                 <div class="nav-item">
-                                    <a href="/Category%20B/Subcategory%20b/Subsubcategory%202/index.html" class="nav-list-link nav-sh">
+                                    <a href="/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20b/Subsubcategory%202/index.html" class="nav-list-link nav-sh">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
                                         <span>Subsubcategory 2</span>
                                     </a>
@@ -239,7 +295,7 @@
                             </li>
 <li id="nav-third" aria-label="post-03">
                                 <div class="nav-item">
-                                    <a href="/Category%20B/Subcategory%20b/post-03.html" class="nav-list-link nav-sh">
+                                    <a href="/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20b/post-03.html" class="nav-list-link nav-sh">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
                                         <span>post-03</span>
                                     </a>
@@ -249,13 +305,31 @@
 </li>
 <li id="nav-second" aria-label="Subcategory c">
                     <div class="nav-item">
-                        <a href="/Category%20B/Subcategory%20c/" class="nav-list-link nav-sh">
+                        <a href="/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20c/" class="nav-list-link nav-sh">
                             <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
                             <span>Subcategory c</span>
                         </a>
 </div>
 </li>
 </ul>
+</li>
+<li id="nav-first" aria-label="2D矢量图元绘制技术研究">
+            <div class="nav-item">
+                <a href="/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>2D矢量图元绘制技术研究</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in 2D矢量图元绘制技术研究 category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list"><li id="nav-second" aria-label="Subcategory a">
+                    <div class="nav-item">
+                        <a href="/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/Subcategory%20a/" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Subcategory a</span>
+                        </a>
+</div>
+</li></ul>
 </li>
 <li id="nav-first" aria-label="comment system">
             <div class="nav-item">
@@ -304,12 +378,12 @@
             <h3>Contact</h3>
             <ul class="contact-list">
                 
-                    <li><a aria-label="My Github" href="https://github.com/github">
+                    <li><a aria-label="My Github" href="https://github.com/Calendar66">
                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3 .3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5 .3-6.2 2.3zm44.2-1.7c-2.9 .7-4.9 2.6-4.6 4.9 .3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3 .7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3 .3 2.9 2.3 3.9 1.6 1 3.6 .7 4.3-.7 .7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3 .7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3 .7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
                     </a></li>
                 
                 
-                    <li><a aria-label="My Email" href="mailto:example@gmail.com">
+                    <li><a aria-label="My Email" href="mailto:guangzez67@gmaill.com">
                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"></path></svg>
                     </a></li>
                 
@@ -371,15 +445,13 @@
     <p>
                 <a href="/">Home</a>
                 &gt;
-            <a href="/Category%20B/">Category B</a>
+            <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">技术学习</a>
                 &gt;
-            <a href="/Category%20B/Subcategory%20b/">Subcategory b</a>
-                &gt;
-            <a href="/Category%20B/Subcategory%20b/Subsubcategory%202/">Subsubcategory 2</a>
+            <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/">GPU通用计算</a>
                 &gt;
             
                 
-                    Classic Literature #2: Don Quixote
+                    Vulkan Compute Shader
                 
             </p>
 </div>
@@ -388,19 +460,19 @@
     <div class="thumbnail">
         <div class="transbox">
             
-                <span class="post-title">Classic Literature #2: Don Quixote</span>
+                <span class="post-title">Vulkan Compute Shader</span>
             
             <div class="post-info">
                 
-                    <a class="info-box category-box" href="/Category%20B">
+                    <a class="info-box category-box" href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M384 480h48c11.4 0 21.9-6 27.6-15.9l112-192c5.8-9.9 5.8-22.1 .1-32.1S555.5 224 544 224H144c-11.4 0-21.9 6-27.6 15.9L48 357.1V96c0-8.8 7.2-16 16-16H181.5c4.2 0 8.3 1.7 11.3 4.7l26.5 26.5c21 21 49.5 32.8 79.2 32.8H416c8.8 0 16 7.2 16 16v32h48V160c0-35.3-28.7-64-64-64H298.5c-17 0-33.3-6.7-45.3-18.7L226.7 50.7c-12-12-28.3-18.7-45.3-18.7H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H87.7 384z"></path></svg>
-                        <span>Category B</span>
+                        <span>技术学习</span>
                     </a>
                 
                 <span class="info-box">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"></path></svg>
                     <span>
-                            2023-12-05
+                            2024-03-12
                         
                     </span>
                 </span>
@@ -419,50 +491,229 @@
     </div>
 </div>
 <div class="tag-box">
-<span class="tag theme-0" contentid="book">
-            book
-        </span><span class="tag theme-1" contentid="epic novel">
-            epic novel
-        </span><span class="tag theme-2" contentid="adventure">
-            adventure
+<span class="tag theme-0" contentid="GPU">
+            GPU
+        </span><span class="tag theme-1" contentid="Vulkan">
+            Vulkan
+        </span><span class="tag theme-2" contentid="ComputeShader">
+            ComputeShader
         </span>
 </div>
 <main>
-    <h1 id="about-the-book">About the book</h1>
-<hr>
-<ul>
-  <li>Author: <a href="https://en.wikipedia.org/wiki/Miguel_de_Cervantes">Miguel de Cervantes</a>
-</li>
-  <li>Original title: <strong><em>El ingenioso hidalgo don Quixote de la Mancha</em></strong>
-</li>
-  <li>Country: Spain</li>
-  <li>Genre: <code class="language-plaintext highlighter-rouge">Novel</code>
-</li>
-  <li>Publication date:
+    <h1 id="reference">Reference</h1>
+
+<p><a href="https://paminerva.github.io/docs/LearnVulkan/02.F-Compute-Shader.html">P.A. Minerva’s Vulkan Tutorial on Compute Shaders</a><br>
+<a href="https://vulkan-tutorial.com/Compute_Shader">vulkan tutorial</a><br>
+<a href="https://gpuopen.com/learn/developing-vulkan-apps/#blogs">AMD opengpu</a><br>
+<a href="https://www.jeremyong.com">GPU Program Blog</a><br>
+<a href="https://www.neilhenning.dev/posts/a-simple-vulkan-compute-example/">Example for Compute Shader</a></p>
+
+<h1 id="intro">Intro</h1>
+<p><img src="https://paminerva.github.io/docs/LearnVulkan/images/02/F/hardware-model.png" alt="Image" loading="lazy"></p>
+<ol>
+  <li>
+    <p><strong>核心组成</strong>：GPU由数千个处理核心组成，这些核心专门用于执行由许多核心同时处理的单独任务。GPU通过并行执行相同的指令序列（描述特定任务）来实现高速处理大量数据。</p>
+  </li>
+  <li>
+    <p><strong>核心组织</strong>：这些核心被组织成多处理器（multiprocessors），能够在多个线程上并行执行相同的指令。这种硬件模型被称为SIMT架构（Single-Instruction, Multiple-Thread）。</p>
+  </li>
+  <li>
+    <p><strong>多处理器内存</strong>：每个多处理器包括以下几种类型的片上内存：</p>
+
     <ul>
-      <li>1605 (<em>Part One</em>)</li>
-      <li>1615 (<em>Part Two</em>)</li>
+      <li>32位寄存器，分配给核心。</li>
+      <li>共享内存，由所有核心共享。</li>
+      <li>只读常量缓存，加速从设备内存的只读区域读取。</li>
+      <li>只读纹理缓存，加速从纹理内存空间读取。</li>
     </ul>
   </li>
+  <li>
+    <p><strong>线程组和执行</strong>：多处理器创建、管理、调度并执行称为warp（或wavefront）的32或64个并行线程组。每个warp在同一程序地址开始，但具有自己的指令地址计数器和寄存器状态，因此可以独立分支和执行。</p>
+  </li>
+  <li>
+    <p><strong>线程块和warp调度</strong>：多处理器接收一个或多个线程块进行执行时，将它们划分为warps，并由warp调度器管理和调度。线程块到warp的划分是一致的，每个warp包含连续递增的线程ID。</p>
+  </li>
+  <li>
+    <p><strong>执行上下文和调度</strong>：每个warp的执行上下文在其整个生命周期内都保持在芯片上，因此从一个执行上下文切换到另一个没有成本。每个指令发出时，warp调度器可以选择一个准备好执行下一指令的warp，并向这些线程发出指令。</p>
+  </li>
+</ol>
+
+<h3 id="线程块thread-blocks">线程块（Thread Blocks）</h3>
+
+<ol>
+  <li>
+<strong>定义</strong>：线程块是一组在GPU上同时执行的线程。它是由程序员定义的，用于组织和执行并行任务。</li>
+  <li>
+<strong>大小和形状</strong>：线程块的大小（即包含的线程数）和形状（如1D、2D或3D）可以根据特定的计算任务进行调整。</li>
+  <li>
+<strong>资源共享</strong>：线程块内的线程可以共享一定量的快速访问内存（称为共享内存），并且可以进行同步操作。</li>
+</ol>
+
+<h3 id="warp线程束">Warp（线程束）</h3>
+
+<ol>
+  <li>
+<strong>定义</strong>：warp是线程块中的一小部分线程，这些线程在GPU上以单一的指令流同时执行相同的操作。在NVIDIA的GPU中，一个warp通常包含32个线程。</li>
+  <li>
+<strong>硬件调度单位</strong>：warp是GPU硬件调度和执行的基本单位。GPU的warp调度器负责管理这些warp的执行。</li>
+</ol>
+
+<h3 id="线程块与warp之间的关系">线程块与Warp之间的关系</h3>
+
+<ol>
+  <li>
+<strong>线程块划分为Warp</strong>：当线程块被提交到GPU执行时，它被划分为多个warp。这个划分是自动进行的，基于warp的大小（如32个线程）。</li>
+  <li>
+<strong>连续线程ID</strong>：每个warp包含具有连续线程ID的线程。例如，在32线程的warp中，第一个warp包含线程ID 0-31，第二个warp包含线程ID 32-63，依此类推。</li>
+  <li>
+<strong>并行执行</strong>：线程块内的所有warp可以在GPU上并行执行，但每个warp内的线程同时执行相同的指令。</li>
+  <li>
+<strong>执行效率</strong>：合理地组织线程块和warp对于实现高效的GPU并行计算至关重要。线程块的大小应该是warp大小的整数倍，以最大化GPU核心的利用率并减少空闲线程。
+    <h1 id="simd-vs-simt">SIMD vs SIMT</h1>
+    <p>GPU并不提供对SIMD的支持，因此考虑并行应该是SIMT，多个线程执行相同的指令。</p>
+  </li>
+</ol>
+
+<p>GPU可以理解为一系列Multiprocessor的集合，如上图。Multiprocessor内部的processor可以共享一部分数据。<br>
+因此线程组的数量应该和multiprocessor数量对应(线程组可以多于multiprocessor数量)。<br>
+而warp是一组线程，是最小的调度单位。warp内的线程并行执行，但不同的warp之间是否并行取决于资源的分配（实际上这是由于某些操作会被挂起等待，转而执行其他的warp）。</p>
+
+<h1 id="cs">CS</h1>
+<p>Thread Blocks：一个三维逻辑结构<br>
+<img src="https://paminerva.github.io/docs/LearnVulkan/images/02/F/cs-model.png" alt="Image" loading="lazy"></p>
+<h2 id="coding">Coding</h2>
+<p><em>Check maxComputeWorkGroupInvocations and maxComputeWorkGroupSize in VkPhysicalDeviceLimits</em> <br>
+查询线程组数量和线程组大小限制<br>
+线程组的数量由API制定，线程组的大小在GLSL代码中被指定</p>
+
+<h2 id="sync">Sync</h2>
+<p>共享内存</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Array allocated in shared memory to be shared by all invocations in a work group.
+// Check VkPhysicalDeviceLimits::maxComputeSharedMemorySize for the maximum 
+// total storage size, in bytes, available for variables shared by all invocations in a work group.
+shared vec4 gCache_0[256];
+</code></pre></div></div>
+
+<p>在一个线程组中的线程的执行很难确定先后顺序，如果多个线程访问到相同的数据，可能会造成线程冲突。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void main()
+{
+    ivec2 textureLocation = ivec2(gl_GlobalInvocationID.xy);
+
+    // Read texel from input image at mipmap level 0 and
+    // save the result in the shared memory
+    gCache_0[gl_LocalInvocationID.x] = imageLoad(InputTex, textureLocation);
+
+    // Wait for all invocations in the work group
+    barrier();
+
+    // OK!
+    vec4 left = gCache_0[gl_LocalInvocationID.x - 1];
+    vec4 right = gCache_0[gl_LocalInvocationID.x + 1];
+
+    // ...
+}
+</code></pre></div></div>
+<p>使用屏障保证数据写入完成。</p>
+
+<h3 id="barrier函数的作用">
+<code class="language-plaintext highlighter-rouge">barrier()</code>函数的作用</h3>
+
+<ol>
+  <li>
+<strong>同步工作组内的着色器调用</strong>：在计算着色器中，<code class="language-plaintext highlighter-rouge">barrier()</code>函数确保在一个工作组（workgroup）内的所有着色器调用都到达这个屏障点之前，任何一个着色器调用都不会继续执行超过这个点的代码。</li>
+  <li>
+<strong>在曲面细分控制着色器中的应用</strong>：<code class="language-plaintext highlighter-rouge">barrier()</code>函数也可以在曲面细分控制着色器中使用，以同步单个输入补丁的所有着色器调用。</li>
+</ol>
+
+<h3 id="控制流的一致性">控制流的一致性</h3>
+
+<ul>
+  <li>
+<strong>控制流必须是一致的</strong>：在计算着色器中使用<code class="language-plaintext highlighter-rouge">barrier()</code>时，控制流必须是一致的。这意味着如果任何一个着色器调用进入了一个条件语句，那么所有的调用都必须进入它。</li>
 </ul>
 
-<h1 id="chapter-i">Chapter I.</h1>
-<hr>
-<p>In a village of La Mancha, the name of which I have no desire to call to mind, there lived not long since one of those gentlemen that keep a lance in the lance-rack, an old buckler, a lean hack, and a greyhound for coursing. An olla of rather more beef than mutton, a salad on most nights, scraps on Saturdays, lentils on Fridays, and a pigeon or so extra on Sundays, made away with three-quarters of his income. The rest of it went in a doublet of fine cloth and velvet breeches and shoes to match for holidays, while on week-days he made a brave figure in his best homespun. He had in his house a housekeeper past forty, a niece under twenty, and a lad for the field and market-place, who used to saddle the hack as well as handle the bill-hook. The age of this gentleman of ours was bordering on fifty; he was of a hardy habit, spare, gaunt-featured, a very early riser and a great sportsman. They will have it his surname was Quixada or Quesada (for here there is some difference of opinion among the authors who write on the subject), although from reasonable conjectures it seems plain that he was called Quexana. This, however, is of but little importance to our tale; it will be enough not to stray a hair’s breadth from the truth in the telling of it.</p>
+<h3 id="barrier与内存同步">
+<code class="language-plaintext highlighter-rouge">barrier()</code>与内存同步</h3>
 
-<p>You must know, then, that the above-named gentleman whenever he was at leisure (which was mostly all the year round) gave himself up to reading books of chivalry with such ardour and avidity that he almost entirely neglected the pursuit of his field-sports, and even the management of his property; and to such a pitch did his eagerness and infatuation go that he sold many an acre of tillageland to buy books of chivalry to read, and brought home as many of them as he could get. But of all there were none he liked so well as those of the famous Feliciano de Silva’s composition, for their lucidity of style and complicated conceits were as pearls in his sight, particularly when in his reading he came upon courtships and cartels, where he often found passages like “the reason of the unreason with which my reason is afflicted so weakens my reason that with reason I murmur at your beauty;” or again, “the high heavens, that of your divinity divinely fortify you with the stars, render you deserving of the desert your greatness deserves.” Over conceits of this sort the poor gentleman lost his wits, and used to lie awake striving to understand them and worm the meaning out of them; what Aristotle himself could not have made out or extracted had he come to life again for that special purpose. He was not at all easy about the wounds which Don Belianis gave and took, because it seemed to him that, great as were the surgeons who had cured him, he must have had his face and body covered all over with seams and scars. He commended, however, the author’s way of ending his book with the promise of that interminable adventure, and many a time was he tempted to take up his pen and finish it properly as is there proposed, which no doubt he would have done, and made a successful piece of work of it too, had not greater and more absorbing thoughts prevented him.</p>
+<ol>
+  <li>
+<strong>控制流和共享变量的同步</strong>：<code class="language-plaintext highlighter-rouge">barrier()</code>函数影响控制流，并同步对共享变量的内存访问（以及曲面细分控制输出变量）。</li>
+  <li>
+<strong>其他内存访问</strong>：对于<strong>非共享变量的内存访问</strong>，<code class="language-plaintext highlighter-rouge">barrier()</code>函数并不能保证一个着色器调用在<code class="language-plaintext highlighter-rouge">barrier()</code>之前写入的值可以被其他调用在<code class="language-plaintext highlighter-rouge">barrier()</code>之后安全地读取。</li>
+</ol>
 
-<p>Many an argument did he have with the curate of his village (a learned man, and a graduate of Siguenza) as to which had been the better knight, Palmerin of England or Amadis of Gaul. Master Nicholas, the village barber, however, used to say that neither of them came up to the Knight of Phoebus, and that if there was any that could compare with him it was Don Galaor, the brother of Amadis of Gaul, because he had a spirit that was equal to every occasion, and was no finikin knight, nor lachrymose like his brother, while in the matter of valour he was not a whit behind him. In short, he became so absorbed in his books that he spent his nights from sunset to sunrise, and his days from dawn to dark, poring over them; and what with little sleep and much reading his brains got so dry that he lost his wits. His fancy grew full of what he used to read about in his books, enchantments, quarrels, battles, challenges, wounds, wooings, loves, agonies, and all sorts of impossible nonsense; and it so possessed his mind that the whole fabric of invention and fancy he read of was true, that to him no history in the world had more reality in it. He used to say the Cid Ruy Diaz was a very good knight, but that he was not to be compared with the Knight of the Burning Sword who with one back-stroke cut in half two fierce and monstrous giants. He thought more of Bernardo del Carpio because at Roncesvalles he slew Roland in spite of enchantments, availing himself of the artifice of Hercules when he strangled Antaeus the son of Terra in his arms. He approved highly of the giant Morgante, because, although of the giant breed which is always arrogant and ill-conditioned, he alone was affable and well-bred. But above all he admired Reinaldos of Montalban, especially when he saw him sallying forth from his castle and robbing everyone he met, and when beyond the seas he stole that image of Mahomet which, as his history says, was entirely of gold. To have a bout of kicking at that traitor of a Ganelon he would have given his housekeeper, and his niece into the bargain.</p>
+<h3 id="使用内存屏障函数">使用内存屏障函数</h3>
 
-<p>In short, his wits being quite gone, he hit upon the strangest notion that ever madman in this world hit upon, and that was that he fancied it was right and requisite, as well for the support of his own honour as for the service of his country, that he should make a knight-errant of himself, roaming the world over in full armour and on horseback in quest of adventures, and putting in practice himself all that he had read of as being the usual practices of knights-errant; righting every kind of wrong, and exposing himself to peril and danger from which, in the issue, he was to reap eternal renown and fame. Already the poor man saw himself crowned by the might of his arm Emperor of Trebizond at least; and so, led away by the intense enjoyment he found in these pleasant fancies, he set himself forthwith to put his scheme into execution.</p>
+<ul>
+  <li>
+<strong>确保内存访问的顺序</strong>：为了确保一个着色器调用写入的值可以被其他调用安全地读取，需要同时使用<code class="language-plaintext highlighter-rouge">barrier()</code>和特定的内存屏障函数。</li>
+  <li>
+<strong>内存屏障函数的作用</strong>：内存屏障函数用于对可被其他着色器调用访问的内存中的变量进行读写操作的排序。这些函数在被调用时，会等待调用者之前执行的所有读写操作的完成，然后再返回。</li>
+</ul>
 
-<p>The first thing he did was to clean up some armour that had belonged to his great-grandfather, and had been for ages lying forgotten in a corner eaten with rust and covered with mildew. He scoured and polished it as best he could, but he perceived one great defect in it, that it had no closed helmet, nothing but a simple morion. This deficiency, however, his ingenuity supplied, for he contrived a kind of half-helmet of pasteboard which, fitted on to the morion, looked like a whole one. It is true that, in order to see if it was strong and fit to stand a cut, he drew his sword and gave it a couple of slashes, the first of which undid in an instant what had taken him a week to do. The ease with which he had knocked it to pieces disconcerted him somewhat, and to guard against that danger he set to work again, fixing bars of iron on the inside until he was satisfied with its strength; and then, not caring to try any more experiments with it, he passed it and adopted it as a helmet of the most perfect construction.</p>
+<h3 id="不同类型的内存屏障函数">不同类型的内存屏障函数</h3>
 
-<p>He next proceeded to inspect his hack, which, with more quartos than a real and more blemishes than the steed of Gonela, that “tantum pellis et ossa fuit,” surpassed in his eyes the Bucephalus of Alexander or the Babieca of the Cid. Four days were spent in thinking what name to give him, because (as he said to himself) it was not right that a horse belonging to a knight so famous, and one with such merits of his own, should be without some distinctive name, and he strove to adapt it so as to indicate what he had been before belonging to a knight-errant, and what he then was; for it was only reasonable that, his master taking a new character, he should take a new name, and that it should be a distinguished and full-sounding one, befitting the new order and calling he was about to follow. And so, after having composed, struck out, rejected, added to, unmade, and remade a multitude of names out of his memory and fancy, he decided upon calling him Rocinante, a name, to his thinking, lofty, sonorous, and significant of his condition as a hack before he became what he now was, the first and foremost of all the hacks in the world.</p>
+<ul>
+  <li>
+<strong>特定类型变量的内存屏障</strong>：如<code class="language-plaintext highlighter-rouge">memoryBarrierAtomicCounter()</code>、<code class="language-plaintext highlighter-rouge">memoryBarrierBuffer()</code>、<code class="language-plaintext highlighter-rouge">memoryBarrierImage()</code>和<code class="language-plaintext highlighter-rouge">memoryBarrierShared()</code>等函数，分别用于等待对原子计数器、缓冲区、图像和共享变量的访问的完成。</li>
+  <li>
+<strong>全局内存屏障</strong>：<code class="language-plaintext highlighter-rouge">memoryBarrier()</code>和<code class="language-plaintext highlighter-rouge">groupMemoryBarrier()</code>函数用于等待对所有上述变量类型的访问的完成。</li>
+  <li>
+<strong>着色器类型的可用性</strong>：<code class="language-plaintext highlighter-rouge">memoryBarrierShared()</code>和<code class="language-plaintext highlighter-rouge">groupMemoryBarrier()</code>只在计算着色器中可用，而其他函数在所有着色器类型中都可用。</li>
+</ul>
 
-<p>Having got a name for his horse so much to his taste, he was anxious to get one for himself, and he was eight days more pondering over this point, till at last he made up his mind to call himself “Don Quixote,” whence, as has been already said, the authors of this veracious history have inferred that his name must have been beyond a doubt Quixada, and not Quesada as others would have it. Recollecting, however, that the valiant Amadis was not content to call himself curtly Amadis and nothing more, but added the name of his kingdom and country to make it famous, and called himself Amadis of Gaul, he, like a good knight, resolved to add on the name of his, and to style himself Don Quixote of La Mancha, whereby, he considered, he described accurately his origin and country, and did honour to it in taking his surname from it.</p>
+<h1 id="例子粒子系统">例子：粒子系统</h1>
+<p>使用GPU更新顶点位置，避免了受到总线带宽的限制。</p>
+<h2 id="ssbo">SSBO</h2>
+<p>需要一个能读能写的buffer，SSBO可以满足这一点。<br>
+<strong>flag为：</strong><br>
+VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT</p>
 
-<p>So then, his armour being furbished, his morion turned into a helmet, his hack christened, and he himself confirmed, he came to the conclusion that nothing more was needed now but to look out for a lady to be in love with; for a knight-errant without love was like a tree without leaves or fruit, or a body without a soul. As he said to himself, “If, for my sins, or by my good fortune, I come across some giant hereabouts, a common occurrence with knights-errant, and overthrow him in one onslaught, or cleave him asunder to the waist, or, in short, vanquish and subdue him, will it not be well to have some one I may send him to as a present, that he may come in and fall on his knees before my sweet lady, and in a humble, submissive voice say, ‘I am the giant Caraculiambro, lord of the island of Malindrania, vanquished in single combat by the never sufficiently extolled knight Don Quixote of La Mancha, who has commanded me to present myself before your Grace, that your Highness dispose of me at your pleasure’?” Oh, how our good gentleman enjoyed the delivery of this speech, especially when he had thought of some one to call his Lady! There was, so the story goes, in a village near his own a very good-looking farm-girl with whom he had been at one time in love, though, so far as is known, she never knew it nor gave a thought to the matter. Her name was Aldonza Lorenzo, and upon her he thought fit to confer the title of Lady of his Thoughts; and after some search for a name which should not be out of harmony with her own, and should suggest and indicate that of a princess and great lady, he decided upon calling her Dulcinea del Tobosoâ€”she being of El Tobosoâ€”a name, to his mind, musical, uncommon, and significant, like all those he had already bestowed upon himself and the things belonging to him.</p>
+<p>VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT</p>
+<h3 id="buffer-type">Buffer type</h3>
+<p><strong>. VK_BUFFER_USAGE_STORAGE_BUFFER_BIT</strong></p>
+
+<p>• <strong>Description</strong>: This flag indicates that the buffer can be used as a <strong>storage buffer</strong>. Storage buffers are used to store large blocks of data that shaders (especially compute shaders) can read from and write to.</p>
+
+<p>• <strong>Common Use Case</strong>:</p>
+
+<p>• It is commonly used in <strong>compute shaders</strong> or <strong>fragment shaders</strong> where you need random-access read and write operations.</p>
+
+<p>• It’s suitable for large datasets that may change frequently, like results of computations or intermediate data.</p>
+
+<p>• <strong>Access in Shaders</strong>:</p>
+
+<p>• In GLSL (Vulkan’s shading language), a buffer marked with VK_BUFFER_USAGE_STORAGE_BUFFER_BIT is typically accessed using the layout(std430) storage qualifier, like this:<br>
+• Both read and write operations are possible in shaders.</p>
+
+<p><strong>VK_BUFFER_USAGE_TRANSFER_SRC_BIT</strong><br>
+• <strong>Description</strong>: This flag indicates that the buffer can be used as a <strong>source for data transfer operations</strong>. Specifically, this buffer can be used in a memory transfer operation, where data from this buffer will be copied to another buffer or image (e.g., via vkCmdCopyBuffer or vkCmdCopyBufferToImage).</p>
+
+<p>• <strong>Common Use Case</strong>:</p>
+
+<p>• When you want to <strong>copy data</strong> from one buffer to another buffer or image, the source buffer should be created with this flag.</p>
+
+<p>• It’s useful when you’re doing <strong>staging operations</strong>: you might upload data to a buffer that’s visible to the CPU (with VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT), then transfer it to a GPU-only buffer with VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT.</p>
+
+<p>VK_BUFFER_USAGE_VERTEX_BUFFER_BIT用于顶点着色器，VK_BUFFER_USAGE_STORAGE_BUFFER_BIT用于计算着色器的写入和读取。<br>
+VK_BUFFER_USAGE_TRANSFER_DST_BIT表明该buffer是数据复制的目的buffer。例如从staging buffer到该buffer。<br>
+VK_BUFFER_USAGE_TRANSFER_SRC_BIT表明该buffer是数据复制的起源。例如staging buffer。</p>
+
+<h2 id="storage-image">Storage Image</h2>
+<p>借助SI可以完成对图片的操作，例如后处理、生成mip-maps等。</p>
+
+<h1 id="信号量和栅栏">信号量和栅栏</h1>
+<p>计算cmd需要栅栏避免冗余提交（确保之前的<br>
+指令已经被执行再提交，cpu和gpu之间），计算管线和图形管线之间需要信号量，保证图形管线开始时计算任务已经完成（gpu内部）。</p>
+<blockquote>
+  <p>[!note]<br>
+解释了为什么信号量以数组形式给出：<br>
+VkSemaphore waitSemaphores[] = { computeFinishedSemaphores[currentFrame], imageAvailableSemaphores[currentFrame] };</p>
+</blockquote>
+
+<p>延伸：<br>
+<a href="https://github.com/KhronosGroup/Vulkan-Samples/tree/master/samples/performance/async_compute">Asynchronous compute</a> <br>
+[[TBDR]]</p>
 
     <!-- see https://giscus.app/ -->
     <div class="giscus" id="giscus" style="margin: 4rem auto;"></div>
@@ -520,10 +771,10 @@
 
         posts.push({
             'title'    : "Index",
-            'path'     : "Category A > Subcategory a",
+            'path'     : "2D矢量图元绘制技术研究 > Subcategory a",
             'type'     : "category",
             'tags'     : "",
-            'url'      : "/Category%20A/Subcategory%20a/index.html",
+            'url'      : "/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/Subcategory%20a/index.html",
             'image'    : "/assets/img/thumbnail/empty.jpg",
             'date'     : "1900-01-01"
         });
@@ -531,65 +782,10 @@
 
         posts.push({
             'title'    : "Index",
-            'path'     : "Category A",
+            'path'     : "2D矢量图元绘制技术研究",
             'type'     : "category",
             'tags'     : "",
-            'url'      : "/Category%20A/index.html",
-            'image'    : "/assets/img/thumbnail/empty.jpg",
-            'date'     : "1900-01-01"
-        });
-    
-
-        posts.push({
-            'title'    : "Index",
-            'path'     : "Category B > Subcategory b > Subsubcategory 1",
-            'type'     : "category",
-            'tags'     : "",
-            'url'      : "/Category%20B/Subcategory%20b/Subsubcategory%201/index.html",
-            'image'    : "/assets/img/thumbnail/empty.jpg",
-            'date'     : "1900-01-01"
-        });
-    
-
-        posts.push({
-            'title'    : "Index",
-            'path'     : "Category B > Subcategory b > Subsubcategory 2",
-            'type'     : "category",
-            'tags'     : "",
-            'url'      : "/Category%20B/Subcategory%20b/Subsubcategory%202/index.html",
-            'image'    : "/assets/img/thumbnail/empty.jpg",
-            'date'     : "1900-01-01"
-        });
-    
-
-        posts.push({
-            'title'    : "Index",
-            'path'     : "Category B > Subcategory b",
-            'type'     : "category",
-            'tags'     : "",
-            'url'      : "/Category%20B/Subcategory%20b/index.html",
-            'image'    : "/assets/img/thumbnail/empty.jpg",
-            'date'     : "1900-01-01"
-        });
-    
-
-        posts.push({
-            'title'    : "Index",
-            'path'     : "Category B > Subcategory c",
-            'type'     : "category",
-            'tags'     : "",
-            'url'      : "/Category%20B/Subcategory%20c/index.html",
-            'image'    : "/assets/img/thumbnail/empty.jpg",
-            'date'     : "1900-01-01"
-        });
-    
-
-        posts.push({
-            'title'    : "Index",
-            'path'     : "Category B",
-            'type'     : "category",
-            'tags'     : "",
-            'url'      : "/Category%20B/index.html",
+            'url'      : "/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/index.html",
             'image'    : "/assets/img/thumbnail/empty.jpg",
             'date'     : "1900-01-01"
         });
@@ -601,6 +797,83 @@
             'type'     : "category",
             'tags'     : "",
             'url'      : "/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "技术学习",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "模糊阴影视效研究 > Subcategory b > Subsubcategory 1",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20b/Subsubcategory%201/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "模糊阴影视效研究 > Subcategory b > Subsubcategory 2",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20b/Subsubcategory%202/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "模糊阴影视效研究 > Subcategory b",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20b/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "模糊阴影视效研究 > Subcategory c",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20c/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "模糊阴影视效研究",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/index.html",
             'image'    : "/assets/img/thumbnail/empty.jpg",
             'date'     : "1900-01-01"
         });
@@ -619,10 +892,10 @@
 
         posts.push({
             'title'    : "Example Post: no thumbnail image",
-            'path'     : "Category A > Subcategory a",
+            'path'     : "2D矢量图元绘制技术研究 > Subcategory a",
             'type'     : "post",
             'tags'     : "",
-            'url'      : "/Category%20A/Subcategory%20a/post-01.html",
+            'url'      : "/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/Subcategory%20a/post-01.html",
             'image'    : "/assets/img/thumbnail/empty.jpg",
             'date'     : "2023-12-01"
         });
@@ -630,10 +903,10 @@
 
         posts.push({
             'title'    : "Example Post: thumbnail exists",
-            'path'     : "Category A > Subcategory a",
+            'path'     : "2D矢量图元绘制技术研究 > Subcategory a",
             'type'     : "post",
             'tags'     : "",
-            'url'      : "/Category%20A/Subcategory%20a/post-02.html",
+            'url'      : "/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/Subcategory%20a/post-02.html",
             'image'    : "/assets/img/thumbnail/bricks.webp",
             'date'     : "2023-12-02"
         });
@@ -641,10 +914,10 @@
 
         posts.push({
             'title'    : "My personal Online Library",
-            'path'     : "Category B > Subcategory b",
+            'path'     : "模糊阴影视效研究 > Subcategory b",
             'type'     : "post",
             'tags'     : "book, education",
-            'url'      : "/Category%20B/Subcategory%20b/post-03.html",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20b/post-03.html",
             'image'    : "/assets/img/thumbnail/book.jpg",
             'date'     : "2023-12-03"
         });
@@ -652,10 +925,10 @@
 
         posts.push({
             'title'    : "Classic Literature #1: Romeo and Juliet",
-            'path'     : "Category B > Subcategory b > Subsubcategory 1",
+            'path'     : "模糊阴影视效研究 > Subcategory b > Subsubcategory 1",
             'type'     : "post",
             'tags'     : "book, epic novel, romance",
-            'url'      : "/Category%20B/Subcategory%20b/Subsubcategory%201/post-04.html",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20b/Subsubcategory%201/post-04.html",
             'image'    : "/assets/img/thumbnail/nightgardenflower.jpg",
             'date'     : "2023-12-04"
         });
@@ -663,10 +936,10 @@
 
         posts.push({
             'title'    : "Classic Literature #2: Don Quixote",
-            'path'     : "Category B > Subcategory b > Subsubcategory 2",
+            'path'     : "模糊阴影视效研究 > Subcategory b > Subsubcategory 2",
             'type'     : "post",
             'tags'     : "book, epic novel, adventure",
-            'url'      : "/Category%20B/Subcategory%20b/Subsubcategory%202/post-05.html",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/Subcategory%20b/Subsubcategory%202/post-05.html",
             'image'    : "/assets/img/La-Mancha.jpg",
             'date'     : "2023-12-05"
         });
@@ -702,6 +975,39 @@
             'url'      : "/posting%20guide.html",
             'image'    : "/assets/img/thumbnail/sample.png",
             'date'     : "2024-02-04"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan Compute Shader",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "post",
+            'tags'     : "GPU, Vulkan, ComputeShader",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html",
+            'image'    : "https://paminerva.github.io/docs/LearnVulkan/images/02/F/hardware-model.png",
+            'date'     : "2024-03-12"
+        });
+    
+
+        posts.push({
+            'title'    : "How to compute integral image on GPU?",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "post",
+            'tags'     : "user manual, markdown, writing format",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102174554.png",
+            'date'     : "2025-01-03"
+        });
+    
+
+        posts.push({
+            'title'    : "图像降采样",
+            'path'     : "技术学习",
+            'type'     : "post",
+            'tags'     : "Image Processing, Vulkan, Opengl, 降采样, MathJax",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250111165135.png",
+            'date'     : "2025-01-12"
         });
     
 

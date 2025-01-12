@@ -12,11 +12,11 @@ linkedin_username: linkedin
 facebook_username: facebook
 
 # External API
-giscus_repo: "byanko55/jekyll-theme-satellite"
-giscus_repoId: "R_kgDOJ6fqWg"
+giscus_repo: "Calendar66/Calendar66.github.io"
+giscus_repoId: "R_kgDONlocmA"
 giscus_category: "Q&A"
-giscus_categoryId: "DIC_kwDOJ6fqWs4Cc7p7"
-goatcounter_code: byanko77
+giscus_categoryId: "DIC_kwDONlocmM4Cl8UB"
+goatcounter_code: calendar
 google_analytics:
 
 # If your repo name follows the format "<user-name>.github.io", then leave the below blank.
@@ -52,3 +52,4 @@ kramdown:
   input: GFM
   hard_wrap: true
   math_engine: mathjax
+
