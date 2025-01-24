@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>
+    
+        EasyVulkan
+    
+</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Index | Calendar’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.4">
+<meta property="og:title" content="Index">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="A graduate student majoring in computer graphics from Xiamen University.">
+<meta property="og:description" content="A graduate student majoring in computer graphics from Xiamen University.">
+<link rel="canonical" href="http://localhost:4000/EasyVulkan/">
+<meta property="og:url" content="http://localhost:4000/EasyVulkan/">
+<meta property="og:site_name" content="Calendar’s Blog">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="1900-01-01T00:00:00+08:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Index">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"1900-01-01T00:00:00+08:00","datePublished":"1900-01-01T00:00:00+08:00","description":"A graduate student majoring in computer graphics from Xiamen University.","headline":"Index","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/EasyVulkan/"},"url":"http://localhost:4000/EasyVulkan/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link rel="shortcut icon" type="image/png" href="/assets/img/favicon.webp">
+<style>
+@font-face {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-display: optional;
+    src: local('Nunito Sans'),
+         url("/assets/fonts/NunitoSans-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: 'Righteous';
+    font-style: normal;
+    font-weight: 600;
+    font-display: optional;
+    src: local('Righteous'),
+         url("/assets/fonts/Righteous-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-display: optional;
+    src: local('Lato'),
+         url("/assets/fonts/Lato-Regular.woff2") format("woff2");
+}
+</style>
+
+<script src="/assets/js/fontfaceobserver.js" type="text/javascript"></script>
+<script type="text/javascript">
+    const nunitoObserver = new FontFaceObserver('Nunito Sans');
+    const righteousObserver = new FontFaceObserver('Righteous');
+    const latoObserver = new FontFaceObserver('Lato');
+  
+    Promise.all([
+        nunitoObserver.load(),
+        righteousObserver.load(),
+        latoObserver.load(),
+    ]).then(function(){
+        document.documentElement.className += " fonts-loaded";
+    });
+</script>
+
+<meta name="baseurl" content="">
+<meta name="description" content="A graduate student majoring in computer graphics from Xiamen University.">
+        <link rel="preload" href="/assets/img/profile.jpg" as="image">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        
+    </head>
+    <body>
+        <script type="text/javascript">
+            let currentTheme = localStorage.getItem('theme');
+        
+            document.body.classList[currentTheme === 'dark' ? 'add' : 'remove']('dark-theme');
+        </script>
+        <canvas id="stars" width="100%" height="100%"></canvas>
+        <div class="sidebar sidebar-left">
+    <div class="side-banner">
+        <h1 class="site-tab">
+            <a href="/" class="site-name">
+                <img src="/assets/img/icon/house.webp" alt="" loading="lazy">
+                <mark>Calendar's Blog</mark>
+            </a>
+            <button id="btn-brightness" aria-label="brightness-button">
+                <svg class="ico-dark" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg>
+                <svg class="ico-light" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"></path></svg>
+            </button>
+            <button id="btn-search" aria-label="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
+            </button>
+            <button id="btn-nav" aria-pressed="false" aria-label="menu-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"></path></svg>
+            </button>
+        </h1>
+        <a href="/" class="site-avatar" aria-label="site-avatar">
+            <img src="/assets/img/profile.jpg" loading="lazy" alt="homepage" aria-label="homepage-button">
+        </a>
+    </div>
+    <div class="side-info">
+        <nav id="navigation">
+    
+    
+    
+
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+    
+    
+    
+
+    <ul class="nav-list">
+<li id="nav-first" aria-label="技术学习">
+            <div class="nav-item">
+                <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>技术学习</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in 技术学习 category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list">
+<li id="nav-second" aria-label="图像降采样">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>图像降采样</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="GPU通用计算">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>GPU通用计算</span>
+                        </a><button class="nav-list-expander" aria-label="toggle items in GPU通用计算 category" aria-pressed="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                        </button>
+</div>
+<ul class="nav-list">
+<li id="nav-third" aria-label="Vulkan compute shader">
+                                <div class="nav-item">
+                                    <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>Vulkan compute shader</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="integral Image计算">
+                                <div class="nav-item">
+                                    <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>integral Image计算</span>
+                                    </a>
+                                </div>
+                            </li>
+</ul>
+</li>
+</ul>
+</li>
+<li id="nav-first" aria-label="模糊阴影视效研究">
+            <div class="nav-item">
+                <a href="/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>模糊阴影视效研究</span>
+                </a>
+</div>
+</li>
+<li id="nav-first" aria-label="2D矢量图元绘制技术研究">
+            <div class="nav-item">
+                <a href="/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>2D矢量图元绘制技术研究</span>
+                </a>
+</div>
+</li>
+<li id="nav-first" aria-label="EasyVulkan">
+            <div class="nav-item">
+                <a href="/EasyVulkan/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>EasyVulkan</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in EasyVulkan category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list"><li id="nav-second" aria-label="Vulkan初始化">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Vulkan初始化</span>
+                        </a>
+</div>
+</li></ul>
+</li>
+<li id="nav-first" aria-label="Home">
+            <div class="nav-item">
+                <a href="/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>Home</span>
+                </a>
+</div>
+</li>
+</ul>
+</nav>
+        <div id="contact">
+            <hr>
+            <h3>Contact</h3>
+            <ul class="contact-list">
+                
+                    <li><a aria-label="My Github" href="https://github.com/Calendar66">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3 .3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5 .3-6.2 2.3zm44.2-1.7c-2.9 .7-4.9 2.6-4.6 4.9 .3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3 .7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3 .3 2.9 2.3 3.9 1.6 1 3.6 .7 4.3-.7 .7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3 .7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3 .7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+                    </a></li>
+                
+                
+                    <li><a aria-label="My Email" href="mailto:guangzez67@gmaill.com">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"></path></svg>
+                    </a></li>
+                
+                
+                    <li><a aria-label="My Bilibili" href="https://space.bilibili.com/233488614">
+                        <svg viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4552" width="10" height="21"><path d="M253.568 577.6c2.496 18.176 5.056 36.48 7.552 55.36 15.488-11.584 30.272-23.04 45.248-34.304C304.384 596.096 263.296 579.776 253.568 577.6z" p-id="4553"></path><path d="M610.176 577.6c2.496 18.176 5.056 36.48 7.552 55.36 15.488-11.584 30.272-23.04 45.248-34.304C660.992 596.096 619.904 579.776 610.176 577.6z" p-id="4554"></path><path d="M515.648 63.296c-244.224 0-442.176 197.952-442.176 442.176s197.952 442.176 442.176 442.176 442.176-197.952 442.176-442.176S759.872 63.296 515.648 63.296zM490.56 447.36l14.656 0c2.496 0 3.712 0.832 3.712 3.84l0 42.752 0 3.392c-5.888-0.32-11.968-0.512-18.304-0.832L490.624 447.36zM390.464 441.856c1.664 0 2.496 1.024 2.88 3.008 1.536 15.488 2.88 30.592 4.544 46.592-5.888 0.704-11.456 0.832-17.664 1.344-2.176-16.96-4.224-33.472-6.4-50.624C379.584 441.856 385.088 441.856 390.464 441.856zM366.592 444.544c2.368-0.32 1.664 1.664 2.048 3.008 0.512 5.696 1.152 11.072 1.664 16.64 0.832 8.768 2.048 17.152 2.88 25.92l0 3.392-13.632 2.368c-3.008-16.32-5.888-32.448-8.896-49.088C356.032 446.208 361.216 444.992 366.592 444.544zM364.096 603.456c-2.176 7.232-7.232 12.928-13.44 17.664-14.656 11.584-29.76 21.696-47.424 27.584-12.416 4.224-25.088 7.232-38.016 9.28-16.832 2.496-33.984 3.712-51.136 5.376-3.52 0.512-6.912 0-10.624 0-1.664 0-2.176-0.832-2.176-2.496-0.192-7.552-0.832-15.488-1.344-23.36-0.832-10.112-1.856-20.032-3.008-30.08-1.664-14.144-3.392-27.776-5.056-41.856-1.664-14.784-3.712-29.44-5.376-44.096-1.664-14.464-3.008-28.736-5.056-43.072-2.368-16.32-4.544-32.448-7.04-49.088-2.496-19.2-6.208-38.528-11.264-57.344-0.32-0.832 0.512-2.496 1.024-3.008 16.64-6.4 33.152-12.928 49.792-19.712 5.376-2.368 5.888-3.2 5.888 3.84 0 29.76 0 59.392 0.512 89.152 0.32 15.488 0.832 30.976 2.048 46.4 1.344 18.496 3.392 37.312 5.056 56.192 0 0.832 0.512 1.536 0.512 2.048 6.4-0.32 12.608-0.832 18.816-0.832 26.432-0.704 52.288 2.88 77.056 12.608 12.096 4.864 23.872 10.432 34.304 18.304C366.784 583.488 368.768 591.552 364.096 603.456zM386.432 641.984C377.728 598.4 369.28 555.52 360.896 511.616c7.04-0.832 13.824-2.048 20.544-2.88 4.864-0.704 9.92-0.704 14.656-1.152 2.688-0.32 4.352 0.832 4.736 3.392 1.024 6.72 2.176 13.44 3.008 20.544 1.536 11.456 2.496 23.04 3.712 34.496 1.152 10.112 2.176 20.032 3.392 30.08 1.152 10.624 2.496 21.376 3.84 32.448 0.32 3.008 0.832 6.4 1.152 9.728C406.144 639.488 396.544 640.64 386.432 641.984zM458.304 629.376c-8.768-0.832-17.152-1.344-26.432-2.176-7.936-79.872-14.656-160.448-29.76-240.896 4.864-0.512 9.92-1.152 14.976-1.664 5.888-0.32 11.584-0.704 17.472-1.152 4.864-0.32 6.72 0.832 7.04 5.568l2.496 38.016c1.152 17.152 2.496 34.304 3.712 51.456 0.832 12.416 1.344 24.704 2.496 37.184 1.152 13.632 2.496 27.072 3.712 40.512 1.152 9.728 2.048 20.032 2.88 29.76 1.152 10.624 2.368 21.376 3.008 32.448l0.832 9.28C460.8 629.376 459.968 629.696 458.304 629.376zM481.472 447.232c2.176 0 3.008 0.512 3.008 3.008-0.32 6.72 0 13.824 0 20.544l0 25.536c-5.056 0.512-9.6 0.832-14.144 1.152-1.344-16.32-2.496-32.768-3.84-50.304L481.472 447.168zM484.032 644.864c-0.832 0-2.176-1.344-2.176-2.176-1.344-14.656-2.496-29.248-3.84-43.904-1.152-13.44-2.496-27.264-3.712-40.704-1.152-13.824-2.496-27.776-3.712-41.856 0-0.832 0-1.664-0.32-2.88 3.392-0.704 6.4-1.152 9.728-1.152 8.768 0 17.664 0.192 26.432 0.512 2.176 0 3.392 1.664 3.392 3.712 0.192 4.544 0.512 8.768 0.512 13.312 0 20.544-0.32 41.408 0 61.888 0.32 16.64 0.832 32.832 1.152 49.472 0 0.832 0 2.048 0.32 3.84C502.336 644.864 492.928 645.184 484.032 644.864zM847.168 447.36l14.656 0c2.496 0 3.712 0.832 3.712 3.84l0 42.752 0 3.392c-5.888-0.32-11.968-0.512-18.304-0.832L847.232 447.36zM747.072 441.856c1.664 0 2.496 1.024 2.88 3.008 1.536 15.488 2.88 30.592 4.544 46.592-5.888 0.704-11.456 0.832-17.664 1.344-2.176-16.96-4.224-33.472-6.4-50.624C736.128 441.856 741.696 441.856 747.072 441.856zM723.2 444.544c2.368-0.32 1.664 1.664 2.048 3.008 0.512 5.696 1.152 11.072 1.664 16.64 0.832 8.768 2.048 17.152 2.88 25.92l0 3.392-13.632 2.368c-3.008-16.32-5.888-32.448-8.896-49.088C712.576 446.208 717.824 444.992 723.2 444.544zM720.512 603.328c-2.176 7.232-7.232 12.928-13.44 17.664-14.656 11.584-29.76 21.696-47.424 27.584-12.416 4.224-25.088 7.232-38.016 9.28-16.832 2.496-33.984 3.712-51.136 5.376-3.52 0.512-6.912 0-10.624 0-1.664 0-2.176-0.832-2.176-2.496-0.192-7.552-0.832-15.488-1.344-23.36-0.832-10.112-1.856-20.032-3.008-30.08-1.664-14.144-3.392-27.776-5.056-41.856-1.664-14.784-3.712-29.44-5.376-44.096-1.664-14.464-3.008-28.736-5.056-43.072-2.368-16.32-4.544-32.448-7.04-49.088-2.496-19.2-6.208-38.528-11.264-57.344-0.192-0.832 0.704-2.496 1.152-2.88 16.64-6.4 33.152-12.928 49.792-19.712 5.376-2.368 5.888-3.2 5.888 3.84 0 29.76 0 59.392 0.512 89.152 0.32 15.488 0.832 30.976 2.048 46.4 1.344 18.496 3.392 37.312 5.056 56.192 0 0.832 0.512 1.536 0.512 2.048 6.4-0.32 12.608-0.832 18.816-0.832 26.432-0.704 52.288 2.88 77.056 12.608 12.096 4.864 23.872 10.432 34.304 18.304C723.392 583.488 725.376 591.552 720.512 603.328zM743.04 641.984c-8.768-43.584-17.152-86.464-25.536-130.368 7.04-0.832 13.824-2.048 20.544-2.88 4.864-0.704 9.92-0.704 14.656-1.152 2.688-0.32 4.352 0.832 4.736 3.392 1.024 6.72 2.176 13.44 3.008 20.544 1.536 11.456 2.496 23.04 3.712 34.496 1.152 10.112 2.176 20.032 3.392 30.08 1.152 10.624 2.496 21.376 3.84 32.448 0.32 3.008 0.832 6.4 1.152 9.728C762.752 639.488 753.152 640.64 743.04 641.984zM814.848 629.376c-8.768-0.832-17.152-1.344-26.432-2.176-7.936-79.872-14.656-160.448-29.76-240.896 4.864-0.512 9.92-1.152 14.976-1.664 5.888-0.32 11.584-0.704 17.472-1.152 4.864-0.32 6.72 0.832 7.04 5.568l2.496 38.016c1.152 17.152 2.496 34.304 3.712 51.456 0.832 12.416 1.344 24.704 2.496 37.184 1.152 13.632 2.496 27.072 3.712 40.512 1.152 9.728 2.048 20.032 2.88 29.76 1.152 10.624 2.368 21.376 3.008 32.448l0.832 9.28C817.408 629.376 816.576 629.696 814.848 629.376zM838.08 447.232c2.176 0 3.008 0.512 3.008 3.008-0.32 6.72 0 13.824 0 20.544l0 25.536c-5.056 0.512-9.6 0.832-14.144 1.152-1.344-16.32-2.496-32.768-3.84-50.304L838.08 447.168zM840.64 644.864c-0.832 0-2.176-1.344-2.176-2.176-1.344-14.656-2.496-29.248-3.84-43.904-1.152-13.44-2.496-27.264-3.712-40.704-1.152-13.824-2.496-27.776-3.712-41.856 0-0.832 0-1.664-0.32-2.88 3.392-0.704 6.4-1.152 9.728-1.152 8.768 0 17.664 0.192 26.432 0.512 2.176 0 3.392 1.664 3.392 3.712 0.192 4.544 0.512 8.768 0.512 13.312 0 20.544-0.32 41.408 0 61.888 0.32 16.64 0.832 32.832 1.152 49.472 0 0.832 0 2.048 0.32 3.84C858.944 644.864 849.536 645.184 840.64 644.864z" p-id="4555"></path></svg>                
+                
+                
+                
+            </a></li>
+</ul>
+            <hr>
+            <span>
+                Copyright © 2025 | <a href="/">Calendar</a>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="sidebar sidebar-right">
+    <div class="tools">
+        <button id="btn-brightness" aria-label="brightness-button">
+            <svg class="ico-dark" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg>
+            <svg class="ico-light" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"></path></svg>
+        </button>
+        <button id="btn-search" aria-label="search-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
+        </button>
+    </div>
+</div>
+        <div id="post">
+            <div class="inner-header">
+                <span class="dot" style="background-color: #F86158;"></span>
+                <span class="dot" style="background-color: #FBBF2D;"></span>
+                <span class="dot" style="background-color: #2ACB45;"></span>
+            </div>
+            <div class="inner-content">
+                <div class="category-tree">
+<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg>
+    <p>
+                <a href="/">Home</a>
+                &gt;
+            
+                
+                    EasyVulkan
+                
+            </p>
+</div>
+                
+                    <div id="loading">
+    <div class="loading_box">
+        <img src="/assets/img/loading.webp" loading="lazy">
+        <p>Now Loading ...</p>
+    </div>
+</div>
+                    <h1 class="category-header">
+    
+        EasyVulkan
+    
+</h1>
+<div id="category-list">
+    <ul class="paginated-list" data-current-page="1" aria-live="polite">
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250124230354.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html"><h1 class="title_post">Vulkan初始化</h1></a>
+                        <a href="/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html" class="txt_post">
+                            
+  最开始接触Vulkan时，通常会被其复杂的概念和庞大的API所吓到。无法理解window、instance、surface等概念的关系，不能区分物理设备和逻辑设备的区别。本文将介绍Vulkan的初始化过程，并解释各个概念之间的关系。最后，本文将介绍EasyVulkan项目的VulkanDevice和VulkanContext对这些概念的封装。
+
+
+整体流程
+
+  创建 Window
+  创建 Instance
+    
+      检查和启用必要的validation layers（如果在debug模式下）
+      设置必要的instance extensions，特别是GLFW要求的extensions
+    
+  
+  创建 Window Surface
+  获取物理设备
+    
+      检查物理设备是否支持所需的features和extensions
+      检查物理设备是否适合（比如是否为独立显卡、是否支持所需的图形特性等）
+    
+  
+  获取队列族索引
+  创建逻辑设备
+    
+      创建队列创建信息
+      启用必要的device extensions（比如VK_KHR_swapchain）
+      指定设备features
+    
+  
+  创建命令池
+
+
+1.创建Window
+使用 GLFW 创建窗口，这是显示 Vulkan 渲染结果的基础：
+
+glfwInit();
+glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);  // 不创建 OpenGL 上下文
+glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);    // 暂时禁用窗口大小调整
+
+window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+
+由于历史原因，GLFW 最初是为 OpenGL 设计的窗口管理库，默认情况下，当你创建 GLFW 窗口时，它会自动创建一个 OpenGL 上下文。因此需要指定GLFW_CLIENT_API为GLFW_NO_API，只创建窗口，而不创建 OpenGL 上下文。
+
+2.创建 Instance
+
+Instance 是应用程序与 Vulkan 库之间的连接：
+
+VkApplicationInfo appInfo{};
+appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+appInfo.pApplicationName = "Vulkan App";
+appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+appInfo.pEngineName = "No Engine";
+appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+appInfo.apiVersion = VK_API_VERSION_1_0;
+
+VkInstanceCreateInfo createInfo{};
+createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+createInfo.pApplicationInfo = &amp;appInfo;
+
+// 获取 GLFW 需要的 extension
+uint32_t glfwExtensionCount = 0;
+const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&amp;glfwExtensionCount);
+createInfo.enabledExtensionCount = glfwExtensionCount;
+createInfo.ppEnabledExtensionNames = glfwExtensions;
+
+vkCreateInstance(&amp;createInfo, nullptr, &amp;instance);
+
+Instance 代表了一个 Vulkan 应用程序的实例，它主要负责：
+
+
+  告诉 Vulkan 驱动程序我们要使用哪些全局扩展（比如与窗口系统的集成）
+  告诉驱动程序我们的应用程序信息（名称、版本等）
+  设置调试回调
+  枚举系统中可用的物理设备（GPU）
+
+
+Instance的创建过程恰恰说明了他的角色：
+VkInstanceCreateInfo createInfo{};
+createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+
+// 告诉 Vulkan 我们的应用程序信息
+createInfo.pApplicationInfo = &amp;appInfo;
+
+// 告诉 Vulkan 我们需要哪些扩展
+createInfo.enabledExtensionCount = glfwExtensionCount;
+createInfo.ppEnabledExtensionNames = glfwExtensions;
+
+// 告诉 Vulkan 我们需要哪些验证层（用于调试）
+createInfo.enabledLayerCount = validationLayers.size();
+createInfo.ppEnabledLayerNames = validationLayers.data();
+
+
+可以把 Instance 想象成一个”门户”或”接待员”：
+// 没有 Instance 之前，我们无法调用大多数 Vulkan 函数
+// 创建 Instance 后，我们可以做这些事：
+vkEnumeratePhysicalDevices(instance, ...);  // 查询 GPU
+vkCreateDebugUtilsMessengerEXT(instance, ...);  // 设置调试
+// 等等
+
+
+Instance可以被理解为一个“配置中心”，我们可以通过他告诉Vulkan：
+
+  这是我的应用程序
+  这是我需要的功能
+  这是我的调试需求
+
+
+3. 创建 Window Surface
+
+Window Surface 提供了 Vulkan 与窗口系统的连接：
+
+VkSurfaceKHR surface;
+if (glfwCreateWindowSurface(instance, window, nullptr, &amp;surface) != VK_SUCCESS) {
+    throw std::runtime_error("failed to create window surface!");
+}
+
+Vulkan 是与平台无关的图形 API，不直接处理窗口系统。Window Surface 是 Vulkan 和窗口系统之间的桥梁,它提供了一个可以渲染到的目标平面.
+工作流程
+
+  Vulkan 渲染流程 → Swapchain → Surface → 窗口系统 → 显示到屏幕
+
+
+// 1. 创建 Surface
+VkSurfaceKHR surface;
+glfwCreateWindowSurface(instance, window, nullptr, &amp;surface);
+
+// 2. Surface 用于创建 Swapchain
+VkSwapchainCreateInfoKHR createInfo{};
+createInfo.surface = surface;  // Surface 告诉 Swapchain 渲染目标在哪里
+
+// 3. 渲染时
+vkAcquireNextImageKHR(...);    // 从 Swapchain 获取下一个可用的图像
+// 渲染到图像
+vkQueuePresentKHR(...);        // 通过 Surface 将渲染结果显示到窗口
+
+
+Surface的作用
+
+  提供图像呈现能力
+    
+      决定支持的图像格式
+      决定支持的呈现模式
+    
+  
+  处理平台差异
+    
+      Windows：使用 Win32 窗口系统
+      Linux：使用 X11 或 Wayland
+      macOS：使用 Metal 层
+    
+  
+
+
+可以把 Surface 想象成一个”画布”：
+
+  Vulkan 是画家（渲染器）
+  Window 是画框（显示窗口）
+  Surface 是画布，它把画家的作品（渲染结果）放在画框中展示
+
+
+
+
+
+
+图 1：Surface 的作用。
+
+
+
+4. 获取物理设备
+
+选择合适的物理设备（显卡）：
+
+uint32_t deviceCount = 0;
+vkEnumeratePhysicalDevices(instance, &amp;deviceCount, nullptr);
+std::vector&lt;VkPhysicalDevice&gt; devices(deviceCount);
+vkEnumeratePhysicalDevices(instance, &amp;deviceCount, devices.data());
+
+// 选择第一个适合的设备
+VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+for (const auto&amp; device : devices) {
+    if (isDeviceSuitable(device)) {
+        physicalDevice = device;
+        break;
+    }
+}
+
+
+isDeviceSuitable 函数通常会检查以下几个关键方面来确定物理设备是否满足应用需求：
+
+  基本设备信息检查
+    bool isDeviceSuitable(VkPhysicalDevice device) {
+ // 获取设备基本属性
+ VkPhysicalDeviceProperties deviceProperties;
+ vkGetPhysicalDeviceProperties(device, &amp;deviceProperties);
+    
+ // 获取设备特性
+ VkPhysicalDeviceFeatures deviceFeatures;
+ vkGetPhysicalDeviceFeatures(device, &amp;deviceFeatures);
+
+ // 检查是否为独立显卡
+ bool isDiscreteGPU = deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
+}
+    
+  
+  队列族支持检查
+    bool checkQueueFamilySupport(VkPhysicalDevice device) {
+ QueueFamilyIndices indices = findQueueFamilies(device);
+    
+ // 检查是否支持所需的所有队列族
+ // - 图形队列族
+ // - 计算队列族
+ // - 显示队列族
+ return indices.isComplete();
+}
+    
+  
+  设备扩展支持检查
+    bool checkDeviceExtensionSupport(VkPhysicalDevice device) {
+ // 获取设备支持的扩展
+ uint32_t extensionCount;
+ vkEnumerateDeviceExtensionProperties(device, nullptr, &amp;extensionCount, nullptr);
+ std::vector&lt;VkExtensionProperties&gt; availableExtensions(extensionCount);
+ vkEnumerateDeviceExtensionProperties(device, nullptr, &amp;extensionCount, availableExtensions.data());
+
+ // 检查必要的扩展是否被支持
+ // 比如 VK_KHR_swapchain
+ std::set&lt;std::string&gt; requiredExtensions = {
+     VK_KHR_SWAPCHAIN_EXTENSION_NAME
+ };
+    
+ for (const auto&amp; extension : availableExtensions) {
+     requiredExtensions.erase(extension.extensionName);
+ }
+
+ return requiredExtensions.empty();
+}
+    
+  
+  Swapchain 适配性检查
+    bool checkSwapChainAdequate(VkPhysicalDevice device) {
+ // 检查 surface 格式
+ uint32_t formatCount;
+ vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &amp;formatCount, nullptr);
+    
+ // 检查显示模式
+ uint32_t presentModeCount;
+ vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &amp;presentModeCount, nullptr);
+    
+ return formatCount &gt; 0 &amp;&amp; presentModeCount &gt; 0;
+}
+    
+  
+  内存属性检查
+    bool checkMemoryProperties(VkPhysicalDevice device) {
+ VkPhysicalDeviceMemoryProperties memProperties;
+ vkGetPhysicalDeviceMemoryProperties(device, &amp;memProperties);
+    
+ // 检查是否有足够的显存
+ // 检查是否支持所需的内存类型
+ return true; // 根据具体需求判断
+}
+    
+  
+  综合评分系统（可选）
+    int rateDeviceSuitability(VkPhysicalDevice device) {
+ int score = 0;
+    
+ // 基础分：独立显卡加分
+ VkPhysicalDeviceProperties deviceProperties;
+ vkGetPhysicalDeviceProperties(device, &amp;deviceProperties);
+    
+ if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+     score += 1000;
+ }
+    
+ // 性能分：根据最大纹理大小加分
+ score += deviceProperties.limits.maxImageDimension2D;
+    
+ // 特性分：支持几何着色器加分
+ VkPhysicalDeviceFeatures deviceFeatures;
+ vkGetPhysicalDeviceFeatures(device, &amp;deviceFeatures);
+ if (deviceFeatures.geometryShader) {
+     score += 100;
+ }
+    
+ return score;
+}
+    
+  
+
+
+最终的设备选择函数如下：
+bool isDeviceSuitable(VkPhysicalDevice device) {
+    bool extensionsSupported = checkDeviceExtensionSupport(device);
+    bool swapChainAdequate = false;
+    
+    if (extensionsSupported) {
+        swapChainAdequate = checkSwapChainAdequate(device);
+    }
+    
+    return checkQueueFamilySupport(device) &amp;&amp; 
+           extensionsSupported &amp;&amp; 
+           swapChainAdequate &amp;&amp;
+           checkMemoryProperties(device) &amp;&amp;
+           rateDeviceSuitability(device) &gt; minRequiredScore;
+}
+
+5. 获取队列族索引
+
+查找支持所需操作的队列族：
+
+struct QueueFamilyIndices {
+    std::optional&lt;uint32_t&gt; graphicsAndComputeFamily; // 图形和计算共用一个队列族
+    std::optional&lt;uint32_t&gt; presentFamily;
+    
+    bool isComplete() {
+        return graphicsAndComputeFamily.has_value() &amp;&amp; presentFamily.has_value();
+    }
+};
+
+QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
+    QueueFamilyIndices indices;
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &amp;queueFamilyCount, nullptr);
+    std::vector&lt;VkQueueFamilyProperties&gt; queueFamilies(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &amp;queueFamilyCount, queueFamilies.data());
+    
+    // 查找支持图形和计算的队列族
+    // 查找支持显示的队列族
+    // ... 具体实现略
+    
+    return indices;
+}
+
+队列族
+队列族是一组具有相同功能的队列（Queue），可以理解为是物理设备的一部分，每个队列族支持特定类型的操作，比如：
+
+
+  图形操作（绘制命令）
+  计算操作（计算着色器）
+  传输操作（内存复制）
+  显示操作（显示到屏幕）
+
+
+物理设备（GPU）
+├── 队列族 0（支持图形+计算+传输）
+│   ├── 队列 0
+│   └── 队列 1
+├── 队列族 1（仅支持传输）
+│   └── 队列 0
+└── 队列族 2（支持显示）
+    └── 队列 0
+
+
+可以查询每个队列族的队列数量、支持的特性，比如：
+
+// 获取队列族属性
+uint32_t queueFamilyCount = 0;
+vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &amp;queueFamilyCount, nullptr);
+std::vector&lt;VkQueueFamilyProperties&gt; queueFamilies(queueFamilyCount);
+vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &amp;queueFamilyCount, queueFamilies.data());
+// 遍历每个队列族，查看其中的队列数量
+for (uint32_t i = 0; i &lt; queueFamilyCount; i++) {
+    const auto&amp; queueFamily = queueFamilies[i];
+    
+    // queueCount 就是该队列族中的队列数量
+    uint32_t numQueues = queueFamily.queueCount;
+    
+    // 打印队列族信息
+    std::cout &lt;&lt; "Queue Family " &lt;&lt; i &lt;&lt; ":\n";
+    std::cout &lt;&lt; "  Number of queues: " &lt;&lt; numQueues &lt;&lt; "\n";
+    std::cout &lt;&lt; "  Supports graphics: " &lt;&lt; (queueFamily.queueFlags &amp; VK_QUEUE_GRAPHICS_BIT ? "yes" : "no") &lt;&lt; "\n";
+    std::cout &lt;&lt; "  Supports compute: " &lt;&lt; (queueFamily.queueFlags &amp; VK_QUEUE_COMPUTE_BIT ? "yes" : "no") &lt;&lt; "\n";
+    std::cout &lt;&lt; "  Supports transfer: " &lt;&lt; (queueFamily.queueFlags &amp; VK_QUEUE_TRANSFER_BIT ? "yes" : "no") &lt;&lt; "\n";
+}
+
+
+队列族作用
+在创建逻辑设备时需要制定使用的队列族，比如：
+// 创建队列信息
+float queuePriority = 1.0f;
+VkDeviceQueueCreateInfo queueCreateInfo{};
+queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+queueCreateInfo.queueFamilyIndex = graphicsFamily;  // 指定队列族索引
+queueCreateInfo.queueCount = 1;                     // 使用的队列数量
+queueCreateInfo.pQueuePriorities = &amp;queuePriority;  // 队列优先级
+
+
+不同队列族
+
+  不同队列族的命令可以并行执行
+  专用队列族（如只支持传输的队列族）通常性能更好
+  需要在不同队列族之间同步操作时会有性能开销
+
+
+相同队列族的不同队列
+可以使用同一个队列族的两个队列提交命令：
+// 获取同一队列族的两个队列
+VkQueue queue1, queue2;
+vkGetDeviceQueue(device, graphicsFamilyIndex, 0, &amp;queue1);
+vkGetDeviceQueue(device, graphicsFamilyIndex, 1, &amp;queue2);
+
+// 这两个队列可以并行执行命令
+vkQueueSubmit(queue1, 1, &amp;submitInfo1, fence1);  // 在队列1提交命令
+vkQueueSubmit(queue2, 1, &amp;submitInfo2, fence2);  // 在队列2提交命令
+
+// 这两个提交会并行执行，不需要等待队列1完成
+
+
+
+  同一队列族的所有队列具有相同的能力（比如都支持图形操作）
+  每个队列都有自己独立的命令流
+  每个队列都可以独立提交命令缓冲区
+  队列之间的执行是异步的(并行执行，没有先后顺序），除非使用同步原语（使用同步原语，可以实现队列2等待队列1完成）
+
+
+队列优先级和同步
+// 创建队列时可以指定不同的优先级
+float priorities[] = { 1.0f, 0.5f };  // 两个队列，不同优先级
+VkDeviceQueueCreateInfo queueCreateInfo{};
+queueCreateInfo.queueCount = 2;
+queueCreateInfo.pQueuePriorities = priorities;
+
+// 如果需要队列间同步，可以使用信号量
+VkSubmitInfo submitInfo{};
+submitInfo.waitSemaphoreCount = 1;
+submitInfo.pWaitSemaphores = &amp;waitSemaphore;    // 等待其他队列的信号量
+submitInfo.signalSemaphoreCount = 1;
+submitInfo.pSignalSemaphores = &amp;signalSemaphore; // 发出完成信号
+
+
+并行渲染举例
+// 场景1：并行渲染多个对象
+void renderScene() {
+    // 队列1渲染地形
+    vkQueueSubmit(queue1, 1, &amp;terrainSubmitInfo, terrainFence);
+    
+    // 同时，队列2渲染角色
+    vkQueueSubmit(queue2, 1, &amp;characterSubmitInfo, characterFence);
+    
+    // 两个渲染任务并行执行
+}
+
+// 场景2：一个队列处理主要渲染，另一个处理后期效果
+void render() {
+    // 队列1执行主要渲染
+    vkQueueSubmit(queue1, 1, &amp;mainRenderSubmitInfo, mainRenderFence);
+    
+    // 设置依赖关系
+    waitSemaphores = mainRenderComplete;
+    
+    // 队列2执行后期处理
+    vkQueueSubmit(queue2, 1, &amp;postProcessSubmitInfo, postProcessFence);
+}
+
+
+6. 创建逻辑设备
+创建队列创建信息
+如前文所说，逻辑设备的创建需要指定使用的队列族。为每个唯一的队列族创建创建信息结构体：
+
+std::vector&lt;VkDeviceQueueCreateInfo&gt; queueCreateInfos;
+std::set&lt;uint32_t&gt; uniqueQueueFamilies = {
+    indices.graphicsAndComputeFamily.value(),
+    indices.presentFamily.value()
+};
+
+float queuePriority = 1.0f;
+for (uint32_t queueFamily : uniqueQueueFamilies) {
+    VkDeviceQueueCreateInfo queueCreateInfo{};
+    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    queueCreateInfo.queueFamilyIndex = queueFamily;   // 指定队列族索引
+    queueCreateInfo.queueCount = 1;                    // 使用的队列数量
+    queueCreateInfo.pQueuePriorities = &amp;queuePriority;  // 队列优先级
+    queueCreateInfos.push_back(queueCreateInfo);
+}
+
+创建逻辑设备
+VkDeviceCreateInfo deviceCreateInfo{};
+deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+deviceCreateInfo.queueCreateInfoCount = static_cast&lt;uint32_t&gt;(queueCreateInfos.size());
+deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();  // 指定队列创建信息
+
+VkPhysicalDeviceFeatures deviceFeatures{};
+deviceCreateInfo.pEnabledFeatures = &amp;deviceFeatures;  // 指定设备特性
+
+VkDevice device;
+if (vkCreateDevice(physicalDevice, &amp;deviceCreateInfo, nullptr, &amp;device) != VK_SUCCESS) {
+    throw std::runtime_error("failed to create logical device!");
+}
+
+
+如前面提到的，队列族是物理设备的一部分，逻辑设备创建时需要指定使用的队列族和队列的数量，因此可以将逻辑设备理解为建立在队列族上对物理设备的抽象。
+即：
+物理设备（GPU）
+    └── 逻辑设备（对GPU的抽象接口）
+            ├── 队列族 0
+            │   ├── 队列 0
+            │   └── 队列 1
+            └── 队列族 1
+                └── 队列 0
+
+上面展示了如何指定队列族和队列数量来创建逻辑设备，下面展示如何从逻辑设备获取队列：
+// 从逻辑设备获取队列
+VkQueue graphicsQueue;
+vkGetDeviceQueue(logicalDevice,  // 逻辑设备句柄
+                 graphicsFamilyIndex,  // 队列族索引
+                 0,  // 队列索引
+                 &amp;graphicsQueue);  // 获取到的队列
+
+
+逻辑设备的功能
+
+  创建和管理各种 Vulkan 资源（缓冲区、图像等）
+  提供队列访问接口
+  启用设备特性和扩展
+  控制设备内存分配
+例如：
+
+
+// 使用逻辑设备创建资源
+VkBuffer buffer;
+vkCreateBuffer(logicalDevice, &amp;bufferInfo, nullptr, &amp;buffer);
+// 使用逻辑设备分配内存
+VkDeviceMemory memory;
+vkAllocateMemory(logicalDevice, &amp;allocInfo, nullptr, &amp;memory);
+
+
+不同的逻辑设备
+
+  一个应用程序可以创建多个逻辑设备
+  每个逻辑设备都有自己的队列和资源
+  不同逻辑设备间的资源不能直接共享
+  逻辑设备销毁时，其创建的所有资源也会被销毁
+
+
+7. 创建命令池
+
+创建用于管理命令缓冲区的命令池：
+
+VkCommandPoolCreateInfo poolInfo{};
+poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+poolInfo.queueFamilyIndex = indices.graphicsAndComputeFamily.value();  // 指定队列族索引
+poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT; // 允许单独重置命令缓冲区
+
+VkCommandPool commandPool;
+if (vkCreateCommandPool(device, &amp;poolInfo, nullptr, &amp;commandPool) != VK_SUCCESS) {
+    throw std::runtime_error("failed to create command pool!");
+}
+
+命令池的作用
+
+  命令池用于管理命令缓冲区的内存
+  每个命令池只能分配给特定的队列族使用
+  从同一个命令池分配的命令缓冲区只能提交到同一队列族的队列中(因为第二点指定了队列族的类型)
+
+
+命令池标志
+// 常用的命令池标志
+VK_COMMAND_POOL_CREATE_TRANSIENT_BIT  // 提示命令缓冲区会频繁重录制，可以优化内存分配
+VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT  // 允许单独重置命令缓冲区，而不是只能重置整个池
+VK_COMMAND_POOL_CREATE_PROTECTED_BIT  // 创建受保护的命令缓冲区
+
+
+分配命令缓冲
+VkCommandBufferAllocateInfo allocInfo{};
+allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+allocInfo.commandPool = commandPool;  // 指定命令池
+allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;  // 主要或次要命令缓冲区
+allocInfo.commandBufferCount = 1;  // 分配数量
+
+VkCommandBuffer commandBuffer;
+vkAllocateCommandBuffers(device, &amp;allocInfo, &amp;commandBuffer);
+
+
+命令池（Command Pool）和命令缓冲区（Command Buffer）
+
+  命令池是内存池
+  命令缓冲区是从这个内存池分配的内存块
+  所有命令缓冲区共享命令池的属性（如队列族绑定）
+  命令池管理着所有命令缓冲区的生命周期
+    内存管理关系
+  
+
+
+// 命令池负责管理命令缓冲区的内存分配
+VkCommandPool commandPool;
+std::vector&lt;VkCommandBuffer&gt; commandBuffers;
+
+// 从命令池分配命令缓冲区
+VkCommandBufferAllocateInfo allocInfo{};
+allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+allocInfo.commandPool = commandPool;              // 指定从哪个命令池分配
+allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+allocInfo.commandBufferCount = 1;                 // 分配数量
+
+vkAllocateCommandBuffers(device, &amp;allocInfo, &amp;commandBuffer);
+
+
+生命周期关系
+
+  命令池控制着其分配的所有命令缓冲区的生命周期
+  销毁命令池时会自动销毁其分配的所有命令缓冲区
+    void cleanup() {
+  // 不需要单独释放命令缓冲区
+  vkDestroyCommandPool(device, commandPool, nullptr); // 会自动释放所有命令缓冲区
+}
+
+    重置关系
+  
+
+
+// 重置整个命令池（影响所有命令缓冲区）
+vkResetCommandPool(device, commandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
+
+// 如果命令池创建时指定了 VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT
+// 则可以单独重置命令缓冲区
+vkResetCommandBuffer(commandBuffer, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT);
+
+
+队列族关系
+
+// 命令池绑定到特定队列族
+VkCommandPoolCreateInfo poolInfo{};
+poolInfo.queueFamilyIndex = graphicsQueueFamily;  // 指定队列族
+
+// 从该命令池分配的命令缓冲区只能提交到同一队列族的队列
+VkSubmitInfo submitInfo{};
+submitInfo.commandBufferCount = 1;
+submitInfo.pCommandBuffers = &amp;commandBuffer;
+vkQueueSubmit(graphicsQueue, 1, &amp;submitInfo, fence);  // 队列必须属于同一队列族
+
+
+实例扩展和设备扩展
+实例扩展（Instance Extensions）：
+作用范围：作用于整个 Vulkan 实例（VkInstance），影响全局功能
+主要用途：
+
+  提供跨平台功能，如窗口系统集成（WSI）
+  添加调试和验证层支持
+  提供实例级别的新功能
+
+
+加载时机：在创建 VkInstance 时通过 vkCreateInstance 启用
+
+常见的实例扩展：
+VK_KHR_surface
+
+  最基础的窗口系统接口扩展
+  定义了创建和管理平台无关的窗口表面的基础功能
+  几乎所有需要显示的应用都会用到
+
+
+平台特定的 surface 扩展：
+
+  VK_KHR_win32_surface (Windows)
+  VK_KHR_xlib_surface (X11/Linux)
+  VK_KHR_wayland_surface (Wayland/Linux)
+  VK_KHR_android_surface (Android)
+  VK_MVK_macos_surface (macOS)
+
+
+VK_EXT_debug_utils
+
+  提供调试功能
+  允许为 Vulkan 对象添加标签和名称
+  支持调试信息的回调
+
+
+VK_KHR_get_physical_device_properties2
+
+  获取物理设备的额外属性信息
+  常用于查询新功能的支持情况
+    设备扩展（Device Extensions）：
+    作用范围：作用于特定的物理设备（VkPhysicalDevice）和逻辑设备（VkDevice）
+主要用途：
+    
+      提供特定硬件功能支持
+      启用设备特定的渲染特性
+      添加新的设备级API功能
+    
+  
+
+
+加载时机：在创建 VkDevice 时通过 vkCreateDevice 启用
+
+常见的设备扩展：
+VK_KHR_swapchain
+
+  最基础的显示相关扩展
+  用于创建和管理交换链
+  实现帧缓冲和显示同步
+
+
+VK_KHR_maintenance1/2/3
+
+  提供各种 API 改进和补充功能
+  修复早期版本的一些限制和问题
+
+
+VK_KHR_dynamic_rendering
+
+  简化渲染流程
+  无需创建 render pass 对象
+  更灵活的渲染配置
+
+
+VK_KHR_multiview
+
+  支持单次渲染传递到多个视图
+  用于 VR 等立体渲染场景
+
+
+VK_KHR_shader_*系列：
+VK_KHR_shader_float16_int8  // 支持16位浮点和8位整数
+VK_KHR_shader_non_semantic_info  // 着色器附加信息
+VK_KHR_shader_draw_parameters  // 绘制参数访问
+
+
+EasyVulkan的初始化设计
+在EasyVulkan中，初始化主要由VulkanContext和VulkanDevice两个类完成。
+
+VulkanContext
+主要用于管理各种Vulkan的对象和资源。
+
+  创建 Vulkan 实例，可选择设置验证层和调试回调。
+  拥有对 VulkanDevice、SwapchainManager、ResourceManager、CommandPoolManager 和可选的 SynchronizationManager 的引用。
+  协调高级生命周期（初始化、清理）。
+
+
+VulkanDevice
+VulkanDevice类主要对物理设备和逻辑设备进行管理。
+
+  选择具有所需功能的物理设备，创建逻辑设备。
+  维护队列句柄（图形、计算、传输）。
+  集成 Vulkan 内存分配器（VMA）。
+
+
+使用说明
+借助VulkanDevice本身就是VulkanContext的成员，因此初始化可以简化为：
+VulkanContext context;
+context.initialize();
+
+在VulkanContext中，我们可以借助Manager类来管理各种Vulkan的对象和资源。
+例如，使用SwapchainManager：
+
+  创建和管理交换链
+  处理窗口调整事件
+  管理交换链图像和图像视图
+  提供图像获取和呈现功能
+
+
+使用ResourceManager：
+
+  所有主要 Vulkan 资源的生成器接口（如BufferBuilder、ImageBuilder、ShaderModuleBuilder等）
+  自动资源跟踪和清理
+  基于名称的资源查找
+
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/EasyVulkan" class="category">EasyVulkan</a>
+                            
+                                <span class="date">· 2025-01-24</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
+        
+        </ul>
+    
+</div>
+<div class="pagination">
+    <nav class="pagination-container">
+        <button class="pagination-button" id="prev-button" aria-label="Previous page" title="Previous page">
+            &lt;
+        </button>
+    
+        <div id="pagination-numbers"></div>
+      
+        <button class="pagination-button" id="next-button" aria-label="Next page" title="Next page">
+            &gt;
+        </button>
+    </nav>
+</div>
+                
+            </div>
+        </div>
+        <div id="search">
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+
+    <div class="search-box">
+        <mark>Touch background to close</mark>
+        <div class="input-box">
+            <input id="search-input" type="search" tabindex="1" spellcheck="false" placeholder="Search...">
+            <button id="btn-clear">
+                <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg>
+            </button>
+        </div>
+        <ul id="search-result"></ul>
+    </div>
+</div>
+    </body>
+    <script defer src="/assets/js/background.js"></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+
+    gtag('js', new Date());
+    gtag('config', '');
+</script>
+    
+        <script src="/assets/js/subject.js"></script>
+    
+    <script src="/assets/js/common.js"></script>
+    <script defer>
+    var posts = [];
+
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "2D矢量图元绘制技术研究",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "EasyVulkan",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/EasyVulkan/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "技术学习",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "模糊阴影视效研究",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan Compute Shader",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "post",
+            'tags'     : "GPU, Vulkan, ComputeShader",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html",
+            'image'    : "https://paminerva.github.io/docs/LearnVulkan/images/02/F/hardware-model.png",
+            'date'     : "2024-03-12"
+        });
+    
+
+        posts.push({
+            'title'    : "How to compute integral image on GPU?",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "post",
+            'tags'     : "user manual, markdown, writing format",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102174554.png",
+            'date'     : "2025-01-03"
+        });
+    
+
+        posts.push({
+            'title'    : "图像降采样",
+            'path'     : "技术学习",
+            'type'     : "post",
+            'tags'     : "Image Processing, Vulkan, Opengl, 降采样",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250112201138.png",
+            'date'     : "2025-01-12"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan初始化",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan",
+            'url'      : "/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250124230354.png",
+            'date'     : "2025-01-24"
+        });
+    
+
+    searchPost(posts);
+
+    
+</script>
+</html>

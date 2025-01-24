@@ -4,21 +4,21 @@ $baseurl: "{{ site.baseurl }}";
 
 @font-face {
   font-family: 'LXGWWenKai';
-  src: url('#{$baseurl}/assets/fonts/LXGWWenKai-Regular.ttf') format('truetype');
+  src: url('#{$baseurl}/assets/fonts/LXGWWenKaiLite-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'LXGWWenKai';
-  src: url('#{$baseurl}/assets/fonts/LXGWWenKai-Light.ttf') format('truetype');
+  src: url('#{$baseurl}/assets/fonts/LXGWWenKaiLite-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'LXGWWenKai';
-  src: url('#{$baseurl}/assets/fonts/LXGWWenKai-Medium.ttf') format('truetype');
+  src: url('#{$baseurl}/assets/fonts/LXGWWenKaiLite-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
 }
