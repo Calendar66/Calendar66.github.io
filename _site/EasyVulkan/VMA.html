@@ -1148,79 +1148,81 @@ void maintainResources() {
 
 <ol>
   <li>预算控制<br>
-使用 VMA_ALLOCATION_CREATE_WITHIN_BUDGET_BIT 标志可限制内存分配在预算范围内：<br>
-```cpp<br>
-VmaAllocationCreateInfo allocInfo = {};<br>
-allocInfo.flags = VMA_ALLOCATION_CREATE_WITHIN_BUDGET_BIT;</li>
+使用 VMA_ALLOCATION_CREATE_WITHIN_BUDGET_BIT 标志可限制内存分配在预算范围内：</li>
 </ol>
 
-<p>// 若超出预算,vmaCreateBuffer 将返回 VK_ERROR_OUT_OF_DEVICE_MEMORY<br>
-VkResult result = vmaCreateBuffer(<br>
-    allocator, &amp;bufferInfo, &amp;allocInfo,<br>
-    &amp;buffer, &amp;allocation, nullptr);</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-## 6.虚拟分配器
-虚拟分配器的核心思想是在不实际分配物理设备内存的情况下，模拟内存分配的行为。这对于以下场景特别有用：
-- 内存分配策略的预演和验证
-- 资源布局的优化
-- 自定义内存管理系统的实现
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">VmaAllocationCreateInfo</span> <span class="n">allocInfo</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="n">allocInfo</span><span class="p">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">VMA_ALLOCATION_CREATE_WITHIN_BUDGET_BIT</span><span class="p">;</span>
 
-例如：
+<span class="c1">// 若超出预算,vmaCreateBuffer 将返回 VK_ERROR_OUT_OF_DEVICE_MEMORY</span>
+<span class="n">VkResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">vmaCreateBuffer</span><span class="p">(</span>
+    <span class="n">allocator</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">bufferInfo</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">allocInfo</span><span class="p">,</span>
+    <span class="o">&amp;</span><span class="n">buffer</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">allocation</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
+</code></pre></div></div>
 
-```cpp
-// 模拟不同的资源分配方案
-void SimulateResourceLayout() {
-    VmaVirtualBlock block;
-    vmaCreateVirtualBlock(&amp;VmaVirtualBlockCreateInfo{
-        .size = 1024 * 1024 * 64 // 64MB
-    }, &amp;block);
+<h2 id="6虚拟分配器">6.虚拟分配器</h2>
+<p>虚拟分配器的核心思想是在不实际分配物理设备内存的情况下，模拟内存分配的行为。这对于以下场景特别有用：</p>
+<ul>
+  <li>内存分配策略的预演和验证</li>
+  <li>资源布局的优化</li>
+  <li>自定义内存管理系统的实现</li>
+</ul>
+
+<p>例如：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 模拟不同的资源分配方案</span>
+<span class="kt">void</span> <span class="nf">SimulateResourceLayout</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">VmaVirtualBlock</span> <span class="n">block</span><span class="p">;</span>
+    <span class="n">vmaCreateVirtualBlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">VmaVirtualBlockCreateInfo</span><span class="p">{</span>
+        <span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">64</span> <span class="c1">// 64MB</span>
+    <span class="p">},</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">);</span>
     
-    struct AllocationRecord {
-        VmaVirtualAllocation allocation;
-        VkDeviceSize offset;
-        VkDeviceSize size;
-        const char* resourceName;
-    };
-    std::vector&lt;AllocationRecord&gt; allocations;
+    <span class="k">struct</span> <span class="nc">AllocationRecord</span> <span class="p">{</span>
+        <span class="n">VmaVirtualAllocation</span> <span class="n">allocation</span><span class="p">;</span>
+        <span class="n">VkDeviceSize</span> <span class="n">offset</span><span class="p">;</span>
+        <span class="n">VkDeviceSize</span> <span class="n">size</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">resourceName</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">AllocationRecord</span><span class="o">&gt;</span> <span class="n">allocations</span><span class="p">;</span>
     
-    // 模拟分配各种资源
-    auto allocateResource = [&amp;](VkDeviceSize size, const char* name) {
-        VmaVirtualAllocationCreateInfo allocInfo = {};
-        allocInfo.size = size;
-        allocInfo.alignment = 256;
+    <span class="c1">// 模拟分配各种资源</span>
+    <span class="k">auto</span> <span class="n">allocateResource</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">VkDeviceSize</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">VmaVirtualAllocationCreateInfo</span> <span class="n">allocInfo</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="n">allocInfo</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+        <span class="n">allocInfo</span><span class="p">.</span><span class="n">alignment</span> <span class="o">=</span> <span class="mi">256</span><span class="p">;</span>
         
-        AllocationRecord record = {};
-        record.size = size;
-        record.resourceName = name;
+        <span class="n">AllocationRecord</span> <span class="n">record</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="n">record</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+        <span class="n">record</span><span class="p">.</span><span class="n">resourceName</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
         
-        if (vmaVirtualAllocate(block, &amp;allocInfo, &amp;record.allocation, &amp;record.offset) == VK_SUCCESS) {
-            allocations.push_back(record);
-            return true;
-        }
-        return false;
-    };
+        <span class="k">if</span> <span class="p">(</span><span class="n">vmaVirtualAllocate</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">allocInfo</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">record</span><span class="p">.</span><span class="n">allocation</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">record</span><span class="p">.</span><span class="n">offset</span><span class="p">)</span> <span class="o">==</span> <span class="n">VK_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">allocations</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">record</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">};</span>
     
-    // 分配各种资源
-    allocateResource(1024 * 1024, "Texture1");
-    allocateResource(512 * 1024, "Vertex Buffer");
-    allocateResource(256 * 1024, "Index Buffer");
+    <span class="c1">// 分配各种资源</span>
+    <span class="n">allocateResource</span><span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span> <span class="s">"Texture1"</span><span class="p">);</span>
+    <span class="n">allocateResource</span><span class="p">(</span><span class="mi">512</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span> <span class="s">"Vertex Buffer"</span><span class="p">);</span>
+    <span class="n">allocateResource</span><span class="p">(</span><span class="mi">256</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span> <span class="s">"Index Buffer"</span><span class="p">);</span>
     
-    // 分析内存布局
-    VmaStatInfo stats;
-    vmaCalculateVirtualBlockStats(block, &amp;stats);
+    <span class="c1">// 分析内存布局</span>
+    <span class="n">VmaStatInfo</span> <span class="n">stats</span><span class="p">;</span>
+    <span class="n">vmaCalculateVirtualBlockStats</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">stats</span><span class="p">);</span>
     
-    // 输出内存使用情况
-    for (const auto&amp; record : allocations) {
-        printf("Resource: %s, Offset: %llu, Size: %llu\n",
-               record.resourceName, record.offset, record.size);
-    }
+    <span class="c1">// 输出内存使用情况</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">record</span> <span class="o">:</span> <span class="n">allocations</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Resource: %s, Offset: %llu, Size: %llu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+               <span class="n">record</span><span class="p">.</span><span class="n">resourceName</span><span class="p">,</span> <span class="n">record</span><span class="p">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">record</span><span class="p">.</span><span class="n">size</span><span class="p">);</span>
+    <span class="p">}</span>
     
-    // 清理
-    for (const auto&amp; record : allocations) {
-        vmaVirtualFree(block, record.allocation);
-    }
-    vmaDestroyVirtualBlock(block);
-}
+    <span class="c1">// 清理</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">record</span> <span class="o">:</span> <span class="n">allocations</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vmaVirtualFree</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">record</span><span class="p">.</span><span class="n">allocation</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">vmaDestroyVirtualBlock</span><span class="p">(</span><span class="n">block</span><span class="p">);</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 <h1 id="关键数据结构">关键数据结构</h1>
@@ -1379,6 +1381,7 @@ void SimulateResourceLayout() {
 <strong>DOOM Eternal</strong>：通过VMA内存池技术降低8%的显存占用</li>
 </ul>
 
+<p><a href="https://drive.google.com/file/d/1UUdl3FJjDqUbCYhrzNWvsavK8ewfMFPA/view?usp=sharing">VMA PDF文档｜Generated by Doxygen</a></p>
 
     <!-- see https://giscus.app/ -->
     <div class="giscus" id="giscus" style="margin: 4rem auto;"></div>
