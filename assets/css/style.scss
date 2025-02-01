@@ -1,6 +1,7 @@
 ---
 ---
 $baseurl: "{{ site.baseurl }}";
+$main-font: "{{ site.font_family }}";
 
 @font-face {
   font-family: 'LXGWWenKai';
@@ -26,21 +27,21 @@ $baseurl: "{{ site.baseurl }}";
 html, body {
   margin:0;
   padding:0;
-  font-family: 'LXGWWenKai', 'Times', 'Times New Roman', serif;
+  font-family: #{$main-font}, 'Times', 'Times New Roman', serif;
 }
 
 .fonts-loaded {
-  a, span, p { font-family: 'LXGWWenKai', 'Times', 'Times New Roman', serif; }
-  h1, h2, h3 { font-family: 'LXGWWenKai', 'Times', 'Times New Roman', serif; }
+  a, span, p { font-family: #{$main-font}, 'Times', 'Times New Roman', serif; }
+  h1, h2, h3 { font-family: #{$main-font}, 'Times', 'Times New Roman', serif; }
   mark { font-family:'Righteous', sans-serif; }
 }
 
 a { text-decoration:none; }
 a, span, p, h1, h2, h3, i { color:#3A241A; }
-a, span, p { font-family: 'LXGWWenKai', 'Times', 'Times New Roman', serif; }
+a, span, p { font-family: #{$main-font}, 'Times', 'Times New Roman', serif; }
 h1, h2, h3, mark {
   margin:0;
-  font-family: 'LXGWWenKai', 'Times', 'Times New Roman', serif;
+  font-family: #{$main-font}, 'Times', 'Times New Roman', serif;
 }
 mark { background-color:transparent; }
 

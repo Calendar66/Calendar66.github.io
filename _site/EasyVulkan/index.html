@@ -537,10 +537,12 @@ vkBindBufferMemory(device, uniformBuffer, bigMemory, offsetUniform);
   CPU (Host) → PCIe总线 → GPU显存(Device Local Memory)
   需要创建staging buffer作为中间缓冲
   数据传输会受限于PCIe总线带宽
-    集成显卡
-    CPU和GPU共享系统内存
+
+
+集成显卡
+CPU和GPU共享系统内存
 数据传输过程：
-  
+
   直接在共享内存中访问,无需跨PCIe传输
   不需要staging buffer
   通过VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT 标识

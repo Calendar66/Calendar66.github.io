@@ -19,14 +19,14 @@
 html, body {
   margin: 0;
   padding: 0;
-  font-family: "LXGWWenKai", "Times", "Times New Roman", serif;
+  font-family: "Times", "Times New Roman", serif;
 }
 
 .fonts-loaded a, .fonts-loaded span, .fonts-loaded p {
-  font-family: "LXGWWenKai", "Times", "Times New Roman", serif;
+  font-family: "Times", "Times New Roman", serif;
 }
 .fonts-loaded h1, .fonts-loaded h2, .fonts-loaded h3 {
-  font-family: "LXGWWenKai", "Times", "Times New Roman", serif;
+  font-family: "Times", "Times New Roman", serif;
 }
 .fonts-loaded mark {
   font-family: "Righteous", sans-serif;
@@ -41,12 +41,12 @@ a, span, p, h1, h2, h3, i {
 }
 
 a, span, p {
-  font-family: "LXGWWenKai", "Times", "Times New Roman", serif;
+  font-family: "Times", "Times New Roman", serif;
 }
 
 h1, h2, h3, mark {
   margin: 0;
-  font-family: "LXGWWenKai", "Times", "Times New Roman", serif;
+  font-family: "Times", "Times New Roman", serif;
 }
 
 mark {

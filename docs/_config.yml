@@ -3,6 +3,9 @@ description: "Introduction for you blog"
 logo_img: "/assets/img/favicon.webp"
 profile_img: "/assets/img/profile.webp"
 
+# Font Settings
+font_family: "LXGWWenKai"
+
 # Social Links
 email: example@gmail.com
 github_username: github
