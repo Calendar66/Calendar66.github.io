@@ -1,11 +1,11 @@
 ---
-title: "Vulkan中的同步机制"
+title: "Vulkan同步机制"
 tags:
     - Vulkan
     - EasyVulkan
     - VMA
-date: "2025-01-29"
-thumbnail: "https://docs.vulkan.org/guide/latest/_images/memory_allocation_sub_allocation.png"
+date: "2025-02-01"
+thumbnail: "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202013124.png"
 bookmark: true
 ---
 
@@ -221,6 +221,11 @@ typedef struct VkImageSubresourceRange {
 除此之外，`VkImageMemoryBarrier` 还包含`oldLayout`和`newLayout`，用于指定图像布局的转换。
 >在 Vulkan 中，图像布局（Image Layout）用于描述 GPU 内部如何组织和访问图像数据。相比 OpenGL 的隐式管理，Vulkan 要求开发者显式指定和转换图像布局，方便GPU明确用途并进行对应的性能优化。
 
+>Transient Attachments（转瞬附件），可以利用 Vulkan 的自动转换特性：
+- Transient Images： 创建时带有 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT，初始布局设为 VK_IMAGE_LAYOUT_UNDEFINED 表明无需保留内容。
+- 自动转换： Vulkan 驱动会在 render pass 开始前、结束后自动插入外部依赖，完成从 UNDEFINED 到目标布局（如 COLOR_ATTACHMENT_OPTIMAL）以及结束后的转换至 PRESENT_SRC_KHR（用于交换链呈现）。
+- 
+
 ## Barrier的性能影响
 - 过度使用导致性能损耗：每个 Barrier 都会在流水线上插入一个同步点，如果频繁地插入不必要的Barrier，会增加**GPU的停顿**并降低并行效率。
 - 恰当使用可以避免错误和竞态：Barrier 在正确的位置使用能够让数据流安全地"串行化"，避免读写冲突。
@@ -344,4 +349,39 @@ Vulkan 中的 Render Pass 可以由多个 Subpass 组成，每个 Subpass 是一
    - 使用 Vulkan 的验证层（Validation Layers）或 GPU 调试工具，来确认 Barrier 和同步的正确性，避免出现 GPU 死锁或数据争用。
 
 
+# EasyVulkan中的同步管理
+EasyVulkan通过封装 Vulkan 的同步对象，提供了一整套简单而灵活的同步管理方案。核心类 SynchronizationManager 就是这一解决方案的代表。下面我们从几个方面来介绍它的设计理念与实现思路。
 
+## 统一创建与管理
+SynchronizationManager 封装了创建信号量和栅栏的过程，允许开发者通过简单的接口来创建同步对象，而无需关心底层的 Vulkan 调用细节。例如：
+
+```C++
+// 创建自定义的信号量和栅栏
+auto transferComplete = syncManager->createSemaphore("transferComplete");
+auto cmdFence = syncManager->createFence(false, "cmdBufferFence");
+```
+
+这里，createSemaphore 与 createFence 接口不仅简化了对象创建，还支持为同步对象命名，这有助于调试和资源追踪。
+
+
+## 帧同步管理
+在现代图形应用中，为了实现流畅的多缓冲（如三重缓冲）渲染，通常需要为每一帧分别创建同步对象。SynchronizationManager 内置了 createFrameSynchronization 接口，可以一次性为所有并行帧创建所需的信号量和栅栏。内部会为每一帧创建：
+- 图像可用信号量：确保交换链图像获取到位。
+- 渲染完成信号量：通知呈现引擎渲染工作已经结束。
+- 帧内栅栏：用于 CPU 等待 GPU 渲染完成。
+
+```C++
+// 设置三重缓冲，每帧同步对象自动创建
+syncManager->createFrameSynchronization(3);
+```
+
+在渲染循环中，可以直接通过索引获取对应帧的同步对象：
+
+```C++
+auto imageAvailable = syncManager->getImageAvailableSemaphore(currentFrame);
+auto renderFinished = syncManager->getRenderFinishedSemaphore(currentFrame);
+auto inFlightFence = syncManager->getInFlightFence(currentFrame);
+```
+
+## 自动资源清理与异常处理
+SynchronizationManager 在内部维护了所有同步对象的生命周期。在其析构函数中，会自动调用 cleanup 方法，**确保所有 Vulkan 同步对象得到正确释放**，从而避免内存泄漏和资源错误。此外，各接口均提供了异常处理机制，当遇到同步对象创建失败或参数错误时，会抛出异常，帮助开发者及时定位问题。

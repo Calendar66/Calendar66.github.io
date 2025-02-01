@@ -150,6 +150,21 @@
         
     
 
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
     
     
     
@@ -229,6 +244,50 @@
                 </button>
 </div>
 <ul class="nav-list">
+<li id="nav-second" aria-label="Builder类">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/Builder%E7%B1%BB/" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Builder类</span>
+                        </a><button class="nav-list-expander" aria-label="toggle items in Builder类 category" aria-pressed="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                        </button>
+</div>
+<ul class="nav-list">
+<li id="nav-third" aria-label="CommandBuffer">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>CommandBuffer</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="DescriptorSet">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>DescriptorSet</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="RenderPass">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/RenderPass.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>RenderPass</span>
+                                    </a>
+                                </div>
+                            </li>
+</ul>
+</li>
+<li id="nav-second" aria-label="SynchronizationManager">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/SynchronizationManager.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>SynchronizationManager</span>
+                        </a>
+</div>
+</li>
 <li id="nav-second" aria-label="VMA">
                     <div class="nav-item">
                         <a href="/EasyVulkan/VMA.html" class="nav-list-link nav-sh">
@@ -325,6 +384,1239 @@
 </h1>
 <div id="category-list">
     <ul class="paginated-list" data-current-page="1" aria-live="polite">
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/EasyVulkan/SynchronizationManager.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202013124.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/EasyVulkan/SynchronizationManager.html"><h1 class="title_post">Vulkan同步机制</h1></a>
+                        <a href="/EasyVulkan/SynchronizationManager.html" class="txt_post">
+                            
+  Vulkan 通过提供多样且细粒度的同步机制，为开发者在控制渲染和计算流程时带来了极大的灵活性。Barrier、Semaphore、Fence 以及 Subpass Dependencies 各有不同的适用场景和影响：
+  
+    Barrier 强调 GPU 内部流水线阶段及内存的同步，适合在单个队列内确保读写有序。
+    Semaphore 强调队列之间的同步，用来连接多队列的工作流。
+    Fence 强调 CPU 对 GPU 任务完成的可见性，用于资源回收和多帧并行调度。
+    Subpass Dependencies 强调在同一 Render Pass 内分阶段进行渲染时的同步，更高效地处理共享附件。
+  
+
+
+Vulkan中的同步机制详解
+在传统图形API如OpenGL中，驱动程序会自动处理资源同步，开发者无需关心底层执行顺序。但这种”黑箱”机制带来了两个严重问题：性能损耗不可控和多线程扩展困难。
+Vulkan 作为现代图形和计算的低层次API，其设计核心之一就是让开发者可以更细粒度地控制GPU和CPU之间的工作流程，以及不同GPU队列之间的执行顺序。而要实现稳定且高性能的渲染或计算，就必须要合理地利用好各种同步机制。本文将从几个常见的 Vulkan 同步原语（Barrier、Semaphore、Fence、Subpass Dependencies）入手，探讨它们各自的概念、适用场景、性能影响以及使用注意事项。希望通过本文，能为正在使用 Vulkan 或即将使用 Vulkan 的读者提供一些实践上的参考。
+
+命令缓冲与队列：线性流但可乱序完成
+在 Vulkan 中，所有命令都要先记录在 VkCommandBuffer 中，再提交到某个 VkQueue。在单个队列中，你提交的命令会按顺序进入 GPU 执行管线；但 GPU 可能在还没完成某个命令的写操作时，就已经开始处理后续命令的读阶段。
+
+
+  逻辑顺序：提交顺序一定依次排队
+  实际执行：可以重叠 / 并行 / 乱序完成
+
+
+内存模型与缓存一致性
+现代GPU采用分级缓存设计：
+
+  DDR显存 → L2缓存 → L1缓存（每个SM） → 寄存器
+
+
+当计算单元写入L1缓存后，数据不会立即同步到其他缓存层级。这就是非一致性内存访问的根源。
+“可用（Available）”意味着数据已经被刷出到更大层级缓存或主存；“可见（Visible）”意味着后续阶段可以读取到最新的数据——需要对读取方无效化缓存或更新缓存。
+或者说：
+
+  Available：源阶段写完数据后，做缓存 Flush，让数据到了 L2 或更高层共享区域
+  Visible：目的阶段需要读数据时，做缓存 Invalidate，从而迫使硬件从 L2 或更高层共享区域读取数据，避免读到陈旧缓存
+
+
+例如：
+
+VkMemoryBarrier memBarrier{
+    .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+    .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
+    .dstAccessMask = VK_ACCESS_SHADER_READ_BIT
+};
+
+vkCmdPipelineBarrier(cmd,
+    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+    0, 1, &amp;memBarrier, 0, nullptr, 0, nullptr);
+
+这个屏障完成：
+
+  刷新所有计算阶段的写入到L2缓存（可用性）
+  使片段着色器能读取最新数据（可见性）
+
+
+由于非一致性内存访问问题的存在，Vulkan还要求开发者显式地管理内存相关屏障，以确保数据在不同阶段之间的可见性和可用性。
+
+因此，Vulkan的同步机制主要有两个目的：
+
+  确保数据在不同阶段之间的可见性和可用性(主要借助内存相关屏障)
+  确保执行顺序(主要借助pipeline屏障、semaphore、fence等)
+
+
+Barrier（屏障）
+
+Barrier的概念
+
+Vulkan 中的 Barrier 是一种细粒度的内存和执行顺序同步机制。Barrier 在 GPU 内部起到”分割线”的作用，确保某些阶段的操作在 Barrier 之前完成，才能进行后续的阶段。例如，在进行纹理的读写转换时，需要使用 Pipeline Barrier 来保证图像布局转换或访问掩码的更改已完成，才进行下一步的采样或写入。
+
+Barrier 有多种类型，最常见的包括：
+
+  Pipeline Barrier：用于指定源阶段（srcStageMask）到目标阶段（dstStageMask）的内存和执行依赖。
+  Memory Barrier：作用在整个资源上，用于指定对内存可见性的限制与保证。
+  Buffer Memory Barrier：只作用在特定的 Buffer 范围上。
+  Image Memory Barrier：只作用在特定的图像资源上，可以指定图像布局转换（image layout transition）。
+
+
+Opengl中的Barrier和Vulkan对比
+在Opengl中同样存在Barrier的概念，但是Vulkan中的barrier提供了更细粒度的控制。
+
+// OpenGL隐式同步
+glDispatchCompute(1024, 1, 1);  // 计算着色器写入数据
+glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT); 
+glDrawArrays(GL_TRIANGLES, 0, 3); // 读取计算数据
+
+// Vulkan显式同步
+vkCmdDispatch(computeCmd, 1024, 1, 1);
+VkMemoryBarrier barrier{...};
+vkCmdPipelineBarrier(computeCmd, 
+    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+    VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
+    0, 1, &amp;barrier);
+vkCmdDraw(graphicCmd, 0, 3);
+
+
+Barrier的适用场景
+
+  图像布局转换：如从 VK_IMAGE_LAYOUT_UNDEFINED 转为 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL，或者从 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL 转为 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL，在开始或结束渲染通道时需要合适的图像布局。
+  内存可见性保证：当一个操作写入资源，另一个操作要读取该资源时，需要添加Barrier确保写入可见并完成。
+  不同着色阶段间的同步：例如，当顶点着色器阶段写入Buffer后，需要在片元着色器阶段进行读取，可通过Barrier来控制依赖顺序。
+
+
+管线阶段分解
+Vulkan将GPU工作分解为可组合的阶段：
+
+  VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT: 表示管线的起始阶段。
+  VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT: 间接绘制命令的阶段。
+  VK_PIPELINE_STAGE_VERTEX_INPUT_BIT: 顶点输入操作的阶段。
+  VK_PIPELINE_STAGE_VERTEX_SHADER_BIT: 顶点着色器执行的阶段。
+  VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT: 片段着色器执行的阶段。
+  VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT: 写入颜色附件的阶段。
+  VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT: 计算着色器执行的阶段。
+  VK_PIPELINE_STAGE_TRANSFER_BIT: 内存传输操作的阶段。
+  VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT: 表示管线的结束阶段。
+
+
+访问掩码
+GPU 有多级缓存（L1、L2），不同阶段可能对同一块内存资源有不同的缓存策略。为了避免缓存不一致（Incoherent），Vulkan 提供了 VK_ACCESS_* 标志来精确说明某个阶段对资源的访问类型。通过source access 与 destination access 结合，可以告诉 Vulkan “我要保证前面写的数据，在后面读的时候一定可见（Visible）”。
+
+具体包括：
+
+  VK_ACCESS_INDIRECT_COMMAND_READ_BIT: 对间接命令数据的读取访问。
+  VK_ACCESS_INDEX_READ_BIT: 对索引缓冲区的读取访问。
+  VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT: 对顶点属性的读取访问。
+  VK_ACCESS_UNIFORM_READ_BIT: 对统一缓冲区的读取访问。
+  VK_ACCESS_SHADER_READ_BIT: 对着色器存储的读取访问。
+  VK_ACCESS_SHADER_WRITE_BIT: 对着色器存储的写入访问。
+  VK_ACCESS_COLOR_ATTACHMENT_READ_BIT: 对颜色附件的读取访问。
+  VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT: 对颜色附件的写入访问。
+  VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT: 对深度/模板附件的读取访问。
+  VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT: 对深度/模板附件的写入访问。
+
+
+Barrier的使用
+一个Barrier的定义如下：
+
+void vkCmdPipelineBarrier(
+    VkCommandBuffer                             commandBuffer,          // 记录barrier的命令缓冲区
+    VkPipelineStageFlags                        srcStageMask,          // 源管线阶段掩码，指定哪些管线阶段必须在barrier之前完成
+    VkPipelineStageFlags                        dstStageMask,          // 目标管线阶段掩码，指定哪些管线阶段必须等待barrier
+    VkDependencyFlags                           dependencyFlags,        // 依赖标志，如VK_DEPENDENCY_BY_REGION_BIT表示区域依赖
+    uint32_t                                    memoryBarrierCount,     // 全局内存屏障数量
+    const VkMemoryBarrier*                      pMemoryBarriers,       // 全局内存屏障数组
+    uint32_t                                    bufferMemoryBarrierCount, // 缓冲内存屏障数量
+    const VkBufferMemoryBarrier*                pBufferMemoryBarriers,   // 缓冲内存屏障数组
+    uint32_t                                    imageMemoryBarrierCount, // 图像内存屏障数量
+    const VkImageMemoryBarrier*                 pImageMemoryBarriers    // 图像内存屏障数组
+);
+
+
+
+  VkDependencyFlags主要用于控制屏障的行为，设置为0表示默认行为，同步将在整个渲染区域上全局进行，对于所有区域(所有像素)，所有指定的源操作都必须在任何目标操作开始之前完成；设置为VK_DEPENDENCY_BY_REGION_BIT则允许基于区域的依赖，同步只在每个区域内进行，而不是整个渲染目标，不同区域之间可以并行处理，适合TBR架构。
+  如果不使用内存相关的屏障，该命令定义了一个执行屏障，即在srcStageMask和dstStageMask之间插入一个同步点，确保所有指定源操作都完成，目标操作才开始。
+  如果使用内存相关的屏障，则屏障会根据自身的srcAccessMask和dstAccessMask的值，在srcStageMask和dstStageMask之间插入一个同步点，确保所有指定源操作都完成，目标操作才开始。
+
+
+全局内存屏障
+
+// 全局内存屏障：影响所有内存访问
+typedef struct VkMemoryBarrier {
+    VkStructureType    sType;                // 结构体类型，必须是 VK_STRUCTURE_TYPE_MEMORY_BARRIER
+    const void*        pNext;                // 扩展信息指针，通常为nullptr
+    VkAccessFlags      srcAccessMask;        // 源访问掩码，指定在barrier之前必须完成的内存访问类型
+    VkAccessFlags      dstAccessMask;        // 目标访问掩码，指定必须等待barrier的内存访问类型
+} VkMemoryBarrier;
+
+
+全局内存屏障由 VkMemoryBarrier 结构体描述，用于同步整个 GPU 内存中的所有数据。它并不针对具体的缓冲区或图像，而是作用于全局范围内的内存访问。通过设置源和目标访问掩码（srcAccessMask 和 dstAccessMask），开发者可以确保在某个阶段完成的所有内存写操作对后续阶段的所有内存读取操作可见。
+
+缓冲区内存屏障
+
+// 缓冲内存屏障：针对特定缓冲区的内存访问
+typedef struct VkBufferMemoryBarrier {
+    VkStructureType    sType;                // 结构体类型，必须是 VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER
+    const void*        pNext;                // 扩展信息指针，通常为nullptr
+    VkAccessFlags      srcAccessMask;        // 源访问掩码
+    VkAccessFlags      dstAccessMask;        // 目标访问掩码
+    uint32_t          srcQueueFamilyIndex;   // 源队列族索引，用于队列族所有权转移
+    uint32_t          dstQueueFamilyIndex;   // 目标队列族索引，用于队列族所有权转移
+    VkBuffer          buffer;                // 受影响的缓冲区对象
+    VkDeviceSize      offset;                // 受影响区域的起始偏移
+    VkDeviceSize      size;                  // 受影响区域的大小
+} VkBufferMem
+
+
+缓冲内存屏障由 VkBufferMemoryBarrier 结构体描述，专门用于同步对特定 VkBuffer 的内存访问。它不仅包含全局内存屏障的所有属性，还能指定屏障所作用的缓冲区、起始偏移量和数据大小。
+
+srcQueueFamilyIndex和dstQueueFamilyIndex用于队列族所有权转移，当使用队列族所有权转移功能时，需要指定源队列族索引和目标队列族索引。如果不涉及队列族所有权转移，设置为VK_QUEUE_FAMILY_IGNORED。当计算队列族和图形队列族分离时，如果需要在图形队列中访问计算队列族的资源，需要使用队列族所有权转移(或者在资源创建时设置资源共享)。
+
+图像内存屏障
+
+
+// 图像内存屏障：针对特定图像的内存访问
+typedef struct VkImageMemoryBarrier {
+    VkStructureType            sType;               // 结构体类型，必须是 VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
+    const void*                pNext;               // 扩展信息指针，通常为nullptr
+    VkAccessFlags             srcAccessMask;        // 源访问掩码
+    VkAccessFlags             dstAccessMask;        // 目标访问掩码
+    VkImageLayout             oldLayout;            // 转换前的图像布局
+    VkImageLayout             newLayout;            // 转换后的图像布局
+    uint32_t                  srcQueueFamilyIndex;  // 源队列族索引
+    uint32_t                  dstQueueFamilyIndex;  // 目标队列族索引
+    VkImage                   image;                // 受影响的图像对象
+    VkImageSubresourceRange   subresourceRange;     // 受影响的图像子资源范围
+} VkImageMemoryBarrier;
+
+// 子资源范围
+typedef struct VkImageSubresourceRange {
+    VkImageAspectFlags    aspectMask;       // 图像方面(颜色、深度、模板等)
+    uint32_t             baseMipLevel;      // 基础mip级别
+    uint32_t             levelCount;        // mip级别数量
+    uint32_t             baseArrayLayer;    // 基础数组层
+    uint32_t             layerCount;        // 数组层数量
+} VkImageSubresourceRange;
+
+
+图像内存屏障由 VkImageMemoryBarrier 结构体描述，专门用于同步对特定 VkImage 的内存访问。它不仅包含全局内存屏障的所有属性，还能指定屏障所作用的图像、子资源范围。
+
+VkImageSubresourceRange 用于指定图像的哪些部分受到影响。
+
+  aspectMask：指定图像的方面，如颜色、深度、模板等。
+  baseMipLevel：指定起始的mip级别。
+  levelCount：指定mip级别的数量。
+  baseArrayLayer：指定起始的数组层。
+  layerCount：指定数组层的数量。
+
+
+除此之外，VkImageMemoryBarrier 还包含oldLayout和newLayout，用于指定图像布局的转换。
+
+  在 Vulkan 中，图像布局（Image Layout）用于描述 GPU 内部如何组织和访问图像数据。相比 OpenGL 的隐式管理，Vulkan 要求开发者显式指定和转换图像布局，方便GPU明确用途并进行对应的性能优化。
+
+
+
+  Transient Attachments（转瞬附件），可以利用 Vulkan 的自动转换特性：
+  
+    Transient Images： 创建时带有 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT，初始布局设为 VK_IMAGE_LAYOUT_UNDEFINED 表明无需保留内容。
+    自动转换： Vulkan 驱动会在 render pass 开始前、结束后自动插入外部依赖，完成从 UNDEFINED 到目标布局（如 COLOR_ATTACHMENT_OPTIMAL）以及结束后的转换至 PRESENT_SRC_KHR（用于交换链呈现）。
+    
+  
+
+
+Barrier的性能影响
+
+  过度使用导致性能损耗：每个 Barrier 都会在流水线上插入一个同步点，如果频繁地插入不必要的Barrier，会增加GPU的停顿并降低并行效率。
+  恰当使用可以避免错误和竞态：Barrier 在正确的位置使用能够让数据流安全地”串行化”，避免读写冲突。
+
+
+使用注意事项
+
+  阶段掩码精确化：在指定 srcStageMask 和 dstStageMask 时，要尽量精确地指定真实会产生和需要依赖的着色阶段或管线阶段，以减少不必要的同步。
+  布局转换与访问掩码：Barrier 需要指定图像的布局转换和访问掩码（srcAccessMask/dstAccessMask），要确保与实际使用场景匹配。
+  批量Barrier：避免在不同的资源上反复调用单个Barrier，可以把多个资源的Barrier一起批量提交，减少命令开销。
+
+
+Events：更灵活的同步利器
+Pipeline Barrier 适用于同一个命令缓冲里强制“先做完 A，再做 B”。但如果你希望在并行中更灵活地“给 GPU 发信号”，可以用 Events:
+
+  Set Event (vkCmdSetEvent)：在指定的 pipeline 阶段完成后，标记某个事件为已触发
+  Wait Event (vkCmdWaitEvent)：在指定管线阶段等事件触发后，再继续执行
+
+
+例如：
+// A 和 B 两次计算
+vkCmdDispatch(...);
+vkCmdDispatch(...);
+
+// 设置事件，表示 A 和 B 都完成后触发
+vkCmdSetEvent(event, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT);
+
+// D 是独立计算，可与 A、B 并行
+vkCmdDispatch(...);
+
+// 在绘制（C）前等待事件，确保 A、B 完成
+vkCmdWaitEvents(1, &amp;event, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT, ...);
+
+// 真正的绘制
+vkCmdDraw(...);
+
+这样便可让 D 与 A、B 并行，只有在需要结果依赖的绘制（C）时才去等待。
+
+Semaphore（信号量）
+
+概念
+
+Semaphore（信号量）在 Vulkan 中主要用于队列之间的执行顺序同步。它不能被 CPU 查询，CPU无法通过 Semaphore 判断什么时候 GPU 完成了某一条指令；它更适合在 GPU 内部或不同队列之间”串起”执行顺序。例如，我们可能在一个队列上进行图像后处理，然后在另一个队列上进行呈现；在这两个队列之间需要一个 Semaphore 让呈现等待后处理完成。
+
+Semaphore的适用场景
+
+  不同队列间依赖：渲染队列和呈现队列之间交换图像通常会用到 Semaphore 来协调。例如，vkAcquireNextImageKHR 返回的信号量会在图像可用时触发，渲染结束后再用一个信号量告知显示队列可以进行呈现。
+  多通道并行处理：如果使用多队列同时处理不同任务，在队列间需要明确地指定执行顺序时，使用 Semaphore 进行同步。
+
+
+Semaphore的性能影响
+
+  轻量但仅限 GPU 内部：相比Fence来说，Semaphore 更轻量，因为它无需让 CPU 轮询或等待，也不需要在 CPU 端可见。通常可以让不同队列并发工作，充分利用 GPU 资源。
+  等待延迟：如果在一个队列上等待另一个队列信号量，会引入一定延迟，要结合管线设计和命令流来优化。
+
+
+Fence（栅栏）
+
+概念
+Fence（栅栏）是另一种同步原语，与 Semaphore 不同的是，Fence 可以被 CPU 端查询。当一个命令缓冲区在 GPU 上执行完成后，Fence 会被置为已信号状态（signaled state），CPU 通过 vkWaitForFences 或 vkGetFenceStatus 等函数能够得知 GPU 的执行状态。
+
+Fence的适用场景
+
+  GPU 任务结束的 CPU 检测：在需要 CPU 端等待 GPU 完成某些任务（比如更新一块缓冲区后，需要 CPU 端再做一些操作）时使用。
+  动态资源回收：如果想知道 GPU 什么时候真正使用完一块资源（例如上一帧的 Uniform Buffer），Fence 可以帮助我们在 CPU 上安全地回收或复用资源。
+  多缓冲策略中的帧同步：常用在多帧并行（triple buffering 或 double buffering）时，CPU需要知道当前帧是否可以安全地写入时，会查询对应的 Fence。
+
+
+Fence的性能影响
+
+  CPU/GPU 同步开销：Fence 一旦被 CPU 等待（vkWaitForFences），就会造成 CPU 和 GPU 之间的同步停顿，影响并行度。
+  延迟增加：如果没有必要的地方使用 Fence，会导致 CPU 过度等待，引起帧率下降或延迟增大。
+
+
+使用注意事项
+
+  批量等待：在需要等待多个Fence时，尽量使用批量等待，而不是一个个等待。
+  复用 Fence：Fence 在被 signaled 之后，可通过 vkResetFences 重置来重复使用，避免频繁创建销毁。
+  避免无谓等待：在管线设计中，如果可以让 CPU 继续做其他工作，就尽量不要阻塞 CPU，只有在需要保证资源一致性时再使用 Fence。
+
+
+
+  Queue Submit &amp; 信号量等待会带来隐式内存保证：
+  
+    当一个队列提交被另一个队列通过信号量（Semaphore）等待时，Vulkan 会隐式地完成所有写入的 flush，使得内存可见给后续队列。
+    当一个队列提交完成并且 Fence 被置位，表示 GPU -&gt; CPU 的所有工作也可见。
+  
+
+
+Subpass Dependencies（子通道依赖）
+概念
+Vulkan 中的 Render Pass 可以由多个 Subpass 组成，每个 Subpass 是一个渲染阶段。Subpass Dependencies 用于指定 Subpass 之间的执行和内存依赖关系，从而在同一个 Render Pass 内实现图像的输入/输出同步。因此在同一个 Render Pass 内，Subpass Dependencies 可以减少外部 Barrier 的使用。
+
+一般地，Subpass Dependencies 会指定：
+
+  源子通道（srcSubpass）和目标子通道（dstSubpass）
+  源阶段与目标阶段（srcStageMask, dstStageMask）
+  源访问掩码与目标访问掩码（srcAccessMask, dstAccessMask）
+  依赖标志（dependencyFlags）
+
+
+Subpass 依赖的适用场景
+
+  多渲染阶段共享同一图像：例如，在一个 Subpass 中写入颜色附件，接下来一个 Subpass 需要使用它作为输入附件（input attachment）。
+  分阶段渲染：如果想在一个 Render Pass 内连续执行多个着色阶段，而这几个阶段都在同一个 GPU 队列上运行，那么 Subpass Dependencies 就是最合适的同步方式。
+
+
+Subpass 依赖的性能影响
+
+  减少开销：使用 Subpass Dependencies 在同一个 Render Pass 内可以减少图像布局切换和相关命令的开销。
+  提高带宽利用率：Subpass Dependencies 可以帮助 Vulkan 在同一 Render Pass 内合理地利用附件。
+
+
+使用注意事项
+
+  需要在创建 Render Pass 时指定：一旦 Render Pass 的依赖关系确定，就不能再动态修改。
+  适当规划多 Subpass 结构：过度的 Subpass 拆分会导致复杂的依赖管理，不是所有的场景都适合在一个 Render Pass 内解决。
+  配合 input attachment 使用：当一个 Subpass 的输出作为下一个 Subpass 的 input attachment 时，需要正确设置依赖，确保不会读写冲突。
+
+
+同步方法对比
+不同的同步机制往往对应着不同的使用层次和需求，下面简要对比：
+
+
+  
+    
+      同步原语
+      主要作用
+      适用场景
+      CPU 可见性
+      性能影响
+    
+  
+  
+    
+      Barrier
+      GPU 内部执行与内存同步
+      管线阶段、内存访问控制、布局转换
+      不可见
+      需要精确指定，过多会影响并行性
+    
+    
+      Semaphore
+      队列间同步
+      多队列交互，如图像获取与提交
+      不可见
+      轻量级，主要在GPU端
+    
+    
+      Fence
+      CPU 等待 GPU 完成
+      资源回收、GPU任务结束时需 CPU 介入
+      可见
+      CPU 阻塞可能拖慢帧率
+    
+    
+      Subpass
+      Render Pass 内部同步
+      多个渲染阶段共享附件，减少外部Barrier
+      不可见
+      在同一 Render Pass 内更高效
+    
+  
+
+
+设计与实践建议
+
+
+  尽量减少无意义的Barrier
+    
+      保证数据访问安全的前提下，减少不必要的 Pipeline Barrier，可以合并多个资源的Barrier或者使用更精准的阶段掩码。
+    
+  
+  巧用Subpass减少外部同步
+    
+      同一 Render Pass 内的多个阶段尽量用 Subpass Dependencies 处理，可以避免过多的图像布局切换和额外的 Barrier 开销。
+    
+  
+  合理划分队列并使用Semaphore
+    
+      如果 GPU 拥有异步计算队列或传输队列，适当将工作分摊在不同队列。使用 Semaphore 进行队列间同步，充分利用 GPU 并行。
+    
+  
+  Fence用于 CPU/GPU 交互
+    
+      只有在需要 CPU 等待 GPU 的结果时才使用 Fence，避免无谓的阻塞。要注意等待方式（阻塞或轮询）的选择及资源回收。
+    
+  
+  监控和调试
+    
+      使用 Vulkan 的验证层（Validation Layers）或 GPU 调试工具，来确认 Barrier 和同步的正确性，避免出现 GPU 死锁或数据争用。
+    
+  
+
+
+EasyVulkan中的同步管理
+EasyVulkan通过封装 Vulkan 的同步对象，提供了一整套简单而灵活的同步管理方案。核心类 SynchronizationManager 就是这一解决方案的代表。下面我们从几个方面来介绍它的设计理念与实现思路。
+
+统一创建与管理
+SynchronizationManager 封装了创建信号量和栅栏的过程，允许开发者通过简单的接口来创建同步对象，而无需关心底层的 Vulkan 调用细节。例如：
+
+// 创建自定义的信号量和栅栏
+auto transferComplete = syncManager-&gt;createSemaphore("transferComplete");
+auto cmdFence = syncManager-&gt;createFence(false, "cmdBufferFence");
+
+
+这里，createSemaphore 与 createFence 接口不仅简化了对象创建，还支持为同步对象命名，这有助于调试和资源追踪。
+
+帧同步管理
+在现代图形应用中，为了实现流畅的多缓冲（如三重缓冲）渲染，通常需要为每一帧分别创建同步对象。SynchronizationManager 内置了 createFrameSynchronization 接口，可以一次性为所有并行帧创建所需的信号量和栅栏。内部会为每一帧创建：
+
+  图像可用信号量：确保交换链图像获取到位。
+  渲染完成信号量：通知呈现引擎渲染工作已经结束。
+  帧内栅栏：用于 CPU 等待 GPU 渲染完成。
+
+
+// 设置三重缓冲，每帧同步对象自动创建
+syncManager-&gt;createFrameSynchronization(3);
+
+
+在渲染循环中，可以直接通过索引获取对应帧的同步对象：
+
+auto imageAvailable = syncManager-&gt;getImageAvailableSemaphore(currentFrame);
+auto renderFinished = syncManager-&gt;getRenderFinishedSemaphore(currentFrame);
+auto inFlightFence = syncManager-&gt;getInFlightFence(currentFrame);
+
+
+自动资源清理与异常处理
+SynchronizationManager 在内部维护了所有同步对象的生命周期。在其析构函数中，会自动调用 cleanup 方法，确保所有 Vulkan 同步对象得到正确释放，从而避免内存泄漏和资源错误。此外，各接口均提供了异常处理机制，当遇到同步对象创建失败或参数错误时，会抛出异常，帮助开发者及时定位问题。
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/EasyVulkan" class="category">EasyVulkan</a>
+                            
+                                <span class="date">· 2025-02-01</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/EasyVulkan/Builder%E7%B1%BB/RenderPass.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202012410.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/EasyVulkan/Builder%E7%B1%BB/RenderPass.html"><h1 class="title_post">Vulkan渲染通道</h1></a>
+                        <a href="/EasyVulkan/Builder%E7%B1%BB/RenderPass.html" class="txt_post">
+                            引言
+在Vulkan图形API的渲染管线中，渲染通道（Render Pass）是构建高效渲染流程的核心组件,它不仅描述了一次渲染操作中的渲染目标（attachments）的使用方式，还决定了多个渲染阶段（subpass）之间的执行顺序和数据依赖关系。本文将深入探讨Vulkan渲染通道的工作原理及其关键要素的实现细节。
+
+渲染通道的本质
+渲染通道（VkRenderPass）定义了渲染操作期间使用的帧缓冲附件集合及其使用方式。它通过明确指定附件的生命周期和依赖关系，允许驱动进行深层次优化。相较于传统图形API的隐式状态管理，Vulkan的显式声明机制可降低内存带宽消耗达30%以上。
+渲染通道主要负责描述：
+
+  渲染目标（Attachments） 的格式、加载/存储操作、采样数等属性；
+  子通道（Subpasses） 中每个阶段如何使用这些渲染目标；
+  子通道间的依赖关系（Pipeline Dependencies），用于保证数据正确性和同步。
+
+
+设计哲学
+显式控制：开发者必须明确指定所有附件和子流程
+执行优化：提前声明渲染流程使驱动能优化资源布局
+依赖管理：精确控制子流程间的内存和执行顺序
+
+Attachment简介与创建方法
+Attachment 通常指的是帧缓冲区中的渲染目标，比如颜色缓冲、深度缓冲或模板缓冲。每个attachment都需要在创建渲染通道时进行详细的描述，主要包括以下几个方面：
+
+  格式（Format）：如 VK_FORMAT_B8G8R8A8_UNORM、VK_FORMAT_D32_SFLOAT 等。
+  采样数（Samples）：多重采样时使用的采样数。
+  加载/存储操作（Load/Store Operations）：如在渲染开始时是清除还是保留已有数据，在渲染结束时是存储还是丢弃数据。
+  初始与最终布局（InitialLayout/FinalLayout）：表明attachment在渲染开始前和结束后的内存布局状态，便于Vulkan内部进行布局转换。
+
+
+在创建渲染通道时，需要通过一个 VkAttachmentDescription 数组来描述所有的attachment。例如：
+
+VkAttachmentDescription colorAttachment = {};
+colorAttachment.format = swapchainImageFormat; // 指定Format
+colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT; // 指定采样数
+colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; // 指定加载操作
+colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE; // 指定存储操作
+// For depth/stencil attachments
+colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // 指定模板加载操作
+colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE; // 指定模板存储操作
+// End for depth/stencil attachments
+colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; // 指定初始布局
+colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // 指定最终布局
+
+
+Subpass简介与创建方法
+Subpass 是渲染通道中的一个阶段，每个subpass描述了在该阶段中如何使用和依赖attachment。
+
+在创建渲染通道时，需要使用 VkSubpassDescription 结构体来描述每个subpass。一个subpass通常至少需要描述以下信息：
+
+  Pipeline Bind Point：通常为 VK_PIPELINE_BIND_POINT_GRAPHICS，指明当前subpass将用于图形管线。
+  颜色附件引用（Color Attachments）：指明渲染阶段中将写入颜色数据的attachment。
+  输入附件引用（Input Attachments）：在一个subpass中可以读取之前subpass生成的数据。
+  深度/模板附件引用（Depth/Stencil Attachment）：如果需要使用深度或模板测试，则需要指定对应的attachment。
+如下代码创建了一个简单的subpass：
+
+
+VkAttachmentReference colorAttachmentRef = {};
+colorAttachmentRef.attachment = 0;  // 引用上面定义的第一个attachment
+colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+VkSubpassDescription subpass = {};
+subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+subpass.colorAttachmentCount = 1;
+subpass.pColorAttachments = &amp;colorAttachmentRef;
+
+在这个例子中，我们创建了一个渲染阶段，该阶段会把渲染结果写入第0号attachment，并且要求该attachment处于 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL 布局状态。
+
+为什么需要subpass？
+Vulkan采用subpass的设计模式，除了在API层面给出了更明确的渲染流程以外，还带来了以下好处：
+
+  利用On-chip memory，减少内存带宽消耗。
+ 在移动端等功耗敏感型设备上，GPU普遍采用了TBR设计，减少对内存带宽的占用，其主要思想是在小块（tile）区域内完成大部分渲染操作，然后统一写回到内存。subpass 非常适合这种架构：在同一个 render pass 内的多个 subpass 可以在同一tile 的生命周期内连续处理(数据传输发生在On-chip memory上)，不必频繁地将数据在片上和内存之间来回传输。
+  避免全局同步。
+ 传统渲染流水线中，可能需要使用全局的内存屏障来确保数据一致性，而在 subpass 内部，由于数据依赖关系已被明确定义，驱动和硬件就可以局部地处理同步，减少不必要的等待。
+
+
+Subpass Dependency简介与创建方法
+在一个渲染通道中，多个subpass之间或subpass与外部操作之间往往存在数据依赖关系。为了确保数据的正确性和避免竞态条件，需要在渲染通道中明确声明这些依赖关系。这就是管线Dependency（Pipeline Dependency）的作用。
+
+管线Dependency 允许开发者在subpass之间定义内存屏障和执行屏障，确保：
+
+  某个subpass的写操作完成后，下一个subpass读取数据时能够获得最新的结果；
+  在执行特定渲染操作前，所有前置的操作已经完成并且内存访问已经同步。
+
+
+在Vulkan中，这种依赖关系通过 VkSubpassDependency 结构体进行描述。
+
+如何使用管线依赖
+假设有两个subpass：subpass0写入颜色数据，而subpass1需要读取这些数据作为输入attachment。在这种场景下，我们需要确保subpass0的写操作在subpass1开始读取之前已经完成。可以通过如下方式定义一个依赖：
+
+VkSubpassDependency dependency = {};
+dependency.srcSubpass = 0;  // 依赖源subpass
+dependency.dstSubpass = 1;  // 依赖目标subpass
+
+// 指定依赖的阶段与访问类型
+dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+dependency.dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+dependency.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+dependency.dstAccessMask = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+
+// 对于跨subpass依赖，通常设置dependency.flags为0或VK_DEPENDENCY_BY_REGION_BIT
+dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+
+在上述例子中：
+
+  srcSubpass 指定了依赖的来源，即subpass0；
+  dstSubpass 指定了依赖的目标，即subpass1；
+  srcStageMask 和 dstStageMask 指明了涉及的管线阶段；
+  srcAccessMask 和 dstAccessMask 则描述了内存访问的类型。
+
+
+此外，对于一些特殊情况（如初始状态与最终状态的同步），也可以将 srcSubpass 或 dstSubpass 设置为 VK_SUBPASS_EXTERNAL，以描述与渲染通道外部的依赖关系。
+
+例如，定义一个计算预处理 -&gt; 图形渲染的依赖：
+
+VkSubpassDependency compToGraphic = {
+    .srcSubpass = VK_SUBPASS_EXTERNAL, // 表示计算阶段
+    .dstSubpass = 0,                   // 图形子流程索引
+    .srcStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+    .dstStageMask = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT |
+                   VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+    .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
+    .dstAccessMask = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT |
+                    VK_ACCESS_SHADER_READ_BIT,
+    .dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT
+};
+
+又或者定义一个图形渲染 -&gt; 计算后处理的依赖：
+
+VkSubpassDependency graphicToComp = {
+    .srcSubpass = 1,                    // 最后一个图形子流程
+    .dstSubpass = VK_SUBPASS_EXTERNAL,  // 后续计算阶段
+    .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+    .dstStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+    .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+    .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
+    .dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT
+};
+
+
+EasyVulkan中的RenderPass
+
+构建一个含有颜色和深度附件的 Renderpass：
+
+// 创建一个简单的 Renderpass，其中包含颜色和深度附件
+auto renderPass = renderPassBuilder
+    .addColorAttachment(swapchainFormat)               // 添加颜色附件
+    .addDepthStencilAttachment(depthFormat)            // 添加深度/模板附件
+    .beginSubpass()                                      // 开始一个子通道
+    .addColorReference(0)                                // 子通道引用第 0 个附件作为颜色附件
+    .setDepthStencilReference(1)                         // 子通道引用第 1 个附件作为深度/模板附件
+    .endSubpass()                                        // 结束子通道
+    .build("mainRenderPass");                            // 构建 Renderpass，并命名为 "mainRenderPass"
+
+
+对于复杂的渲染流程，经常需要设置多个子通道以及它们之间的依赖关系。以下示例展示了如何配置多个子通道，并在它们之间添加依赖：
+
+// 构建一个拥有多个子通道的 Renderpass
+auto renderPass = renderPassBuilder
+    .addColorAttachment(colorFormat)                   // 添加颜色附件
+    .addDepthStencilAttachment(depthFormat)            // 添加深度/模板附件
+
+    // 第一个子通道配置：渲染到颜色附件和深度附件
+    .beginSubpass()
+    .addColorReference(0)
+    .setDepthStencilReference(1)
+    .endSubpass()
+
+    // 第二个子通道配置：使用第一个子通道的颜色输出作为输入附件，同时写入到另一个颜色附件（例如后续处理）
+    .beginSubpass()
+    .addInputReference(0)
+    .addColorReference(2)
+    .endSubpass()
+
+    // 添加子通道间依赖：确保第一个子通道的写入操作完成后，第二个子通道才能读取
+    .addDependency(0, 1,
+        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+        VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+        VK_ACCESS_SHADER_READ_BIT)
+    
+    .build("multiPassRender");                          // 构建 Renderpass
+
+
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/EasyVulkan" class="category">EasyVulkan</a>
+                            
+                                <span class="date">· 2025-01-29</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011726.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html"><h1 class="title_post">Vulkan描述符集</h1></a>
+                        <a href="/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html" class="txt_post">
+                            Vulkan描述符集的简化之道：探索EasyVulkan的实现
+
+
+  在使用Vulkan时，需要使用描述符集来管理资源。描述符集是Vulkan中的一种资源管理机制，用于管理资源（如纹理、缓冲区等）的绑定和使用。然而，描述符集的创建和使用需要大量的代码操作，包括创建描述符池、创建layout binding、创建描述符池、创建和更新descriptorSet等。并且，增加新的资源时，也需要修改大量的代码，这无疑增加了开发者的负担。
+
+
+为了简化这个过程，EasyVulkan提供了DescriptorSetBuilder类，它采用了构建器模式，大大简化了描述符集的创建和管理过程。让我们一起深入了解这个实现。
+
+DescriptorSetBuilder的核心设计
+
+1. 构建器模式的应用
+
+EasyVulkan的DescriptorSetBuilder采用了构建器模式，这使得描述符集的创建过程变得更加流畅和直观。主要体现在：
+
+DescriptorSetBuilder builder(device, context);
+VkDescriptorSet descriptorSet = builder
+    .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, VK_SHADER_STAGE_VERTEX_BIT)
+    .addBufferDescriptor(0, buffer, 0, bufferSize, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+    .buildWithLayout("myDescriptorSet");
+
+
+2. 资源绑定的简化
+
+DescriptorSetBuilder提供了多个直观的方法来添加不同类型的资源，这些方法中封装了原本复杂的Vulkan API调用操作：
+
+
+  addBinding: 添加描述符布局绑定
+  addBufferDescriptor: 添加缓冲区描述符
+  addImageDescriptor: 添加图像描述符
+  addStorageImageDescriptor: 添加存储图像描述符
+
+
+3. 自动化的资源管理
+
+DescriptorSetBuilder还提供了自动的资源管理功能：
+
+
+  自动创建和管理描述符池
+  自动验证绑定的正确性
+  自动注册资源到资源管理器
+  自动处理错误情况
+
+
+实现细节解析
+
+1. 描述符池的创建
+
+描述符池的创建在build方法中调用createPool方法完成。该方法的实现如下：
+
+VkDescriptorPool DescriptorSetBuilder::createPool() const {
+    // 统计每种描述符类型的数量
+    std::unordered_map&lt;VkDescriptorType, uint32_t&gt; typeCount;
+    for (const auto &amp;binding : m_layoutBindings) {
+        typeCount[binding.descriptorType] += binding.descriptorCount;
+    }
+
+    // 创建池大小信息
+    std::vector&lt;VkDescriptorPoolSize&gt; poolSizes;
+    for (const auto &amp;[type, count] : typeCount) {
+        poolSizes.push_back({type, count});
+    }
+    
+    // ... 创建描述符池
+}
+
+
+2. 绑定验证机制
+
+为了确保描述符集的正确性，DescriptorSetBuilder实现了完善的验证机制：
+
+void DescriptorSetBuilder::validateBindings() const {
+    // 检查是否存在绑定
+    if (m_layoutBindings.empty()) {
+        throw std::runtime_error("No descriptor set bindings specified");
+    }
+
+    // 检查重复绑定
+    std::unordered_map&lt;uint32_t, VkDescriptorType&gt; bindingTypes;
+    for (const auto &amp;binding : m_layoutBindings) {
+        auto [it, inserted] = bindingTypes.insert({binding.binding, binding.descriptorType});
+        if (!inserted) {
+            throw std::runtime_error("Duplicate binding number in descriptor set layout");
+        }
+    }
+
+    // 验证写入描述符与绑定的匹配性
+    // ...
+}
+
+
+3. 资源更新机制
+
+描述符集的更新过程也被简化：
+
+void DescriptorSetBuilder::updateDescriptorSet(VkDescriptorSet descriptorSet) const {
+    std::vector&lt;VkWriteDescriptorSet&gt; writes = m_writes;
+    for (auto &amp;write : writes) {
+        write.dstSet = descriptorSet;
+    }
+
+    vkUpdateDescriptorSets(m_device-&gt;getLogicalDevice(),
+                          static_cast&lt;uint32_t&gt;(writes.size()),
+                          writes.data(), 0, nullptr);
+}
+
+
+EasyVulkan中的DescriptorSet
+
+// 创建一个包含uniform buffer和纹理的描述符集
+auto descriptorSet = builder
+    // 添加uniform buffer绑定
+    .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, 
+                VK_SHADER_STAGE_VERTEX_BIT)
+    // 添加纹理绑定
+    .addBinding(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1,
+                VK_SHADER_STAGE_FRAGMENT_BIT)
+    // 添加uniform buffer描述符
+    .addBufferDescriptor(0, uniformBuffer, 0, sizeof(UniformBufferObject),
+                        VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+    // 添加纹理描述符（Sampler可以通过SamplerBuilder创建）
+    .addImageDescriptor(1, textureImageView, textureSampler,
+                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                       VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
+    // 构建描述符集（name用于资源追踪）
+    .buildWithLayout("myMaterialDescriptorSet");
+
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/EasyVulkan" class="category">EasyVulkan</a>
+                            
+                                <span class="date">· 2025-01-27</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011015.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html"><h1 class="title_post">Vulkan命令缓冲区</h1></a>
+                        <a href="/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html" class="txt_post">
+                            命令池与命令缓冲区
+在Vulkan的渲染架构中，命令池（Command Pool）和命令缓冲区（Command Buffer）构成了GPU指令管理的核心机制。
+
+命令池 (Command Pool):  命令池是命令缓冲区的内存分配器和管理器。你可以把它想象成一个命令缓冲区的“工厂”。 每个命令池都与一个特定的队列族索引 (Queue Family Index) 关联。这意味着从该命令池分配的命令缓冲区只能提交到与该队列族索引对应的队列中。
+
+  内存分配: 命令池负责分配命令缓冲区所需的内存。Vulkan 允许驱动程序在命令池级别进行内存管理优化，例如预分配内存，从而提高命令缓冲区分配和释放的效率。
+  生命周期管理: 命令池管理着它所分配的命令缓冲区的生命周期。你可以重置整个命令池，一次性释放所有命令缓冲区，也可以单独重置和重新使用命令缓冲区。
+
+
+命令缓冲区 (Command Buffer): 命令缓冲区是实际存储 GPU 指令的容器。它记录了一系列图形或计算操作，例如：
+
+  渲染指令: 设置渲染状态、绑定描述符集、绑定顶点缓冲区和索引缓冲区、绘制调用等。
+  计算指令: 分发计算着色器、绑定计算描述符集等。
+  传输指令: 缓冲区和图像的拷贝、填充、更新等。
+  同步指令: 设置事件、栅栏、管线屏障等。
+可以将命令缓冲区类比为一条“指令流水线”，GPU 会按照命令缓冲区中指令的顺序逐条执行。
+
+
+
+  
+    
+      特性
+      命令池
+      命令缓冲区
+    
+  
+  
+    
+      生命周期管理
+      手动创建/销毁
+      由命令池分配/回收
+    
+    
+      线程关联性
+      绑定到特定队列族
+      继承所属命令池的队列族属性
+    
+    
+      重置行为
+      可批量重置所有关联命令缓冲区
+      支持单独或批量重置
+    
+    
+      内存管理
+      控制底层内存分配策略
+      使用预分配的内存空间
+    
+  
+
+
+
+
+
+
+图 1：CommandPool 、CommandBuffer 、QueueFamily 、 Queue  的关系。
+
+
+
+
+  回顾在Vulkan初始化中，我们提到命令池创建时需要指定队列族，由该命令池创建的命令缓冲区也只能使用该队列族的队列来执行。
+
+
+创建和使用
+命令池创建
+
+VkCommandPoolCreateInfo poolInfo{};
+poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+poolInfo.queueFamilyIndex = queueFamilyIndex;  // 指定队列族索引 (例如图形队列族)
+poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+
+vkCreateCommandPool(device, &amp;poolInfo, nullptr, &amp;commandPool);
+
+
+标志位解析：
+VK_COMMAND_POOL_CREATE_TRANSIENT_BIT: 适用于高频更新的短期命令。提示驱动程序命令缓冲区是短暂的，可能可以进行一些优化，但实际效果取决于驱动程序。
+VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT: 允许单独重置命令缓冲区。强烈建议设置此标志位。它允许你单独重置命令池中分配的命令缓冲区，以便重复使用，而无需重新分配。
+
+命令缓冲区分配
+
+VkCommandBufferAllocateInfo allocInfo{};
+allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+allocInfo.commandPool = commandPool;
+allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;  // 或者 VK_COMMAND_BUFFER_LEVEL_SECONDARY
+allocInfo.commandBufferCount = 1;  // 分配的命令缓冲区数量
+
+vkAllocateCommandBuffers(device, &amp;allocInfo, &amp;commandBuffer);
+
+commandPool: 指定命令缓冲区从哪个命令池分配。
+level: 指定命令缓冲区的级别，可以是 VK_COMMAND_BUFFER_LEVEL_PRIMARY 或 VK_COMMAND_BUFFER_LEVEL_SECONDARY。
+commandBufferCount: 指定要分配的命令缓冲区数量。可以一次性分配多个命令缓冲区。
+
+开始和结束记录
+
+VkCommandBufferBeginInfo beginInfo{};
+beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT; // 提示缓冲区将被提交一次并立即重置
+
+vkBeginCommandBuffer(commandBuffer, &amp;beginInfo);
+
+// ... 在这里记录你的 Vulkan 指令 (例如 vkCmdBindPipeline, vkCmdDraw 等) ...
+
+vkEndCommandBuffer(commandBuffer);
+
+
+
+beginInfo.flags: 可以设置一些标志位来提示驱动程序命令缓冲区的用途，常用的标志位包括：
+
+  VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT: 提示缓冲区将被提交一次，然后立即重置或释放。
+  VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT: 指示后续渲染通道的状态将继承自这个命令缓冲区之前的渲染通道。
+  VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT: 指示命令缓冲区可以多次提交，直到被显式重置。
+
+
+提交
+记录完成的命令缓冲区需要提交到队列才能被 GPU 执行。
+
+VkSubmitInfo submitInfo{};
+submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+submitInfo.commandBufferCount = 1;
+submitInfo.pCommandBuffers = &amp;commandBuffer;
+
+if (vkQueueSubmit(graphicsQueue, 1, &amp;submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
+    throw std::runtime_error("failed to submit command buffer!");
+}
+
+// 可选: 等待队列完成执行 (同步操作)
+vkQueueWaitIdle(graphicsQueue);
+
+
+submitInfo.pCommandBuffers: 指向要提交的命令缓冲区数组。
+vkQueueSubmit: 将命令缓冲区提交到指定的队列 (graphicsQueue 在这里是图形队列)。
+vkQueueWaitIdle: 等待队列中的所有命令缓冲区执行完成。通常用于同步操作，例如等待渲染完成才能进行后续操作。
+
+释放和重置命令缓冲区
+
+使用完命令缓冲区后，你可以选择释放或重置它。
+释放命令缓冲区: 将命令缓冲区返回给命令池，可以再次分配新的命令缓冲区。
+
+vkFreeCommandBuffers(device, commandPool, 1, &amp;commandBuffer);
+
+
+重置命令缓冲区: 清除命令缓冲区中的所有指令，使其可以重新记录。重置操作比重新分配更高效。
+
+vkResetCommandBuffer(commandBuffer, 0); // 或者 VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT
+
+
+VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT: 提示驱动程序释放命令缓冲区内部使用的资源，可以节省内存，但可能会降低性能。
+
+销毁命令池
+当不再需要命令池时，需要销毁它，释放其占用的资源。
+
+vkDestroyCommandPool(device, commandPool, nullptr);
+
+
+高级用法-二级缓冲区被主命令缓冲区调用
+
+Vulkan 将命令缓冲区分为两种级别：
+
+  
+    主命令缓冲区 (Primary Command Buffer, VK_COMMAND_BUFFER_LEVEL_PRIMARY):  主命令缓冲区可以提交到队列执行，并且可以调用二级命令缓冲区。它通常用于组织应用程序的主要渲染或计算流程。
+  
+  
+    二级命令缓冲区 (Secondary Command Buffer, VK_COMMAND_BUFFER_LEVEL_SECONDARY): 二级命令缓冲区不能直接提交到队列执行， 必须由主命令缓冲区调用才能被执行。二级命令缓冲区常用于：
+    
+      组织复杂的渲染流程: 将渲染流程分解成多个逻辑模块，每个模块用一个二级命令缓冲区表示，提高代码可读性和可维护性。
+      并行命令缓冲区记录: 多个线程可以并行记录二级命令缓冲区，然后由主命令缓冲区按顺序调用，利用多核 CPU 提升命令缓冲区记录效率。
+      命令复用: 对于一些重复使用的命令序列，可以将其记录到二级命令缓冲区中，然后在多个主命令缓冲区中复用，减少重复记录的工作。
+    
+  
+
+
+调用二级命令缓冲区
+步骤：
+
+  创建二级命令缓冲区: 按照之前的方法，创建一个 VK_COMMAND_BUFFER_LEVEL_SECONDARY 级别的命令缓冲区。
+  记录二级命令缓冲区: 在二级命令缓冲区中记录你希望复用或并行记录的命令序列。
+  在主命令缓冲区中调用二级命令缓冲区: 在主命令缓冲区的记录过程中，使用 vkCmdExecuteCommands 命令来调用二级命令缓冲区。
+
+
+// 假设 primaryCmdBuffer 是主命令缓冲区，secondaryCmdBuffer 是二级命令缓冲区
+
+vkBeginCommandBuffer(primaryCmdBuffer, &amp;primaryBeginInfo);
+
+// ... 主命令缓冲区中的其他指令 ...
+
+// 调用二级命令缓冲区
+vkCmdExecuteCommands(primaryCmdBuffer, 1, &amp;secondaryCmdBuffer);
+
+// ... 主命令缓冲区中的其他指令 ...
+
+vkEndCommandBuffer(primaryCmdBuffer);
+
+
+二级命令缓冲区的继承 (Inheritance)
+当二级命令缓冲区在渲染通道内执行时，需要设置继承信息，例如渲染通道 (Render Pass) 和帧缓冲区 (Framebuffer)。这通过 VkCommandBufferInheritanceInfo 结构体在分配二级命令缓冲区时指定。
+
+VkCommandBufferInheritanceInfo inheritanceInfo{};
+inheritanceInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
+inheritanceInfo.renderPass = renderPass; // 继承的渲染通道
+inheritanceInfo.framebuffer = framebuffer; // 继承的帧缓冲区
+
+VkCommandBufferAllocateInfo allocInfo{};
+allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+allocInfo.commandPool = commandPool;
+allocInfo.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+allocInfo.commandBufferCount = 1;
+allocInfo.pInheritanceInfo = &amp;inheritanceInfo; // 设置继承信息
+
+vkAllocateCommandBuffers(device, &amp;allocInfo, &amp;secondaryCmdBuffer);
+
+
+
+  当前 Render Pass：确保次级缓冲区的操作与主缓冲区的渲染流程兼容。
+  当前 Framebuffer：明确操作的目标附件（如颜色/深度附件）。
+  子通道（Subpass）：若次级缓冲区在某个子通道内执行，需指定子通道索引。
+Vulkan 会基于这些信息验证次级缓冲区的操作是否合法。如果未正确配置，可能导致验证层错误或运行时崩溃：
+如果未正确配置，Vulkan 会抛出以下错误：
+  VUID-VkCommandBufferBeginInfo-flags-00053（Render Pass 未匹配）
+  VUID-vkCmdExecuteCommands-pCommandBuffers-00088（Framebuffer 不兼容）
+
+
+主命令缓冲会在记录时显式的在VkRenderPassBeginInfo中指定VkRenderPass和VkFramebuffer。
+
+// 主缓冲区记录 Render Pass
+VkRenderPassBeginInfo renderPassInfo{};
+renderPassInfo.renderPass = myRenderPass;     // 在此处指定 Render Pass
+renderPassInfo.framebuffer = myFramebuffer;
+
+vkBeginCommandBuffer(primaryCmdBuffer, ...);
+vkCmdBeginRenderPass(primaryCmdBuffer, &amp;renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+// 调用次级缓冲区或记录绘制命令
+vkCmdEndRenderPass(primaryCmdBuffer);
+vkEndCommandBuffer(primaryCmdBuffer);
+
+
+高级用法-条件执行模式
+代码逻辑
+
+// 1. 定义可能执行的命令缓冲区（此处为两个候选）
+VkCommandBuffer conditionalBuffer = ...;
+
+// 2. 配置条件渲染信息
+VkConditionalRenderingBeginInfoEXT condInfo{};
+condInfo.sType = VK_STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT;
+condInfo.buffer = conditionBuffer; // 存储条件值的缓冲区
+condInfo.offset = 0;               // 条件值在缓冲区中的偏移量
+
+// 3. 开启条件渲染范围
+vkCmdBeginConditionalRenderingEXT(primaryBuffer, &amp;condInfo);
+
+// 4. 在条件范围内执行命令
+vkCmdExecuteCommands(primaryBuffer, 1, conditionalBuffer);
+
+// 5. 结束条件渲染范围
+vkCmdEndConditionalRenderingEXT(primaryBuffer);
+
+
+解析
+
+
+  条件值的判定规则
+
+
+GPU 会从 conditionBuffer 的指定 offset 处读取一个 32位无符号整数值。
+判定逻辑：
+若值 ≠ 0 → 执行条件范围内的命令
+若值 = 0 → 跳过所有条件范围内的命令
+
+
+  
+    执行范围的作用域
+条件渲染的影响范围严格限定在 vkCmdBeginConditionalRenderingEXT 和 vkCmdEndConditionalRenderingEXT 之间的命令。
+嵌套支持：Vulkan 允许条件渲染的嵌套使用，内层条件可以覆盖外层条件。
+  
+  
+    次级命令缓冲区的特殊性
+示例中通过 vkCmdExecuteCommands 调用的次级命令缓冲区会整体受条件值控制。
+若条件不满足，次级缓冲区的所有命令将被跳过，如同未被调用。
+  
+
+
+场景
+
+  动态遮挡剔除（Occlusion Culling）
+
+
+// 步骤：
+// 1. 第一帧：执行遮挡查询，将结果写入 conditionBuffer
+// 2. 后续帧：根据查询结果决定是否绘制物体
+vkCmdBeginConditionalRenderingEXT(cmdBuffer, &amp;condInfo);
+vkCmdDrawIndexed(cmdBuffer, ...); // 仅当物体可见时执行绘制
+vkCmdEndConditionalRenderingEXT(cmdBuffer);
+
+
+
+  多方案动态切换
+
+
+uint32_t conditionValue = useTechniqueA ? 1 : 0;
+CopyDataToBuffer(conditionBuffer, &amp;conditionValue); // 更新条件值
+
+vkCmdBeginConditionalRenderingEXT(cmdBuffer, &amp;condInfo);
+if (useTechniqueA) {
+    vkCmdExecuteCommands(cmdBuffer, 1, &amp;techACmdBuffer);
+} else {
+    vkCmdExecuteCommands(cmdBuffer, 1, &amp;techBCmdBuffer);
+}
+vkCmdEndConditionalRenderingEXT(cmdBuffer);
+
+
+
+  GPU-Driven 渲染决策
+
+
+// 通过计算着色器生成条件值
+vkCmdDispatch(computeCmdBuffer, ...);
+
+// 在渲染流程中根据计算结果决策
+vkCmdBeginConditionalRenderingEXT(renderCmdBuffer, &amp;condInfo);
+vkCmdDraw(renderCmdBuffer, ...); // 由 GPU 计算的结果控制是否绘制
+vkCmdEndConditionalRenderingEXT(renderCmdBuffer);
+
+
+何时使用二级命令缓冲区？
+1. 复杂场景分解
+将复杂的渲染流程分解成多个二级命令缓冲区，例如将不同的物体或渲染阶段分别用不同的二级命令缓冲区表示，可以提高代码组织性。
+
+2. 并行记录
+如果你的应用程序有复杂的场景，命令缓冲区记录成为瓶颈，可以考虑使用多线程并行记录二级命令缓冲区，然后在一个主命令缓冲区中按顺序调用这些二级命令缓冲区。这可以有效利用多核 CPU 的性能。
+
+3. 命令复用
+对于重复使用的渲染或计算序列，将其记录到二级命令缓冲区中，在多个主命令缓冲区中复用，可以减少重复记录的工作量。
+
+EasyVulkan中的CommandBuffer
+在EasyVulkan中，使用CommandBufferBuilder来创建和记录命令缓冲区，在注册到ResourceManager中时，会绑定对应的CommandPool。即name-&gt; (CommandBuffer,CommandPool)
+
+例如创建单个CommandBuffer：
+
+// 假设 graphicsPool 已经正确创建并初始化
+auto cmdBuffer = commandBufferBuilder
+    -&gt;setCommandPool(graphicsPool)
+    -&gt;setLevel(VK_COMMAND_BUFFER_LEVEL_PRIMARY)
+    -&gt;build("mainCommandBuffer");
+
+
+创建多个CommandBuffer：
+
+// swapchainImageCount 为交换链图像数量
+auto cmdBuffers = commandBufferBuilder
+    -&gt;setCommandPool(graphicsPool)
+    -&gt;setCount(swapchainImageCount)
+    -&gt;buildMultiple({"frame0", "frame1", "frame2"});
+
+
+创建多个二级CommandBuffer：
+
+// 假设 threadCount 是线程数量
+auto secondaryCmdBuffers = commandBufferBuilder
+    -&gt;setCommandPool(graphicsPool)
+    -&gt;setLevel(VK_COMMAND_BUFFER_LEVEL_SECONDARY)
+    -&gt;setCount(threadCount)
+    -&gt;buildMultiple();
+
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/EasyVulkan" class="category">EasyVulkan</a>
+                            
+                                <span class="date">· 2025-01-27</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
         <li class="paginated-item">
                 <div id="article_content">
                     <div class="thumbnail_zone">
@@ -861,6 +2153,8 @@ typedef enum VmaMemoryUsage {
 } VmaMemoryUsage;
 
 
+requiredFlags
+
 VmaAllocationCreateFlags 枚举值说明：
 
 VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT
@@ -1306,6 +2600,37 @@ VMA_ALLOCATION_CREATE_MAPPED_BIT 是一个在创建 VMA 内存分配时使用的
   《赛博朋克2077》：使用VMA管理超过20GB的显存资源
   Unreal Engine 5：集成VMA实现跨平台内存管理
   DOOM Eternal：通过VMA内存池技术降低8%的显存占用
+
+
+EasyVulkan中的VMA
+在EasyVulkan中，Buffer和Image的内存分配都使用了VMA。
+
+Buffer Builder
+根据上文的问题，在创建Buffer时比较重要的信息包括：
+
+  Buffer size。
+  Buffer usage。
+  Buffer memory usage。
+  Buffer memory flags。
+  Buffer memory type index(property,optional)。
+一个Buffer的创建流程可以简化为：
+
+
+// Create a vertex buffer
+auto vertexBuffer = bufferBuilder
+    -&gt;setSize(sizeof(vertices))
+    -&gt;setUsage(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT)
+    -&gt;setMemoryUsage(VMA_MEMORY_USAGE_CPU_TO_GPU)
+    -&gt;setMemoryFlags(VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+                    VMA_ALLOCATION_CREATE_MAPPED_BIT)
+    -&gt;build("myVertexBuffer");
+
+// Create a storage buffer used on GPU only
+auto storageBuffer = bufferBuilder
+    -&gt;setSize(sizeof(storageData))
+    -&gt;setUsage(VK_BUFFER_USAGE_STORAGE_BUFFER_BIT)
+    -&gt;setMemoryUsage(VMA_MEMORY_USAGE_GPU_ONLY)
+    -&gt;build("myStorageBuffer");
 
 
 VMA PDF文档｜Generated by Doxygen
@@ -3029,6 +4354,8 @@ Asynchronous compute
         
         
         
+        
+        
         </ul>
     
 </div>
@@ -3089,6 +4416,17 @@ Asynchronous compute
             'type'     : "category",
             'tags'     : "",
             'url'      : "/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/index.html",
             'image'    : "/assets/img/thumbnail/empty.jpg",
             'date'     : "1900-01-01"
         });
@@ -3201,6 +4539,50 @@ Asynchronous compute
             'url'      : "/EasyVulkan/VMA.html",
             'image'    : "https://docs.vulkan.org/guide/latest/_images/memory_allocation_sub_allocation.png",
             'date'     : "2025-01-26"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan命令缓冲区",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, CommandBuffer",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011015.png",
+            'date'     : "2025-01-27"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan描述符集",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, DescriptorSet",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011726.png",
+            'date'     : "2025-01-27"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan渲染通道",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, RenderPass, Subpass, Attachment, Subpass Dependency",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/RenderPass.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202012410.png",
+            'date'     : "2025-01-29"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan同步机制",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, VMA",
+            'url'      : "/EasyVulkan/SynchronizationManager.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202013124.png",
+            'date'     : "2025-02-01"
         });
     
 

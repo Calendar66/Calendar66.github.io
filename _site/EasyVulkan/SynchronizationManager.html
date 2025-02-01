@@ -7,25 +7,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>
     
-        How to compute integral image on GPU?
+        Vulkan同步机制
     
 </title>
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>How to compute integral image on GPU? | Calendar’s Blog</title>
+<title>Vulkan同步机制 | Calendar’s Blog</title>
 <meta name="generator" content="Jekyll v4.3.4">
-<meta property="og:title" content="How to compute integral image on GPU?">
+<meta property="og:title" content="Vulkan同步机制">
 <meta property="og:locale" content="en_US">
-<meta name="description" content="Related Work">
-<meta property="og:description" content="Related Work">
-<link rel="canonical" href="http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html">
-<meta property="og:url" content="http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html">
+<meta name="description" content="Vulkan 通过提供多样且细粒度的同步机制，为开发者在控制渲染和计算流程时带来了极大的灵活性。Barrier、Semaphore、Fence 以及 Subpass Dependencies 各有不同的适用场景和影响： Barrier 强调 GPU 内部流水线阶段及内存的同步，适合在单个队列内确保读写有序。 Semaphore 强调队列之间的同步，用来连接多队列的工作流。 Fence 强调 CPU 对 GPU 任务完成的可见性，用于资源回收和多帧并行调度。 Subpass Dependencies 强调在同一 Render Pass 内分阶段进行渲染时的同步，更高效地处理共享附件。">
+<meta property="og:description" content="Vulkan 通过提供多样且细粒度的同步机制，为开发者在控制渲染和计算流程时带来了极大的灵活性。Barrier、Semaphore、Fence 以及 Subpass Dependencies 各有不同的适用场景和影响： Barrier 强调 GPU 内部流水线阶段及内存的同步，适合在单个队列内确保读写有序。 Semaphore 强调队列之间的同步，用来连接多队列的工作流。 Fence 强调 CPU 对 GPU 任务完成的可见性，用于资源回收和多帧并行调度。 Subpass Dependencies 强调在同一 Render Pass 内分阶段进行渲染时的同步，更高效地处理共享附件。">
+<link rel="canonical" href="http://localhost:4000/EasyVulkan/SynchronizationManager.html">
+<meta property="og:url" content="http://localhost:4000/EasyVulkan/SynchronizationManager.html">
 <meta property="og:site_name" content="Calendar’s Blog">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2025-01-03T00:00:00+08:00">
+<meta property="article:published_time" content="2025-02-01T00:00:00+08:00">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="How to compute integral image on GPU?">
+<meta property="twitter:title" content="Vulkan同步机制">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-01-03T00:00:00+08:00","datePublished":"2025-01-03T00:00:00+08:00","description":"Related Work","headline":"How to compute integral image on GPU?","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html"},"url":"http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-02-01T00:00:00+08:00","datePublished":"2025-02-01T00:00:00+08:00","description":"Vulkan 通过提供多样且细粒度的同步机制，为开发者在控制渲染和计算流程时带来了极大的灵活性。Barrier、Semaphore、Fence 以及 Subpass Dependencies 各有不同的适用场景和影响： Barrier 强调 GPU 内部流水线阶段及内存的同步，适合在单个队列内确保读写有序。 Semaphore 强调队列之间的同步，用来连接多队列的工作流。 Fence 强调 CPU 对 GPU 任务完成的可见性，用于资源回收和多帧并行调度。 Subpass Dependencies 强调在同一 Render Pass 内分阶段进行渲染时的同步，更高效地处理共享附件。","headline":"Vulkan同步机制","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/EasyVulkan/SynchronizationManager.html"},"url":"http://localhost:4000/EasyVulkan/SynchronizationManager.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -102,7 +102,7 @@
             
                 <style>
                         .thumbnail {
-                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102174554.png");
+                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202013124.png");
                         }
                     
                 </style>
@@ -404,13 +404,11 @@
     <p>
                 <a href="/">Home</a>
                 &gt;
-            <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">技术学习</a>
-                &gt;
-            <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/">GPU通用计算</a>
+            <a href="/EasyVulkan/">EasyVulkan</a>
                 &gt;
             
                 
-                    How to compute integral image on GPU?
+                    Vulkan同步机制
                 
             </p>
 </div>
@@ -419,19 +417,19 @@
     <div class="thumbnail">
         <div class="transbox">
             
-                <span class="post-title">How to compute integral image on GPU?</span>
+                <span class="post-title">Vulkan同步机制</span>
             
             <div class="post-info">
                 
-                    <a class="info-box category-box" href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0">
+                    <span class="info-box">
                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M384 480h48c11.4 0 21.9-6 27.6-15.9l112-192c5.8-9.9 5.8-22.1 .1-32.1S555.5 224 544 224H144c-11.4 0-21.9 6-27.6 15.9L48 357.1V96c0-8.8 7.2-16 16-16H181.5c4.2 0 8.3 1.7 11.3 4.7l26.5 26.5c21 21 49.5 32.8 79.2 32.8H416c8.8 0 16 7.2 16 16v32h48V160c0-35.3-28.7-64-64-64H298.5c-17 0-33.3-6.7-45.3-18.7L226.7 50.7c-12-12-28.3-18.7-45.3-18.7H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H87.7 384z"></path></svg>
-                        <span>技术学习</span>
-                    </a>
+                        <span>None</span>
+                    </span>
                 
                 <span class="info-box">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"></path></svg>
                     <span>
-                            2025-01-03
+                            2025-02-01
                         
                     </span>
                 </span>
@@ -450,362 +448,511 @@
     </div>
 </div>
 <div class="tag-box">
-<span class="tag theme-0" contentid="user manual">
-            user manual
-        </span><span class="tag theme-1" contentid="markdown">
-            markdown
-        </span><span class="tag theme-2" contentid="writing format">
-            writing format
+<span class="tag theme-0" contentid="Vulkan">
+            Vulkan
+        </span><span class="tag theme-1" contentid="EasyVulkan">
+            EasyVulkan
+        </span><span class="tag theme-2" contentid="VMA">
+            VMA
         </span>
 </div>
 <main>
-    <h1 id="related-work">Related Work</h1>
+    <blockquote>
+  <p>Vulkan 通过提供多样且细粒度的同步机制，为开发者在控制渲染和计算流程时带来了极大的灵活性。Barrier、Semaphore、Fence 以及 Subpass Dependencies 各有不同的适用场景和影响：</p>
+  <ul>
+    <li>Barrier 强调 GPU 内部流水线阶段及内存的同步，适合在单个队列内确保读写有序。</li>
+    <li>Semaphore 强调队列之间的同步，用来连接多队列的工作流。</li>
+    <li>Fence 强调 CPU 对 GPU 任务完成的可见性，用于资源回收和多帧并行调度。</li>
+    <li>Subpass Dependencies 强调在同一 Render Pass 内分阶段进行渲染时的同步，更高效地处理共享附件。</li>
+  </ul>
+</blockquote>
 
-<p>GPU Gems 3 (2005). Chapter: “Summed-Area Tables on the GPU” by Dave Johnson (NVIDIA).<br>
-https://developer.nvidia.com/gpugems/gpugems3/part-ii-light-and-shadows/chapter-8-summed-area-variance-shadow-maps</p>
+<h1 id="vulkan中的同步机制详解">Vulkan中的同步机制详解</h1>
+<p>在传统图形API如OpenGL中，驱动程序会自动处理资源同步，开发者无需关心底层执行顺序。但这种”黑箱”机制带来了两个严重问题：<strong>性能损耗不可控和多线程扩展困难。</strong><br>
+Vulkan 作为现代图形和计算的低层次API，其设计核心之一就是让开发者可以更细粒度地控制GPU和CPU之间的工作流程，以及不同GPU队列之间的执行顺序。而要实现稳定且高性能的渲染或计算，就必须要合理地利用好各种同步机制。本文将从几个常见的 Vulkan 同步原语（Barrier、Semaphore、Fence、Subpass Dependencies）入手，探讨它们各自的概念、适用场景、性能影响以及使用注意事项。希望通过本文，能为正在使用 Vulkan 或即将使用 Vulkan 的读者提供一些实践上的参考。</p>
 
-<p>Parallel Prefix Sums<br>
-https://developer.nvidia.com/gpugems/gpugems3/part-vi-gpu-computing/chapter-39-parallel-prefix-sum-scan-cuda<br>
-<a href="https://dl.acm.org/doi/10.5555/1280094.1280110">Scan primitives for GPU computing</a></p>
+<h1 id="命令缓冲与队列线性流但可乱序完成">命令缓冲与队列：线性流但可乱序完成</h1>
+<p>在 Vulkan 中，所有命令都要先记录在 VkCommandBuffer 中，再提交到某个 VkQueue。在单个队列中，你提交的命令会按顺序进入 GPU 执行管线；但 GPU 可能在还没完成某个命令的写操作时，就已经开始处理后续命令的读阶段。</p>
 
-<p>GPU-efficient recursive filtering and summed-area tables<br>
-https://dl.acm.org/doi/10.1145/2070781.2024210</p>
-
-<p><strong>技术重点：</strong><br>
-<strong>并行前缀和（Scan）</strong>：大多数GPU实现将积分图像计算分解为两个主要的并行前缀和传递，一个是水平方向的，另一个是垂直方向的。<br>
-<strong>内存合并与冲突</strong>：高效的GPU积分图像算法注意内存布局，确保线程访问连续的内存段以减少延迟并提高吞吐量。<br>
-<strong>工作负载划分（Tile）</strong>：大型图像被划分为独立且并行计算的小块。在每个小块上计算出部分总和后，额外进行一次合并操作以得到全局积分图像。<br>
-<strong>层次化方法</strong>：层次化求和策略通过将求和问题拆解成多个阶段来降低处理大型图像时所需处理复杂度。<br>
-使用共享内存与寄存器：高性能实现将中间总和保存在在快速GPU共享内存中，从而减少全局内存流量。</p>
-
-<h1 id="summed-area-variance-shadow-mapsgpu-gem3">Summed-Area Variance Shadow Maps(GPU gem3)</h1>
-<p>https://developer.nvidia.com/gpugems/gpugems3/part-ii-light-and-shadows/chapter-8-summed-area-variance-shadow-maps<br>
-该章节指出SAT的计算本质上是两个维度的前缀和过程。Hensley et al. 2005.提出了一种更并行的方法。<br>
-本章节主要关注积分图像计算时的精度问题，Hensley et al. 2005有很多关于精度问题的解决方案， Donnelly and Lauritzen 2006也给出了一种解决方案。</p>
-
-<h1 id="parallel-prefix-sum-scan-with-cudagpu-gem3">Parallel Prefix Sum (Scan) with CUDA（GPU Gem3）</h1>
-<h2 id="naive-method">Naive Method</h2>
-<p>CPU的前缀和计算的复杂度为O(n),GPU算法的复杂度如果不超过该复杂度，我们称之为efficient work。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241209133753.png" alt="image.png" loading="lazy"><br>
-最原始的GPU版本就是一个不高效的实现，该算法需要两个Buffer来保证正确性。同时，该算法还假设处理器单元的数量和数组大小一致。</p>
-
-<h2 id="work-efficient-method">Work-Efficient Method</h2>
 <ul>
-  <li>使用平衡树来优化复杂度。</li>
-  <li>分成两个过程，Red1uce(归约过程，也被称作上扫过程)；和下扫过程。</li>
-  <li>同一个位置上的操作在共享内存中完成。</li>
+  <li>逻辑顺序：提交顺序一定依次排队</li>
+  <li>实际执行：可以重叠 / 并行 / 乱序完成</li>
 </ul>
 
-<p><strong>Reduce</strong><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241223132615.png" alt="image.png" loading="lazy"></p>
+<h1 id="内存模型与缓存一致性">内存模型与缓存一致性</h1>
+<p>现代GPU采用分级缓存设计：</p>
+<blockquote>
+  <p>DDR显存 → L2缓存 → L1缓存（每个SM） → 寄存器</p>
+</blockquote>
 
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241209134620.png" alt="image.png" loading="lazy"><br>
-该过程结束后，根结点上保存了整个数组的和。</p>
+<p>当计算单元写入L1缓存后，数据不会立即同步到其他缓存层级。这就是<strong>非一致性内存访问</strong>的根源。<br>
+“可用（Available）”意味着数据已经被刷出到更大层级缓存或主存；“可见（Visible）”意味着后续阶段可以读取到最新的数据——需要对读取方无效化缓存或更新缓存。<br>
+或者说：</p>
+<ul>
+  <li>
+<strong>Available</strong>：源阶段写完数据后，做缓存 Flush，让数据到了 L2 或更高层共享区域</li>
+  <li>
+<strong>Visible</strong>：目的阶段需要读数据时，做缓存 Invalidate，从而迫使硬件从 L2 或更高层共享区域读取数据，避免读到陈旧缓存</li>
+</ul>
 
-<p><strong>down-sweep</strong><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241223132741.png" alt="image.png" loading="lazy"><br>
-在上扫描阶段，我们已经获得了总和，但前缀和还未完全计算出来。下扫描阶段通过逆向操作，逐步填充前缀和数组。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/%E5%9B%BE%E5%83%8F.jpeg" alt="图像.jpeg" loading="lazy"><br>
-上扫描结束后，位置0，1，3，7的值是前缀和数组中会出现的值（为inclusive的，但通常需要计算exclusive的）。例如，25的右子树14需要11的值来更新子节点。<br>
-因此，下扫描过程可以理解为一个传递到左子树、累加右子树的过程。</p>
-<ol>
-  <li>初始化：设置根节点为0.</li>
-  <li>遍历步长数组[4,2,1]
-    <ol>
-      <li>设置左子树为根节点的值，右子树为左子树和右子树的和（左子树使用设置后的值）。<br>
- <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241209135551.png" alt="" loading="lazy"><br>
- 该过程一个线程操作两个元素，需要在同一个work group中完成。<br>
- 使用上扫阶段的结果：
-        <ul>
-          <li>树结构：
-            <div class="language-plaintext highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>   25
- /    \
-   11      14
-  /  \    /  \
- 4    7  5    9
-/ \  / \ / \  / \
-  3  1 7  0 4 1 6 3
-</code></pre></div>            </div>
-          </li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-</ol>
+<p>例如：</p>
+
+<pre><code class="language-C++">VkMemoryBarrier memBarrier{
+    .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+    .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
+    .dstAccessMask = VK_ACCESS_SHADER_READ_BIT
+};
+
+vkCmdPipelineBarrier(cmd,
+    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+    0, 1, &amp;memBarrier, 0, nullptr, 0, nullptr);
+</code></pre>
+<p>这个屏障完成：</p>
+<ul>
+  <li>刷新所有计算阶段的写入到L2缓存（可用性）</li>
+  <li>使片段着色器能读取最新数据（可见性）</li>
+</ul>
+
+<p>由于非一致性内存访问问题的存在，<em>Vulkan还要求开发者显式地管理内存相关屏障，以确保数据在不同阶段之间的可见性和可用性。</em></p>
+
+<p>因此，Vulkan的同步机制主要有两个目的：</p>
+<ul>
+  <li>确保数据在不同阶段之间的可见性和可用性(主要借助内存相关屏障)</li>
+  <li>确保执行顺序(主要借助pipeline屏障、semaphore、fence等)</li>
+</ul>
+
+<h1 id="barrier屏障">Barrier（屏障）</h1>
+
+<h2 id="barrier的概念">Barrier的概念</h2>
+
+<p>Vulkan 中的 Barrier 是一种细粒度的内存和执行顺序同步机制。Barrier 在 GPU 内部起到”分割线”的作用，确保某些阶段的操作在 Barrier 之前完成，才能进行后续的阶段。例如，在进行纹理的读写转换时，需要使用 Pipeline Barrier 来保证图像布局转换或访问掩码的更改已完成，才进行下一步的采样或写入。</p>
+
+<p>Barrier 有多种类型，最常见的包括：</p>
+<ul>
+  <li>Pipeline Barrier：用于指定源阶段（srcStageMask）到目标阶段（dstStageMask）的内存和执行依赖。</li>
+  <li>Memory Barrier：作用在整个资源上，用于指定对内存可见性的限制与保证。</li>
+  <li>Buffer Memory Barrier：只作用在特定的 Buffer 范围上。</li>
+  <li>Image Memory Barrier：只作用在特定的图像资源上，可以指定图像布局转换（image layout transition）。</li>
+</ul>
+
+<h2 id="opengl中的barrier和vulkan对比">Opengl中的Barrier和Vulkan对比</h2>
+<p>在Opengl中同样存在Barrier的概念，但是Vulkan中的barrier提供了更细粒度的控制。</p>
+
+<pre><code class="language-C++">// OpenGL隐式同步
+glDispatchCompute(1024, 1, 1);  // 计算着色器写入数据
+glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT); 
+glDrawArrays(GL_TRIANGLES, 0, 3); // 读取计算数据
+
+// Vulkan显式同步
+vkCmdDispatch(computeCmd, 1024, 1, 1);
+VkMemoryBarrier barrier{...};
+vkCmdPipelineBarrier(computeCmd, 
+    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+    VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
+    0, 1, &amp;barrier);
+vkCmdDraw(graphicCmd, 0, 3);
+</code></pre>
+
+<h2 id="barrier的适用场景">Barrier的适用场景</h2>
+<ul>
+  <li>图像布局转换：如从 VK_IMAGE_LAYOUT_UNDEFINED 转为 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL，或者从 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL 转为 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL，在开始或结束渲染通道时需要合适的图像布局。</li>
+  <li>
+<strong>内存可见性保证</strong>：当一个操作写入资源，另一个操作要读取该资源时，需要添加Barrier确保写入可见并完成。</li>
+  <li>
+<strong>不同着色阶段间的同步</strong>：例如，当顶点着色器阶段写入Buffer后，需要在片元着色器阶段进行读取，可通过Barrier来控制依赖顺序。</li>
+</ul>
+
+<h2 id="管线阶段分解">管线阶段分解</h2>
+<p>Vulkan将GPU工作分解为可组合的阶段：</p>
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT</code>: 表示管线的起始阶段。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT</code>: 间接绘制命令的阶段。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_VERTEX_INPUT_BIT</code>: 顶点输入操作的阶段。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_VERTEX_SHADER_BIT</code>: 顶点着色器执行的阶段。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT</code>: 片段着色器执行的阶段。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT</code>: 写入颜色附件的阶段。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT</code>: 计算着色器执行的阶段。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_TRANSFER_BIT</code>: 内存传输操作的阶段。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT</code>: 表示管线的结束阶段。</li>
+</ul>
+
+<h2 id="访问掩码">访问掩码</h2>
+<p>GPU 有多级缓存（L1、L2），不同阶段可能对同一块内存资源有不同的缓存策略。为了避免缓存不一致（Incoherent），Vulkan 提供了 VK_ACCESS_* 标志来精确说明某个阶段对资源的访问类型。通过source access 与 destination access 结合，可以告诉 Vulkan “我要保证前面写的数据，在后面读的时候一定可见（Visible）”。</p>
+
+<p>具体包括：</p>
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_ACCESS_INDIRECT_COMMAND_READ_BIT</code>: 对间接命令数据的读取访问。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_ACCESS_INDEX_READ_BIT</code>: 对索引缓冲区的读取访问。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT</code>: 对顶点属性的读取访问。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_ACCESS_UNIFORM_READ_BIT</code>: 对统一缓冲区的读取访问。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_ACCESS_SHADER_READ_BIT</code>: 对着色器存储的读取访问。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_ACCESS_SHADER_WRITE_BIT</code>: 对着色器存储的写入访问。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_ACCESS_COLOR_ATTACHMENT_READ_BIT</code>: 对颜色附件的读取访问。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT</code>: 对颜色附件的写入访问。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT</code>: 对深度/模板附件的读取访问。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT</code>: 对深度/模板附件的写入访问。</li>
+</ul>
+
+<h2 id="barrier的使用">Barrier的使用</h2>
+<p>一个Barrier的定义如下：</p>
+
+<pre><code class="language-C++">void vkCmdPipelineBarrier(
+    VkCommandBuffer                             commandBuffer,          // 记录barrier的命令缓冲区
+    VkPipelineStageFlags                        srcStageMask,          // 源管线阶段掩码，指定哪些管线阶段必须在barrier之前完成
+    VkPipelineStageFlags                        dstStageMask,          // 目标管线阶段掩码，指定哪些管线阶段必须等待barrier
+    VkDependencyFlags                           dependencyFlags,        // 依赖标志，如VK_DEPENDENCY_BY_REGION_BIT表示区域依赖
+    uint32_t                                    memoryBarrierCount,     // 全局内存屏障数量
+    const VkMemoryBarrier*                      pMemoryBarriers,       // 全局内存屏障数组
+    uint32_t                                    bufferMemoryBarrierCount, // 缓冲内存屏障数量
+    const VkBufferMemoryBarrier*                pBufferMemoryBarriers,   // 缓冲内存屏障数组
+    uint32_t                                    imageMemoryBarrierCount, // 图像内存屏障数量
+    const VkImageMemoryBarrier*                 pImageMemoryBarriers    // 图像内存屏障数组
+);
+</code></pre>
 
 <ul>
-  <li>初始化根节点为 0：
-    <div class="language-plaintext highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>        0
-      /    \
-    11      14
-   /  \    /  \
-  4    7  5    9
- / \  / \ / \  / \
-3  1 7  0 4 1 6 3
-</code></pre></div>    </div>
+  <li>
+<code class="language-plaintext highlighter-rouge">VkDependencyFlags</code>主要用于控制屏障的行为，设置为0表示默认行为，同步将在整个渲染区域上全局进行，对于所有区域(所有像素)，所有指定的源操作都必须在任何目标操作开始之前完成；设置为VK_DEPENDENCY_BY_REGION_BIT则允许基于区域的依赖，同步只在每个区域内进行，而不是整个渲染目标，不同区域之间可以并行处理，适合TBR架构。</li>
+  <li>如果不使用内存相关的屏障，该命令定义了一个执行屏障，即在srcStageMask和dstStageMask之间插入一个同步点，确保所有指定源操作都完成，目标操作才开始。</li>
+  <li>如果使用内存相关的屏障，则屏障会根据自身的srcAccessMask和dstAccessMask的值，在srcStageMask和dstStageMask之间插入一个同步点，确保所有指定源操作都完成，目标操作才开始。</li>
+</ul>
+
+<h2 id="全局内存屏障">全局内存屏障</h2>
+
+<pre><code class="language-C++">// 全局内存屏障：影响所有内存访问
+typedef struct VkMemoryBarrier {
+    VkStructureType    sType;                // 结构体类型，必须是 VK_STRUCTURE_TYPE_MEMORY_BARRIER
+    const void*        pNext;                // 扩展信息指针，通常为nullptr
+    VkAccessFlags      srcAccessMask;        // 源访问掩码，指定在barrier之前必须完成的内存访问类型
+    VkAccessFlags      dstAccessMask;        // 目标访问掩码，指定必须等待barrier的内存访问类型
+} VkMemoryBarrier;
+</code></pre>
+
+<p>全局内存屏障由 VkMemoryBarrier 结构体描述，用于同步整个 GPU 内存中的所有数据。<strong>它并不针对具体的缓冲区或图像</strong>，而是作用于全局范围内的内存访问。通过设置源和目标访问掩码（srcAccessMask 和 dstAccessMask），开发者可以确保在某个阶段完成的所有内存写操作对后续阶段的所有内存读取操作可见。</p>
+
+<h2 id="缓冲区内存屏障">缓冲区内存屏障</h2>
+
+<pre><code class="language-C++">// 缓冲内存屏障：针对特定缓冲区的内存访问
+typedef struct VkBufferMemoryBarrier {
+    VkStructureType    sType;                // 结构体类型，必须是 VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER
+    const void*        pNext;                // 扩展信息指针，通常为nullptr
+    VkAccessFlags      srcAccessMask;        // 源访问掩码
+    VkAccessFlags      dstAccessMask;        // 目标访问掩码
+    uint32_t          srcQueueFamilyIndex;   // 源队列族索引，用于队列族所有权转移
+    uint32_t          dstQueueFamilyIndex;   // 目标队列族索引，用于队列族所有权转移
+    VkBuffer          buffer;                // 受影响的缓冲区对象
+    VkDeviceSize      offset;                // 受影响区域的起始偏移
+    VkDeviceSize      size;                  // 受影响区域的大小
+} VkBufferMem
+</code></pre>
+
+<p>缓冲内存屏障由 VkBufferMemoryBarrier 结构体描述，专门用于同步对<strong>特定 VkBuffer 的内存访问</strong>。它不仅包含全局内存屏障的所有属性，还能指定屏障<strong>所作用的缓冲区、起始偏移量和数据大小。</strong></p>
+
+<p>srcQueueFamilyIndex和dstQueueFamilyIndex用于队列族所有权转移，当使用队列族所有权转移功能时，需要指定源队列族索引和目标队列族索引。如果不涉及队列族所有权转移，设置为VK_QUEUE_FAMILY_IGNORED。当计算队列族和图形队列族分离时，如果需要在图形队列中访问计算队列族的资源，需要使用队列族所有权转移(或者在资源创建时设置资源共享)。</p>
+
+<h2 id="图像内存屏障">图像内存屏障</h2>
+
+<pre><code class="language-C++">
+// 图像内存屏障：针对特定图像的内存访问
+typedef struct VkImageMemoryBarrier {
+    VkStructureType            sType;               // 结构体类型，必须是 VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
+    const void*                pNext;               // 扩展信息指针，通常为nullptr
+    VkAccessFlags             srcAccessMask;        // 源访问掩码
+    VkAccessFlags             dstAccessMask;        // 目标访问掩码
+    VkImageLayout             oldLayout;            // 转换前的图像布局
+    VkImageLayout             newLayout;            // 转换后的图像布局
+    uint32_t                  srcQueueFamilyIndex;  // 源队列族索引
+    uint32_t                  dstQueueFamilyIndex;  // 目标队列族索引
+    VkImage                   image;                // 受影响的图像对象
+    VkImageSubresourceRange   subresourceRange;     // 受影响的图像子资源范围
+} VkImageMemoryBarrier;
+
+// 子资源范围
+typedef struct VkImageSubresourceRange {
+    VkImageAspectFlags    aspectMask;       // 图像方面(颜色、深度、模板等)
+    uint32_t             baseMipLevel;      // 基础mip级别
+    uint32_t             levelCount;        // mip级别数量
+    uint32_t             baseArrayLayer;    // 基础数组层
+    uint32_t             layerCount;        // 数组层数量
+} VkImageSubresourceRange;
+</code></pre>
+
+<p>图像内存屏障由 <code class="language-plaintext highlighter-rouge">VkImageMemoryBarrier</code> 结构体描述，专门用于同步对<strong>特定 VkImage 的内存访问</strong>。它不仅包含全局内存屏障的所有属性，还能指定屏障<strong>所作用的图像、子资源范围</strong>。</p>
+
+<p><code class="language-plaintext highlighter-rouge">VkImageSubresourceRange</code> 用于指定图像的哪些部分受到影响。</p>
+<ul>
+  <li>aspectMask：指定图像的方面，如颜色、深度、模板等。</li>
+  <li>baseMipLevel：指定起始的mip级别。</li>
+  <li>levelCount：指定mip级别的数量。</li>
+  <li>baseArrayLayer：指定起始的数组层。</li>
+  <li>layerCount：指定数组层的数量。</li>
+</ul>
+
+<p>除此之外，<code class="language-plaintext highlighter-rouge">VkImageMemoryBarrier</code> 还包含<code class="language-plaintext highlighter-rouge">oldLayout</code>和<code class="language-plaintext highlighter-rouge">newLayout</code>，用于指定图像布局的转换。</p>
+<blockquote>
+  <p>在 Vulkan 中，图像布局（Image Layout）用于描述 GPU 内部如何组织和访问图像数据。相比 OpenGL 的隐式管理，Vulkan 要求开发者显式指定和转换图像布局，方便GPU明确用途并进行对应的性能优化。</p>
+</blockquote>
+
+<blockquote>
+  <p>Transient Attachments（转瞬附件），可以利用 Vulkan 的自动转换特性：</p>
+  <ul>
+    <li>Transient Images： 创建时带有 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT，初始布局设为 VK_IMAGE_LAYOUT_UNDEFINED 表明无需保留内容。</li>
+    <li>自动转换： Vulkan 驱动会在 render pass 开始前、结束后自动插入外部依赖，完成从 UNDEFINED 到目标布局（如 COLOR_ATTACHMENT_OPTIMAL）以及结束后的转换至 PRESENT_SRC_KHR（用于交换链呈现）。</li>
+    <li>
   </li>
-  <li>传递并更新：
+</ul>
+</blockquote>
+
+<h2 id="barrier的性能影响">Barrier的性能影响</h2>
+<ul>
+  <li>过度使用导致性能损耗：每个 Barrier 都会在流水线上插入一个同步点，如果频繁地插入不必要的Barrier，会增加<strong>GPU的停顿</strong>并降低并行效率。</li>
+  <li>恰当使用可以避免错误和竞态：Barrier 在正确的位置使用能够让数据流安全地”串行化”，避免读写冲突。</li>
+</ul>
+
+<h2 id="使用注意事项">使用注意事项</h2>
+<ul>
+  <li>阶段掩码精确化：在指定 srcStageMask 和 dstStageMask 时，要尽量精确地指定真实会产生和需要依赖的着色阶段或管线阶段，以减少不必要的同步。</li>
+  <li>布局转换与访问掩码：Barrier 需要指定图像的布局转换和访问掩码（srcAccessMask/dstAccessMask），要确保与实际使用场景匹配。</li>
+  <li>批量Barrier：避免在不同的资源上反复调用单个Barrier，可以把多个资源的Barrier一起批量提交，减少命令开销。</li>
+</ul>
+
+<h1 id="events更灵活的同步利器">Events：更灵活的同步利器</h1>
+<p>Pipeline Barrier 适用于同一个命令缓冲里强制“先做完 A，再做 B”。但如果你希望在并行中更灵活地“给 GPU 发信号”，可以用 Events:</p>
+<ol>
+  <li>Set Event (vkCmdSetEvent)：在指定的 pipeline 阶段完成后，标记某个事件为已触发</li>
+  <li>Wait Event (vkCmdWaitEvent)：在指定管线阶段等事件触发后，再继续执行</li>
+</ol>
+
+<p>例如：</p>
+<pre><code class="language-C++">// A 和 B 两次计算
+vkCmdDispatch(...);
+vkCmdDispatch(...);
+
+// 设置事件，表示 A 和 B 都完成后触发
+vkCmdSetEvent(event, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT);
+
+// D 是独立计算，可与 A、B 并行
+vkCmdDispatch(...);
+
+// 在绘制（C）前等待事件，确保 A、B 完成
+vkCmdWaitEvents(1, &amp;event, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT, ...);
+
+// 真正的绘制
+vkCmdDraw(...);
+</code></pre>
+<p>这样便可让 D 与 A、B 并行，只有在需要结果依赖的绘制（C）时才去等待。</p>
+
+<h1 id="semaphore信号量">Semaphore（信号量）</h1>
+
+<h2 id="概念">概念</h2>
+
+<p>Semaphore（信号量）在 Vulkan 中主要用于<strong>队列之间</strong>的执行顺序同步。它不能被 CPU 查询，CPU无法通过 Semaphore 判断什么时候 GPU 完成了某一条指令；它更适合在 GPU 内部或不同队列之间”串起”执行顺序。例如，我们可能在一个队列上进行图像后处理，然后在另一个队列上进行呈现；在这两个队列之间需要一个 Semaphore 让呈现等待后处理完成。</p>
+
+<h2 id="semaphore的适用场景">Semaphore的适用场景</h2>
+<ul>
+  <li>不同队列间依赖：渲染队列和呈现队列之间交换图像通常会用到 Semaphore 来协调。例如，vkAcquireNextImageKHR 返回的信号量会在图像可用时触发，渲染结束后再用一个信号量告知显示队列可以进行呈现。</li>
+  <li>多通道并行处理：如果使用多队列同时处理不同任务，在队列间需要明确地指定执行顺序时，使用 Semaphore 进行同步。</li>
+</ul>
+
+<h2 id="semaphore的性能影响">Semaphore的性能影响</h2>
+<ul>
+  <li>轻量但仅限 GPU 内部：相比Fence来说，Semaphore 更轻量，因为它无需让 CPU 轮询或等待，也不需要在 CPU 端可见。通常可以让不同队列并发工作，充分利用 GPU 资源。</li>
+  <li>等待延迟：如果在一个队列上等待另一个队列信号量，会引入一定延迟，要结合管线设计和命令流来优化。</li>
+</ul>
+
+<h1 id="fence栅栏">Fence（栅栏）</h1>
+
+<h2 id="概念-1">概念</h2>
+<p>Fence（栅栏）是另一种同步原语，与 Semaphore 不同的是，Fence 可以被 CPU 端查询。当一个命令缓冲区在 GPU 上执行完成后，Fence 会被置为已信号状态（signaled state），CPU 通过 vkWaitForFences 或 vkGetFenceStatus 等函数能够得知 GPU 的执行状态。</p>
+
+<h2 id="fence的适用场景">Fence的适用场景</h2>
+<ul>
+  <li>GPU 任务结束的 CPU 检测：在需要 CPU 端等待 GPU 完成某些任务（比如更新一块缓冲区后，需要 CPU 端再做一些操作）时使用。</li>
+  <li>动态资源回收：如果想知道 GPU 什么时候真正使用完一块资源（例如上一帧的 Uniform Buffer），Fence 可以帮助我们在 CPU 上安全地回收或复用资源。</li>
+  <li>多缓冲策略中的帧同步：常用在多帧并行（triple buffering 或 double buffering）时，CPU需要知道当前帧是否可以安全地写入时，会查询对应的 Fence。</li>
+</ul>
+
+<h2 id="fence的性能影响">Fence的性能影响</h2>
+<ul>
+  <li>CPU/GPU 同步开销：Fence 一旦被 CPU 等待（vkWaitForFences），就会造成 CPU 和 GPU 之间的同步停顿，影响并行度。</li>
+  <li>延迟增加：如果没有必要的地方使用 Fence，会导致 CPU 过度等待，引起帧率下降或延迟增大。</li>
+</ul>
+
+<h2 id="使用注意事项-1">使用注意事项</h2>
+<ul>
+  <li>批量等待：在需要等待多个Fence时，尽量使用批量等待，而不是一个个等待。</li>
+  <li>复用 Fence：Fence 在被 signaled 之后，可通过 vkResetFences 重置来重复使用，避免频繁创建销毁。</li>
+  <li>避免无谓等待：在管线设计中，如果可以让 CPU 继续做其他工作，就尽量不要阻塞 CPU，只有在需要保证资源一致性时再使用 Fence。</li>
+</ul>
+
+<blockquote>
+  <p>Queue Submit &amp; 信号量等待会带来隐式内存保证：</p>
+  <ul>
+    <li>当一个队列提交被另一个队列通过信号量（Semaphore）等待时，Vulkan 会隐式地完成所有写入的 flush，使得内存可见给后续队列。</li>
+    <li>当一个队列提交完成并且 Fence 被置位，表示 GPU -&gt; CPU 的所有工作也可见。</li>
+  </ul>
+</blockquote>
+
+<h1 id="subpass-dependencies子通道依赖">Subpass Dependencies（子通道依赖）</h1>
+<h2 id="概念-2">概念</h2>
+<p>Vulkan 中的 Render Pass 可以由多个 Subpass 组成，每个 Subpass 是一个渲染阶段。Subpass Dependencies 用于指定 Subpass 之间的执行和内存依赖关系，从而在同一个 Render Pass 内实现图像的输入/输出同步。因此在同一个 Render Pass 内，Subpass Dependencies 可以减少外部 Barrier 的使用。</p>
+
+<p>一般地，Subpass Dependencies 会指定：</p>
+<ul>
+  <li>源子通道（srcSubpass）和目标子通道（dstSubpass）</li>
+  <li>源阶段与目标阶段（srcStageMask, dstStageMask）</li>
+  <li>源访问掩码与目标访问掩码（srcAccessMask, dstAccessMask）</li>
+  <li>依赖标志（dependencyFlags）</li>
+</ul>
+
+<h2 id="subpass-依赖的适用场景">Subpass 依赖的适用场景</h2>
+<ul>
+  <li>多渲染阶段共享同一图像：例如，在一个 Subpass 中写入颜色附件，接下来一个 Subpass 需要使用它作为输入附件（input attachment）。</li>
+  <li>分阶段渲染：如果想在一个 Render Pass 内连续执行多个着色阶段，而这几个阶段都在同一个 GPU 队列上运行，那么 Subpass Dependencies 就是最合适的同步方式。</li>
+</ul>
+
+<h2 id="subpass-依赖的性能影响">Subpass 依赖的性能影响</h2>
+<ul>
+  <li>减少开销：使用 Subpass Dependencies 在同一个 Render Pass 内可以减少图像布局切换和相关命令的开销。</li>
+  <li>提高带宽利用率：Subpass Dependencies 可以帮助 Vulkan 在同一 Render Pass 内合理地利用附件。</li>
+</ul>
+
+<h2 id="使用注意事项-2">使用注意事项</h2>
+<ul>
+  <li>需要在创建 Render Pass 时指定：一旦 Render Pass 的依赖关系确定，就不能再动态修改。</li>
+  <li>适当规划多 Subpass 结构：过度的 Subpass 拆分会导致复杂的依赖管理，不是所有的场景都适合在一个 Render Pass 内解决。</li>
+  <li>配合 input attachment 使用：当一个 Subpass 的输出作为下一个 Subpass 的 input attachment 时，需要正确设置依赖，确保不会读写冲突。</li>
+</ul>
+
+<h1 id="同步方法对比">同步方法对比</h1>
+<p>不同的同步机制往往对应着不同的使用层次和需求，下面简要对比：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>同步原语</th>
+      <th>主要作用</th>
+      <th>适用场景</th>
+      <th>CPU 可见性</th>
+      <th>性能影响</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Barrier</td>
+      <td>GPU 内部执行与内存同步</td>
+      <td>管线阶段、内存访问控制、布局转换</td>
+      <td>不可见</td>
+      <td>需要精确指定，过多会影响并行性</td>
+    </tr>
+    <tr>
+      <td>Semaphore</td>
+      <td>队列间同步</td>
+      <td>多队列交互，如图像获取与提交</td>
+      <td>不可见</td>
+      <td>轻量级，主要在GPU端</td>
+    </tr>
+    <tr>
+      <td>Fence</td>
+      <td>CPU 等待 GPU 完成</td>
+      <td>资源回收、GPU任务结束时需 CPU 介入</td>
+      <td>可见</td>
+      <td>CPU 阻塞可能拖慢帧率</td>
+    </tr>
+    <tr>
+      <td>Subpass</td>
+      <td>Render Pass 内部同步</td>
+      <td>多个渲染阶段共享附件，减少外部Barrier</td>
+      <td>不可见</td>
+      <td>在同一 Render Pass 内更高效</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="设计与实践建议">设计与实践建议</h1>
+
+<ol>
+  <li>尽量减少无意义的Barrier
     <ul>
-      <li>根节点 0 分配给左子树 <code class="language-plaintext highlighter-rouge">left = 0</code> 和右子树 <code class="language-plaintext highlighter-rouge">right = 11</code>（左子树的部分和）。</li>
-      <li>左子树 11 分配给其左子树 <code class="language-plaintext highlighter-rouge">left = 0</code> 和右子树 <code class="language-plaintext highlighter-rouge">right = 4</code>。</li>
-      <li>右子树 14 分配给其左子树 <code class="language-plaintext highlighter-rouge">left = 11</code> 和右子树 <code class="language-plaintext highlighter-rouge">right = 5</code>。</li>
-      <li>继续递归，最终得到前缀和数组。</li>
+      <li>保证数据访问安全的前提下，减少不必要的 Pipeline Barrier，可以合并多个资源的Barrier或者使用更精准的阶段掩码。</li>
     </ul>
   </li>
-</ul>
-
-<p>最终前缀和数组 <code class="language-plaintext highlighter-rouge">S = [0, 3, 4, 11, 11, 15, 16, 22]</code>。</p>
-
-<h1 id="fast-summedarea-table-generation-and-its-applicationshensley-et-al-2005">Fast Summed‐Area Table Generation and its Applications[Hensley et al. 2005]</h1>
-<p>提到论文：Simple Blurry Reflections with Environment Maps 似乎是使用miomap近似模糊的lerp blur。</p>
-<h2 id="方法">方法</h2>
-<p>使用<strong>图形管线实现</strong>，整个过程分解为两个phase，每个phase包括log(n)个pass。<br>
-使用两张纹理图像，互相作为输入输出。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241212125634.png" alt="image.png" loading="lazy"></p>
-<h2 id="积分图像的精度问题">积分图像的精度问题</h2>
-<ol>
-  <li>累加时机器误差的积累。</li>
-  <li>使用积分图像时通常是两个接近的值相减，尤其是两个值很大时，误差会更加明显。</li>
-  <li>积分图像的最大值大小为$w \times h \times 255$</li>
-</ol>
-
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241212133603.png" alt="image.png" loading="lazy"></p>
-
-<h3 id="using-signed-offset-pixel-representation">Using Signed-Offset Pixel Representation</h3>
-<p>将像素值进行偏移，从[0,1]偏移到[-0.5,0.5],这样可以使得：</p>
-<ol>
-  <li>数值不总是单调的。<br>
-有两种方式实现这一点：</li>
-  <li>所有像素值-0.5.</li>
-  <li>所有像素值-平均值。</li>
-</ol>
-
-<h3 id="using-origin-centered-image-representation">Using Origin-Centered Image Representation</h3>
-<p>以图片的中心点作为原点，相当于计算四张更小的积分图像，从而避免了极大值的出现。<br>
-但是使用时增加了额外的计算量。</p>
-
-<h1 id="scan-primitives-for-gpu-computing-2007">Scan Primitives for GPU Computing 2007</h1>
-<h2 id="gpu并行模型">GPU并行模型</h2>
-<p>符合流水线结构的算法天然适合GPU实现。即，每个kernel处理单独的输入，产生单独的输出。<br>
-某些问题，例如前缀求和问题，需要输入数据的全局知识。</p>
-<h2 id="相关工作">相关工作</h2>
-<h2 id="原始方法">原始方法</h2>
-<p><a href="https://developer.nvidia.com/gpugems/gpugems2/part-iv-general-purpose-computation-gpus-primer/chapter-36-stream-reduction">horn 2005</a><br>
-[[#Fast Summed‐Area Table Generation and its Applications[Hensley et al. 2005]]]<br>
-这些方法的复杂度为O(nlogn)，是non-work-efficient的。</p>
-
-<h2 id="reduce-and-down-sweep">reduce and down-sweep</h2>
-<p>提出：Blelloch in 1990[Vector Models for Data-Parallel Computing]<br>
-GPU实现：Sengupta(本文作者) et al. and Greß et al. in 2006<br>
-CUDA实现：本文</p>
-
-<h2 id="方法-1">方法</h2>
-<p>本文方法的主要贡献是引入了分段扫描的概念.<br>
-<strong>分段扫描Segmented Scan</strong>，是一种将输入序列分成多个互不影响的字序列并进行后续操作的过程。<br>
-使用flag数组标记不同的分段，例如：<br>
-Data: [a, b, c, d, e] <br>
-Flags: [1, 0, 1, 0, 0]</p>
-
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241216141919.png" alt="image.png" loading="lazy"><br>
-该算法用于解决输入向量超过线程块大小的情况。<br>
-在归约过程和下扫描之间插入部分和的计算。<br>
-（影响下扫描的初始化）</p>
-
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241225110015.png" alt="image.png" loading="lazy"></p>
-
-<h1 id="efficient-integral-image-computation-on-the-gpu-2010">Efficient Integral Image Computation on the GPU 2010</h1>
-<p>使用work-efficient的前缀和计算，利用了分段扫描解决大数组问题。积分图像的计算转化为：前缀和-转置-前缀和过程。<br>
-使用tanspose操作的优点在于，可以使用同一个kernel完成两次扫描操作。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241223154019.png" alt="image.png" loading="lazy"></p>
-
-<h1 id="gpu-efficient-recursive-filtering-and-summed-area-tables-2011">GPU-Efficient Recursive Filtering and Summed-Area Tables 2011</h1>
-
-<h1 id="efficient-algorithms-for-the-summed-area-tables--primitive-on-gpus-2018">Efficient Algorithms for the Summed Area Tables  Primitive on GPUs 2018</h1>
-<h2 id="related-work-1">Related work</h2>
-
-<h3 id="scan-scan-algorithms">Scan-scan algorithms:</h3>
-<ul>
-  <li>Compute prefix sums directly</li>
-  <li>Limited by memory access patterns</li>
-</ul>
-
-<h3 id="scan-transpose-scan-algorithms">Scan-transpose-scan algorithms:</h3>
-<ul>
-  <li>Use matrix transposition between steps</li>
-  <li>Rely heavily on scratchpad memory</li>
-  <li>Have expensive matrix transpose operations</li>
-  <li>Face memory bandwidth limitations<br>
-该方法来自于Efficient Integral Image Computation on the GPU。<strong>本文指出</strong>，该方法需要对global memory的聚合访问和昂贵的transpose操作。
-    <blockquote>
-      <p>[!聚合访问]<br>
-对全局内容的访问较慢，只有每一个线程以相同stride的方式访问全局内存，才能实现峰值吞吐：<br>
-Thread 0: accesses address N <br>
-Thread 1: accesses address N+1 <br>
-Thread 2: accesses address N+2 <br>
-…and so on</p>
-    </blockquote>
+  <li>巧用Subpass减少外部同步
+    <ul>
+      <li>同一 Render Pass 内的多个阶段尽量用 Subpass Dependencies 处理，可以避免过多的图像布局切换和额外的 Barrier 开销。</li>
+    </ul>
   </li>
+  <li>合理划分队列并使用Semaphore
+    <ul>
+      <li>如果 GPU 拥有异步计算队列或传输队列，适当将工作分摊在不同队列。使用 Semaphore 进行队列间同步，充分利用 GPU 并行。</li>
+    </ul>
+  </li>
+  <li>Fence用于 CPU/GPU 交互
+    <ul>
+      <li>只有在需要 CPU 等待 GPU 的结果时才使用 Fence，避免无谓的阻塞。要注意等待方式（阻塞或轮询）的选择及资源回收。</li>
+    </ul>
+  </li>
+  <li>监控和调试
+    <ul>
+      <li>使用 Vulkan 的验证层（Validation Layers）或 GPU 调试工具，来确认 Barrier 和同步的正确性，避免出现 GPU 死锁或数据争用。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="easyvulkan中的同步管理">EasyVulkan中的同步管理</h1>
+<p>EasyVulkan通过封装 Vulkan 的同步对象，提供了一整套简单而灵活的同步管理方案。核心类 SynchronizationManager 就是这一解决方案的代表。下面我们从几个方面来介绍它的设计理念与实现思路。</p>
+
+<h2 id="统一创建与管理">统一创建与管理</h2>
+<p>SynchronizationManager 封装了创建信号量和栅栏的过程，允许开发者通过简单的接口来创建同步对象，而无需关心底层的 Vulkan 调用细节。例如：</p>
+
+<pre><code class="language-C++">// 创建自定义的信号量和栅栏
+auto transferComplete = syncManager-&gt;createSemaphore("transferComplete");
+auto cmdFence = syncManager-&gt;createFence(false, "cmdBufferFence");
+</code></pre>
+
+<p>这里，createSemaphore 与 createFence 接口不仅简化了对象创建，还支持为同步对象命名，这有助于调试和资源追踪。</p>
+
+<h2 id="帧同步管理">帧同步管理</h2>
+<p>在现代图形应用中，为了实现流畅的多缓冲（如三重缓冲）渲染，通常需要为每一帧分别创建同步对象。SynchronizationManager 内置了 createFrameSynchronization 接口，可以一次性为所有并行帧创建所需的信号量和栅栏。内部会为每一帧创建：</p>
+<ul>
+  <li>图像可用信号量：确保交换链图像获取到位。</li>
+  <li>渲染完成信号量：通知呈现引擎渲染工作已经结束。</li>
+  <li>帧内栅栏：用于 CPU 等待 GPU 渲染完成。</li>
 </ul>
 
-<blockquote>
-  <p>[!bank conflict]<br>
-现代GPU的共享内容被分成一系列的bank。当同一个warp中的不同线程访问同一个bank时，会发生冲突。<br>
-例如，一个warp中存在12个线程，每个线程都需要访问共享内存对应行的32个数据，即第i个线程访问sharedMem[i][0…31]由于bank的存在，每个线程访问数据j时都对应到同一个bank中，因此存在冲突。<br>
-本文为了避免这种冲突，定义数组大小为[32][33]<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241225123424.png" alt="image.png" loading="lazy"></p>
-</blockquote>
+<pre><code class="language-C++">// 设置三重缓冲，每帧同步对象自动创建
+syncManager-&gt;createFrameSynchronization(3);
+</code></pre>
 
-<h3 id="本文方法的动机">本文方法的动机</h3>
-<p>SAT 计算的瓶颈在于数据移动。以聚合模式高效访问全局内存对算法性能至关重要。此外，设计减少为了减少数据移动，我们采用了寄存器缓存方法。问题在于如何在有效使用寄存器的同时避免争用。<br>
-线程间通信寄存器的技术（即shuffle指令）只能在单个 warp（CUDA 中一起执行的一组线程）内工作。因此，我们调整了算法，在warp级别进行扫描，同时避免warp内部通信。</p>
+<p>在渲染循环中，可以直接通过索引获取对应帧的同步对象：</p>
 
-<h3 id="最直接的sat计算">最直接的SAT计算</h3>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129173328.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129200705.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129201044.png" alt="image.png" loading="lazy"></p>
+<pre><code class="language-C++">auto imageAvailable = syncManager-&gt;getImageAvailableSemaphore(currentFrame);
+auto renderFinished = syncManager-&gt;getRenderFinishedSemaphore(currentFrame);
+auto inFlightFence = syncManager-&gt;getInFlightFence(currentFrame);
+</code></pre>
 
-<h3 id="prefix-sum">Prefix Sum</h3>
-<h4 id="basic-method">Basic method</h4>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129201950.png" alt="image.png" loading="lazy"></p>
-
-<h4 id="kogge-stone">Kogge-Stone</h4>
-<p>http://lumetta.web.engr.illinois.edu/408-S20/slide-copies/ece408-lecture16-S20.pdf<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129195323.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129195348.png" alt="image.png" loading="lazy"><br>
-Step1得到长度小于等于2的累加和<br>
-Step2得到长度小于等于4的累加和<br>
-Step3得到长度小于等于8的累加和</p>
-
-<h4 id="lf-scan">LF-scan</h4>
-<p>warp shuffle<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129200135.png" alt="image.png" loading="lazy"></p>
-<blockquote>
-  <p>In theory, the LFscan achieves the highest computing efficiency with logN  stages and $\frac{NlogN}{2}$<br>
- addition operations as Fig. 2c shows,</p>
-</blockquote>
-
-<h4 id="reduce-up-sweep-and-down-sweep">‘reduce (up-sweep) and down-sweep’</h4>
-<p>https://developer.nvidia.com/gpugems/gpugems3/part-vi-gpu-computing/chapter-39-parallel-prefix-sum-scan-cuda<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129203801.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129203810.png" alt="image.png" loading="lazy"></p>
-
-<h2 id="问题">问题</h2>
-<ol>
-  <li>算法流程决定<strong>加法运算的次数和算法阶段数</strong>。</li>
-  <li>数据存储、传递的方式(GPU显存访问模式)也会显著影响算法性能。</li>
-</ol>
-
-<h2 id="本文贡献">本文贡献</h2>
-<ol>
-  <li>使用寄存器存储中间数据。</li>
-  <li>提出BRLT</li>
-</ol>
-
-<h2 id="方法-2">方法</h2>
-<h3 id="caching-data-using-register-files">Caching Data Using Register Files</h3>
-<p>SAT的计算问题是内存限制的。<br>
-每个线程都先使用寄存器缓存数据。<br>
-并且warp中线程的通信泗洪shuffle操作完成。</p>
-
-<h3 id="gpu聚合访问">GPU聚合访问</h3>
-<p>用于降低对Global Memory的访问成本。具体做法是，在<strong>同一个warp中的所有线程访问临近的内存位置</strong>。GPU可以将这些操作打包成一次数据传输，从而降低延迟、提升带宽。</p>
-
-<ol>
-  <li>data向16 bits or 32 bits对齐。</li>
-  <li>globalID = (x + width * y + width * height * z),对内存位置的访问和GlobalID一致（尤其是2D图像，y连续访问不是聚合访问）。</li>
-</ol>
-
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102115812.png" alt="image.png" loading="lazy"></p>
-
-<p><a href="https://docs.google.com/document/d/1R4-bzx7B4Samr4GWcQNvo-yN6V7qxtniZQmGluQTwT8/edit?usp=sharing">Google</a><br>
-<a href="https://docs.google.com/document/d/1Vne4JPgmYX9DFQ6Qu7OlWNAlr7hfni1HvbwmxMbJG64/edit?usp=sharing">Ch</a></p>
-
-<h3 id="问题回顾">问题回顾</h3>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102115300.png" alt="image.png" loading="lazy"><br>
-计算前缀和在两个方向上进行。<br>
-但是：</p>
-<ol>
-  <li>两个方向需要使用不同的kernel函数（不同的着色器程序，或者引入不同的分支）。</li>
-  <li>列方向处理的数据不连续，无法实现聚合访问。</li>
-</ol>
-
-<p>因此，SAT计算更常见的做法是<strong>Scan-transpose-scan</strong>。<br>
-接下来需要考虑<strong>矩阵转置是否是聚合操作</strong>。</p>
-<h3 id="矩阵转置">矩阵转置</h3>
-<h4 id="warp-level">warp level</h4>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102114752.png" alt="image.png" loading="lazy"></p>
-<h4 id="element-level">element level</h4>
-<p>在每个warp内部：<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102114951.png" alt="image.png" loading="lazy"></p>
-<h4 id="method直接做法">Method：直接做法</h4>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102120631.png" alt="image.png" loading="lazy"><br>
-写入操作不是聚合操作。<br>
-本文提出了BRLT，在Shared memory中对warp中的数据进行转置。</p>
-
-<h3 id="brlt">BRLT</h3>
-<p><em>Block-Register-Local-Transpose Method</em><br>
-这是一种将数据从寄存器复制到共享内容再复制回寄存器的矩阵transpose方法。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102121418.png" alt="image.png" loading="lazy"></p>
-
-<p>这种方法的仅<strong>使用共享内存作为缓冲区</strong>，transpose操作是在<strong>寄存器-共享内存之间</strong>完成的；传统算法的操作是在共享内存中完成，并且需要从主存中加载数据。</p>
-
-<h3 id="bank-conflict">Bank conflict</h3>
-<p><a href="https://docs.google.com/document/d/1m9uyMrOjMYgwPfExUukleEViUgA3CqzxVioyn1Agp8E/edit?usp=sharing">google</a><br>
-GPU共享内存以bank的形式被组织。N卡通常32banks，bank中数据单元大小为4或8。当一个warp中的不同线程访问到同一个bank时，会发生conflict，导致IO操作无法并行。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102113838.png" alt="image.png" loading="lazy"><br>
-例如，bank number=4.该任务是一个矩阵转置任务，Clock0时，四个线程写入第一列：<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102113958.png" alt="image.png" loading="lazy"><br>
-此时发生bank conflict。<br>
-但是如果修改共享内存大小为4*5:<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102114045.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102114053.png" alt="image.png" loading="lazy"></p>
-
-<h3 id="部分和计算">部分和计算</h3>
-<ol>
-  <li>将warp计算出的部分和存储在共享内存中。</li>
-  <li>在共享内存中计算数据的前缀和。</li>
-  <li>将数据从共享内存加载回对应的warp。</li>
-</ol>
-
-<h3 id="方法一scanrow-brlt">方法一：ScanRow-BRLT</h3>
-<p>Efficient Integral Image Computation on the GPU 2010中方法需要将行扫描的结果存储在全局内存中，transpose操作也在全局内存中完成。<br>
-本文中的方法:</p>
-<ol>
-  <li>将输入2D图像的一块直接加载到block中,</li>
-  <li>然后执行行扫描-BRLT-写回主存。因此转置操作在共享内存中完成。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241230122606.png" alt="image.png" loading="lazy"><br>
-如上图所示，每个block负责32行的数据，每个warp处理32*32的块。<br>
-每个线程读取32个数据，<strong>线程之间</strong>使用LF-scan（利用shuffle操作）。<br>
-<strong>warp之间的通信：</strong><br>
-在一个线程中串行操作，复杂度O(n^2)：<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102174554.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102175757.png" alt="image.png" loading="lazy">
-</li>
-</ol>
-
-<h4 id="思考">思考</h4>
-<ol>
-  <li>warp是被调度的基本单元，但并不意味着不同warp之间有先后顺序，也不意味着warp被完整调度。</li>
-  <li>为什么转置以后再写回主存，直接rigister-shared memory-rigister的模式完成两次算法IO更少。</li>
-  <li>如何处理更大的图像。</li>
-</ol>
-
-<h3 id="方法二brlt-scanrow">方法二：BRLT-ScanRow</h3>
-<p>与方法1类似，但是先转置再执行scan操作。重复两次。<strong>但是论文指出，该方法使用串行扫描算法，并且这种方法效率更高。</strong><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102175124.png" alt="image.png" loading="lazy"><br>
-warp之间使用共享内存通信，但是该方法的每个线程只需要一个位置的preSum，复杂度降低为O(n)<br>
-<img src="" alt="Uploading file...e22h5" loading="lazy"></p>
-
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102175257.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102175812.png" alt="" loading="lazy"></p>
-
-<h3 id="方法三register-based-scanrowcolumn-method">方法三：Register-based ScanRowColumn Method</h3>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241230123440.png" alt="image.png" loading="lazy"><br>
-每个block处理32行的数据，每个warp处理一行的数据。<br>
-例如warp0，扫描0-31号元素，使用shuffle操作传递到warp0的第二次扫描的第一个线程上。</p>
-
+<h2 id="自动资源清理与异常处理">自动资源清理与异常处理</h2>
+<p>SynchronizationManager 在内部维护了所有同步对象的生命周期。在其析构函数中，会自动调用 cleanup 方法，<strong>确保所有 Vulkan 同步对象得到正确释放</strong>，从而避免内存泄漏和资源错误。此外，各接口均提供了异常处理机制，当遇到同步对象创建失败或参数错误时，会抛出异常，帮助开发者及时定位问题。</p>
 
     <!-- see https://giscus.app/ -->
     <div class="giscus" id="giscus" style="margin: 4rem auto;"></div>

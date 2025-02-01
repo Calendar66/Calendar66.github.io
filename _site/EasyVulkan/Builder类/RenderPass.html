@@ -7,25 +7,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>
     
-        How to compute integral image on GPU?
+        Vulkan渲染通道
     
 </title>
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>How to compute integral image on GPU? | Calendar’s Blog</title>
+<title>Vulkan渲染通道 | Calendar’s Blog</title>
 <meta name="generator" content="Jekyll v4.3.4">
-<meta property="og:title" content="How to compute integral image on GPU?">
+<meta property="og:title" content="Vulkan渲染通道">
 <meta property="og:locale" content="en_US">
-<meta name="description" content="Related Work">
-<meta property="og:description" content="Related Work">
-<link rel="canonical" href="http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html">
-<meta property="og:url" content="http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html">
+<meta name="description" content="引言 在Vulkan图形API的渲染管线中，渲染通道（Render Pass）是构建高效渲染流程的核心组件,它不仅描述了一次渲染操作中的渲染目标（attachments）的使用方式，还决定了多个渲染阶段（subpass）之间的执行顺序和数据依赖关系。本文将深入探讨Vulkan渲染通道的工作原理及其关键要素的实现细节。">
+<meta property="og:description" content="引言 在Vulkan图形API的渲染管线中，渲染通道（Render Pass）是构建高效渲染流程的核心组件,它不仅描述了一次渲染操作中的渲染目标（attachments）的使用方式，还决定了多个渲染阶段（subpass）之间的执行顺序和数据依赖关系。本文将深入探讨Vulkan渲染通道的工作原理及其关键要素的实现细节。">
+<link rel="canonical" href="http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/RenderPass.html">
+<meta property="og:url" content="http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/RenderPass.html">
 <meta property="og:site_name" content="Calendar’s Blog">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2025-01-03T00:00:00+08:00">
+<meta property="article:published_time" content="2025-01-29T00:00:00+08:00">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="How to compute integral image on GPU?">
+<meta property="twitter:title" content="Vulkan渲染通道">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-01-03T00:00:00+08:00","datePublished":"2025-01-03T00:00:00+08:00","description":"Related Work","headline":"How to compute integral image on GPU?","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html"},"url":"http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-01-29T00:00:00+08:00","datePublished":"2025-01-29T00:00:00+08:00","description":"引言 在Vulkan图形API的渲染管线中，渲染通道（Render Pass）是构建高效渲染流程的核心组件,它不仅描述了一次渲染操作中的渲染目标（attachments）的使用方式，还决定了多个渲染阶段（subpass）之间的执行顺序和数据依赖关系。本文将深入探讨Vulkan渲染通道的工作原理及其关键要素的实现细节。","headline":"Vulkan渲染通道","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/RenderPass.html"},"url":"http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/RenderPass.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -102,7 +102,7 @@
             
                 <style>
                         .thumbnail {
-                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102174554.png");
+                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202012410.png");
                         }
                     
                 </style>
@@ -404,13 +404,13 @@
     <p>
                 <a href="/">Home</a>
                 &gt;
-            <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">技术学习</a>
+            <a href="/EasyVulkan/">EasyVulkan</a>
                 &gt;
-            <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/">GPU通用计算</a>
+            <a href="/EasyVulkan/Builder%E7%B1%BB/">Builder类</a>
                 &gt;
             
                 
-                    How to compute integral image on GPU?
+                    Vulkan渲染通道
                 
             </p>
 </div>
@@ -419,19 +419,19 @@
     <div class="thumbnail">
         <div class="transbox">
             
-                <span class="post-title">How to compute integral image on GPU?</span>
+                <span class="post-title">Vulkan渲染通道</span>
             
             <div class="post-info">
                 
-                    <a class="info-box category-box" href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0">
+                    <a class="info-box category-box" href="/EasyVulkan">
                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M384 480h48c11.4 0 21.9-6 27.6-15.9l112-192c5.8-9.9 5.8-22.1 .1-32.1S555.5 224 544 224H144c-11.4 0-21.9 6-27.6 15.9L48 357.1V96c0-8.8 7.2-16 16-16H181.5c4.2 0 8.3 1.7 11.3 4.7l26.5 26.5c21 21 49.5 32.8 79.2 32.8H416c8.8 0 16 7.2 16 16v32h48V160c0-35.3-28.7-64-64-64H298.5c-17 0-33.3-6.7-45.3-18.7L226.7 50.7c-12-12-28.3-18.7-45.3-18.7H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H87.7 384z"></path></svg>
-                        <span>技术学习</span>
+                        <span>EasyVulkan</span>
                     </a>
                 
                 <span class="info-box">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"></path></svg>
                     <span>
-                            2025-01-03
+                            2025-01-29
                         
                     </span>
                 </span>
@@ -450,361 +450,204 @@
     </div>
 </div>
 <div class="tag-box">
-<span class="tag theme-0" contentid="user manual">
-            user manual
-        </span><span class="tag theme-1" contentid="markdown">
-            markdown
-        </span><span class="tag theme-2" contentid="writing format">
-            writing format
+<span class="tag theme-0" contentid="Vulkan">
+            Vulkan
+        </span><span class="tag theme-1" contentid="EasyVulkan">
+            EasyVulkan
+        </span><span class="tag theme-2" contentid="RenderPass">
+            RenderPass
+        </span><span class="tag theme-0" contentid="Subpass">
+            Subpass
+        </span><span class="tag theme-1" contentid="Attachment">
+            Attachment
+        </span><span class="tag theme-2" contentid="Subpass Dependency">
+            Subpass Dependency
         </span>
 </div>
 <main>
-    <h1 id="related-work">Related Work</h1>
+    <h1 id="引言">引言</h1>
+<p>在Vulkan图形API的渲染管线中，渲染通道（Render Pass）是构建高效渲染流程的核心组件,它不仅描述了一次渲染操作中的<strong>渲染目标（attachments）的使用方式</strong>，还决定了多个渲染阶段（subpass）之间的<strong>执行顺序和数据依赖关系</strong>。本文将深入探讨Vulkan渲染通道的工作原理及其关键要素的实现细节。</p>
 
-<p>GPU Gems 3 (2005). Chapter: “Summed-Area Tables on the GPU” by Dave Johnson (NVIDIA).<br>
-https://developer.nvidia.com/gpugems/gpugems3/part-ii-light-and-shadows/chapter-8-summed-area-variance-shadow-maps</p>
-
-<p>Parallel Prefix Sums<br>
-https://developer.nvidia.com/gpugems/gpugems3/part-vi-gpu-computing/chapter-39-parallel-prefix-sum-scan-cuda<br>
-<a href="https://dl.acm.org/doi/10.5555/1280094.1280110">Scan primitives for GPU computing</a></p>
-
-<p>GPU-efficient recursive filtering and summed-area tables<br>
-https://dl.acm.org/doi/10.1145/2070781.2024210</p>
-
-<p><strong>技术重点：</strong><br>
-<strong>并行前缀和（Scan）</strong>：大多数GPU实现将积分图像计算分解为两个主要的并行前缀和传递，一个是水平方向的，另一个是垂直方向的。<br>
-<strong>内存合并与冲突</strong>：高效的GPU积分图像算法注意内存布局，确保线程访问连续的内存段以减少延迟并提高吞吐量。<br>
-<strong>工作负载划分（Tile）</strong>：大型图像被划分为独立且并行计算的小块。在每个小块上计算出部分总和后，额外进行一次合并操作以得到全局积分图像。<br>
-<strong>层次化方法</strong>：层次化求和策略通过将求和问题拆解成多个阶段来降低处理大型图像时所需处理复杂度。<br>
-使用共享内存与寄存器：高性能实现将中间总和保存在在快速GPU共享内存中，从而减少全局内存流量。</p>
-
-<h1 id="summed-area-variance-shadow-mapsgpu-gem3">Summed-Area Variance Shadow Maps(GPU gem3)</h1>
-<p>https://developer.nvidia.com/gpugems/gpugems3/part-ii-light-and-shadows/chapter-8-summed-area-variance-shadow-maps<br>
-该章节指出SAT的计算本质上是两个维度的前缀和过程。Hensley et al. 2005.提出了一种更并行的方法。<br>
-本章节主要关注积分图像计算时的精度问题，Hensley et al. 2005有很多关于精度问题的解决方案， Donnelly and Lauritzen 2006也给出了一种解决方案。</p>
-
-<h1 id="parallel-prefix-sum-scan-with-cudagpu-gem3">Parallel Prefix Sum (Scan) with CUDA（GPU Gem3）</h1>
-<h2 id="naive-method">Naive Method</h2>
-<p>CPU的前缀和计算的复杂度为O(n),GPU算法的复杂度如果不超过该复杂度，我们称之为efficient work。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241209133753.png" alt="image.png" loading="lazy"><br>
-最原始的GPU版本就是一个不高效的实现，该算法需要两个Buffer来保证正确性。同时，该算法还假设处理器单元的数量和数组大小一致。</p>
-
-<h2 id="work-efficient-method">Work-Efficient Method</h2>
+<h2 id="渲染通道的本质">渲染通道的本质</h2>
+<p>渲染通道（VkRenderPass）定义了渲染操作期间使用的帧缓冲附件集合及其使用方式。它通过明确指定附件的生命周期和依赖关系，允许驱动进行深层次优化。相较于传统图形API的隐式状态管理，Vulkan的显式声明机制可降低内存带宽消耗达30%以上。<br>
+渲染通道主要负责描述：</p>
 <ul>
-  <li>使用平衡树来优化复杂度。</li>
-  <li>分成两个过程，Red1uce(归约过程，也被称作上扫过程)；和下扫过程。</li>
-  <li>同一个位置上的操作在共享内存中完成。</li>
+  <li>
+<strong>渲染目标</strong>（Attachments） 的格式、加载/存储操作、采样数等属性；</li>
+  <li>
+<strong>子通道</strong>（Subpasses） 中每个阶段如何使用这些渲染目标；</li>
+  <li>子通道间的<strong>依赖关系</strong>（Pipeline Dependencies），用于保证数据正确性和同步。</li>
 </ul>
 
-<p><strong>Reduce</strong><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241223132615.png" alt="image.png" loading="lazy"></p>
+<h2 id="设计哲学">设计哲学</h2>
+<p>显式控制：开发者必须明确指定所有附件和子流程<br>
+执行优化：提前声明渲染流程使驱动能优化资源布局<br>
+依赖管理：精确控制子流程间的内存和执行顺序</p>
 
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241209134620.png" alt="image.png" loading="lazy"><br>
-该过程结束后，根结点上保存了整个数组的和。</p>
-
-<p><strong>down-sweep</strong><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241223132741.png" alt="image.png" loading="lazy"><br>
-在上扫描阶段，我们已经获得了总和，但前缀和还未完全计算出来。下扫描阶段通过逆向操作，逐步填充前缀和数组。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/%E5%9B%BE%E5%83%8F.jpeg" alt="图像.jpeg" loading="lazy"><br>
-上扫描结束后，位置0，1，3，7的值是前缀和数组中会出现的值（为inclusive的，但通常需要计算exclusive的）。例如，25的右子树14需要11的值来更新子节点。<br>
-因此，下扫描过程可以理解为一个传递到左子树、累加右子树的过程。</p>
-<ol>
-  <li>初始化：设置根节点为0.</li>
-  <li>遍历步长数组[4,2,1]
-    <ol>
-      <li>设置左子树为根节点的值，右子树为左子树和右子树的和（左子树使用设置后的值）。<br>
- <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241209135551.png" alt="" loading="lazy"><br>
- 该过程一个线程操作两个元素，需要在同一个work group中完成。<br>
- 使用上扫阶段的结果：
-        <ul>
-          <li>树结构：
-            <div class="language-plaintext highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>   25
- /    \
-   11      14
-  /  \    /  \
- 4    7  5    9
-/ \  / \ / \  / \
-  3  1 7  0 4 1 6 3
-</code></pre></div>            </div>
-          </li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-</ol>
-
+<h1 id="attachment简介与创建方法">Attachment简介与创建方法</h1>
+<p>Attachment 通常指的是帧缓冲区中的渲染目标，比如颜色缓冲、深度缓冲或模板缓冲。每个attachment都需要在创建渲染通道时进行详细的描述，主要包括以下几个方面：</p>
 <ul>
-  <li>初始化根节点为 0：
-    <div class="language-plaintext highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>        0
-      /    \
-    11      14
-   /  \    /  \
-  4    7  5    9
- / \  / \ / \  / \
-3  1 7  0 4 1 6 3
-</code></pre></div>    </div>
-  </li>
-  <li>传递并更新：
-    <ul>
-      <li>根节点 0 分配给左子树 <code class="language-plaintext highlighter-rouge">left = 0</code> 和右子树 <code class="language-plaintext highlighter-rouge">right = 11</code>（左子树的部分和）。</li>
-      <li>左子树 11 分配给其左子树 <code class="language-plaintext highlighter-rouge">left = 0</code> 和右子树 <code class="language-plaintext highlighter-rouge">right = 4</code>。</li>
-      <li>右子树 14 分配给其左子树 <code class="language-plaintext highlighter-rouge">left = 11</code> 和右子树 <code class="language-plaintext highlighter-rouge">right = 5</code>。</li>
-      <li>继续递归，最终得到前缀和数组。</li>
-    </ul>
-  </li>
+  <li>格式（Format）：如 VK_FORMAT_B8G8R8A8_UNORM、VK_FORMAT_D32_SFLOAT 等。</li>
+  <li>采样数（Samples）：多重采样时使用的采样数。</li>
+  <li>加载/存储操作（Load/Store Operations）：如在渲染开始时是清除还是保留已有数据，在渲染结束时是存储还是丢弃数据。</li>
+  <li>初始与最终布局（InitialLayout/FinalLayout）：表明attachment在渲染开始前和结束后的内存布局状态，便于Vulkan内部进行布局转换。</li>
 </ul>
 
-<p>最终前缀和数组 <code class="language-plaintext highlighter-rouge">S = [0, 3, 4, 11, 11, 15, 16, 22]</code>。</p>
+<p>在创建渲染通道时，需要通过一个 VkAttachmentDescription 数组来描述所有的attachment。例如：</p>
 
-<h1 id="fast-summedarea-table-generation-and-its-applicationshensley-et-al-2005">Fast Summed‐Area Table Generation and its Applications[Hensley et al. 2005]</h1>
-<p>提到论文：Simple Blurry Reflections with Environment Maps 似乎是使用miomap近似模糊的lerp blur。</p>
-<h2 id="方法">方法</h2>
-<p>使用<strong>图形管线实现</strong>，整个过程分解为两个phase，每个phase包括log(n)个pass。<br>
-使用两张纹理图像，互相作为输入输出。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241212125634.png" alt="image.png" loading="lazy"></p>
-<h2 id="积分图像的精度问题">积分图像的精度问题</h2>
-<ol>
-  <li>累加时机器误差的积累。</li>
-  <li>使用积分图像时通常是两个接近的值相减，尤其是两个值很大时，误差会更加明显。</li>
-  <li>积分图像的最大值大小为$w \times h \times 255$</li>
-</ol>
+<pre><code class="language-C++">VkAttachmentDescription colorAttachment = {};
+colorAttachment.format = swapchainImageFormat; // 指定Format
+colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT; // 指定采样数
+colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; // 指定加载操作
+colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE; // 指定存储操作
+// For depth/stencil attachments
+colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // 指定模板加载操作
+colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE; // 指定模板存储操作
+// End for depth/stencil attachments
+colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; // 指定初始布局
+colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // 指定最终布局
+</code></pre>
 
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241212133603.png" alt="image.png" loading="lazy"></p>
+<h1 id="subpass简介与创建方法">Subpass简介与创建方法</h1>
+<p>Subpass 是渲染通道中的一个阶段，每个subpass描述了在该阶段中如何使用和依赖attachment。</p>
 
-<h3 id="using-signed-offset-pixel-representation">Using Signed-Offset Pixel Representation</h3>
-<p>将像素值进行偏移，从[0,1]偏移到[-0.5,0.5],这样可以使得：</p>
-<ol>
-  <li>数值不总是单调的。<br>
-有两种方式实现这一点：</li>
-  <li>所有像素值-0.5.</li>
-  <li>所有像素值-平均值。</li>
-</ol>
-
-<h3 id="using-origin-centered-image-representation">Using Origin-Centered Image Representation</h3>
-<p>以图片的中心点作为原点，相当于计算四张更小的积分图像，从而避免了极大值的出现。<br>
-但是使用时增加了额外的计算量。</p>
-
-<h1 id="scan-primitives-for-gpu-computing-2007">Scan Primitives for GPU Computing 2007</h1>
-<h2 id="gpu并行模型">GPU并行模型</h2>
-<p>符合流水线结构的算法天然适合GPU实现。即，每个kernel处理单独的输入，产生单独的输出。<br>
-某些问题，例如前缀求和问题，需要输入数据的全局知识。</p>
-<h2 id="相关工作">相关工作</h2>
-<h2 id="原始方法">原始方法</h2>
-<p><a href="https://developer.nvidia.com/gpugems/gpugems2/part-iv-general-purpose-computation-gpus-primer/chapter-36-stream-reduction">horn 2005</a><br>
-[[#Fast Summed‐Area Table Generation and its Applications[Hensley et al. 2005]]]<br>
-这些方法的复杂度为O(nlogn)，是non-work-efficient的。</p>
-
-<h2 id="reduce-and-down-sweep">reduce and down-sweep</h2>
-<p>提出：Blelloch in 1990[Vector Models for Data-Parallel Computing]<br>
-GPU实现：Sengupta(本文作者) et al. and Greß et al. in 2006<br>
-CUDA实现：本文</p>
-
-<h2 id="方法-1">方法</h2>
-<p>本文方法的主要贡献是引入了分段扫描的概念.<br>
-<strong>分段扫描Segmented Scan</strong>，是一种将输入序列分成多个互不影响的字序列并进行后续操作的过程。<br>
-使用flag数组标记不同的分段，例如：<br>
-Data: [a, b, c, d, e] <br>
-Flags: [1, 0, 1, 0, 0]</p>
-
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241216141919.png" alt="image.png" loading="lazy"><br>
-该算法用于解决输入向量超过线程块大小的情况。<br>
-在归约过程和下扫描之间插入部分和的计算。<br>
-（影响下扫描的初始化）</p>
-
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241225110015.png" alt="image.png" loading="lazy"></p>
-
-<h1 id="efficient-integral-image-computation-on-the-gpu-2010">Efficient Integral Image Computation on the GPU 2010</h1>
-<p>使用work-efficient的前缀和计算，利用了分段扫描解决大数组问题。积分图像的计算转化为：前缀和-转置-前缀和过程。<br>
-使用tanspose操作的优点在于，可以使用同一个kernel完成两次扫描操作。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241223154019.png" alt="image.png" loading="lazy"></p>
-
-<h1 id="gpu-efficient-recursive-filtering-and-summed-area-tables-2011">GPU-Efficient Recursive Filtering and Summed-Area Tables 2011</h1>
-
-<h1 id="efficient-algorithms-for-the-summed-area-tables--primitive-on-gpus-2018">Efficient Algorithms for the Summed Area Tables  Primitive on GPUs 2018</h1>
-<h2 id="related-work-1">Related work</h2>
-
-<h3 id="scan-scan-algorithms">Scan-scan algorithms:</h3>
+<p>在创建渲染通道时，需要使用 VkSubpassDescription 结构体来描述每个subpass。一个subpass通常至少需要描述以下信息：</p>
 <ul>
-  <li>Compute prefix sums directly</li>
-  <li>Limited by memory access patterns</li>
+  <li>Pipeline Bind Point：通常为 VK_PIPELINE_BIND_POINT_GRAPHICS，指明当前subpass将用于图形管线。</li>
+  <li>颜色附件引用（Color Attachments）：指明渲染阶段中将写入颜色数据的attachment。</li>
+  <li>输入附件引用（Input Attachments）：在一个subpass中可以读取之前subpass生成的数据。</li>
+  <li>深度/模板附件引用（Depth/Stencil Attachment）：如果需要使用深度或模板测试，则需要指定对应的attachment。<br>
+如下代码创建了一个简单的subpass：</li>
 </ul>
 
-<h3 id="scan-transpose-scan-algorithms">Scan-transpose-scan algorithms:</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VkAttachmentReference colorAttachmentRef = {};
+colorAttachmentRef.attachment = 0;  // 引用上面定义的第一个attachment
+colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+VkSubpassDescription subpass = {};
+subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+subpass.colorAttachmentCount = 1;
+subpass.pColorAttachments = &amp;colorAttachmentRef;
+</code></pre></div></div>
+<p>在这个例子中，我们创建了一个渲染阶段，该阶段会把渲染结果写入第0号attachment，并且要求该attachment处于 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL 布局状态。</p>
+
+<h2 id="为什么需要subpass">为什么需要subpass？</h2>
+<p>Vulkan采用subpass的设计模式，除了在API层面给出了更明确的渲染流程以外，还带来了以下好处：</p>
+<ol>
+  <li>利用On-chip memory，减少内存带宽消耗。<br>
+ 在移动端等功耗敏感型设备上，GPU普遍采用了TBR设计，减少对内存带宽的占用，其主要思想是在小块（tile）区域内完成大部分渲染操作，然后统一写回到内存。subpass 非常适合这种架构：在同一个 render pass 内的多个 subpass 可以在同一tile 的生命周期内连续处理(数据传输发生在On-chip memory上)，不必频繁地将数据在片上和内存之间来回传输。</li>
+  <li>避免全局同步。<br>
+ 传统渲染流水线中，可能需要使用全局的内存屏障来确保数据一致性，而在 subpass 内部，由于数据依赖关系已被明确定义，驱动和硬件就可以局部地处理同步，减少不必要的等待。</li>
+</ol>
+
+<h1 id="subpass-dependency简介与创建方法">Subpass Dependency简介与创建方法</h1>
+<p>在一个渲染通道中，多个subpass之间或subpass与外部操作之间往往存在数据依赖关系。为了确保数据的正确性和避免竞态条件，需要在渲染通道中明确声明这些依赖关系。这就是管线Dependency（Pipeline Dependency）的作用。</p>
+
+<p>管线Dependency 允许开发者在subpass之间定义内存屏障和执行屏障，确保：</p>
 <ul>
-  <li>Use matrix transposition between steps</li>
-  <li>Rely heavily on scratchpad memory</li>
-  <li>Have expensive matrix transpose operations</li>
-  <li>Face memory bandwidth limitations<br>
-该方法来自于Efficient Integral Image Computation on the GPU。<strong>本文指出</strong>，该方法需要对global memory的聚合访问和昂贵的transpose操作。
-    <blockquote>
-      <p>[!聚合访问]<br>
-对全局内容的访问较慢，只有每一个线程以相同stride的方式访问全局内存，才能实现峰值吞吐：<br>
-Thread 0: accesses address N <br>
-Thread 1: accesses address N+1 <br>
-Thread 2: accesses address N+2 <br>
-…and so on</p>
-    </blockquote>
-  </li>
+  <li>某个subpass的写操作完成后，下一个subpass读取数据时能够获得最新的结果；</li>
+  <li>在执行特定渲染操作前，所有前置的操作已经完成并且内存访问已经同步。</li>
 </ul>
 
-<blockquote>
-  <p>[!bank conflict]<br>
-现代GPU的共享内容被分成一系列的bank。当同一个warp中的不同线程访问同一个bank时，会发生冲突。<br>
-例如，一个warp中存在12个线程，每个线程都需要访问共享内存对应行的32个数据，即第i个线程访问sharedMem[i][0…31]由于bank的存在，每个线程访问数据j时都对应到同一个bank中，因此存在冲突。<br>
-本文为了避免这种冲突，定义数组大小为[32][33]<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241225123424.png" alt="image.png" loading="lazy"></p>
-</blockquote>
+<p>在Vulkan中，这种依赖关系通过 VkSubpassDependency 结构体进行描述。</p>
 
-<h3 id="本文方法的动机">本文方法的动机</h3>
-<p>SAT 计算的瓶颈在于数据移动。以聚合模式高效访问全局内存对算法性能至关重要。此外，设计减少为了减少数据移动，我们采用了寄存器缓存方法。问题在于如何在有效使用寄存器的同时避免争用。<br>
-线程间通信寄存器的技术（即shuffle指令）只能在单个 warp（CUDA 中一起执行的一组线程）内工作。因此，我们调整了算法，在warp级别进行扫描，同时避免warp内部通信。</p>
+<h2 id="如何使用管线依赖">如何使用管线依赖</h2>
+<p>假设有两个subpass：subpass0写入颜色数据，而subpass1需要读取这些数据作为输入attachment。在这种场景下，我们需要确保subpass0的写操作在subpass1开始读取之前已经完成。可以通过如下方式定义一个依赖：</p>
 
-<h3 id="最直接的sat计算">最直接的SAT计算</h3>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129173328.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129200705.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129201044.png" alt="image.png" loading="lazy"></p>
+<pre><code class="language-C++">VkSubpassDependency dependency = {};
+dependency.srcSubpass = 0;  // 依赖源subpass
+dependency.dstSubpass = 1;  // 依赖目标subpass
 
-<h3 id="prefix-sum">Prefix Sum</h3>
-<h4 id="basic-method">Basic method</h4>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129201950.png" alt="image.png" loading="lazy"></p>
+// 指定依赖的阶段与访问类型
+dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+dependency.dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+dependency.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+dependency.dstAccessMask = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
 
-<h4 id="kogge-stone">Kogge-Stone</h4>
-<p>http://lumetta.web.engr.illinois.edu/408-S20/slide-copies/ece408-lecture16-S20.pdf<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129195323.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129195348.png" alt="image.png" loading="lazy"><br>
-Step1得到长度小于等于2的累加和<br>
-Step2得到长度小于等于4的累加和<br>
-Step3得到长度小于等于8的累加和</p>
+// 对于跨subpass依赖，通常设置dependency.flags为0或VK_DEPENDENCY_BY_REGION_BIT
+dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+</code></pre>
 
-<h4 id="lf-scan">LF-scan</h4>
-<p>warp shuffle<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129200135.png" alt="image.png" loading="lazy"></p>
-<blockquote>
-  <p>In theory, the LFscan achieves the highest computing efficiency with logN  stages and $\frac{NlogN}{2}$<br>
- addition operations as Fig. 2c shows,</p>
-</blockquote>
+<p>在上述例子中：</p>
+<ul>
+  <li>srcSubpass 指定了依赖的来源，即subpass0；</li>
+  <li>dstSubpass 指定了依赖的目标，即subpass1；</li>
+  <li>srcStageMask 和 dstStageMask 指明了涉及的管线阶段；</li>
+  <li>srcAccessMask 和 dstAccessMask 则描述了内存访问的类型。</li>
+</ul>
 
-<h4 id="reduce-up-sweep-and-down-sweep">‘reduce (up-sweep) and down-sweep’</h4>
-<p>https://developer.nvidia.com/gpugems/gpugems3/part-vi-gpu-computing/chapter-39-parallel-prefix-sum-scan-cuda<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129203801.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241129203810.png" alt="image.png" loading="lazy"></p>
+<p>此外，对于一些特殊情况（如初始状态与最终状态的同步），也可以将 srcSubpass 或 dstSubpass 设置为 VK_SUBPASS_EXTERNAL，以描述与渲染通道外部的依赖关系。</p>
 
-<h2 id="问题">问题</h2>
-<ol>
-  <li>算法流程决定<strong>加法运算的次数和算法阶段数</strong>。</li>
-  <li>数据存储、传递的方式(GPU显存访问模式)也会显著影响算法性能。</li>
-</ol>
+<p>例如，定义一个计算预处理 -&gt; 图形渲染的依赖：</p>
 
-<h2 id="本文贡献">本文贡献</h2>
-<ol>
-  <li>使用寄存器存储中间数据。</li>
-  <li>提出BRLT</li>
-</ol>
+<pre><code class="language-C++">VkSubpassDependency compToGraphic = {
+    .srcSubpass = VK_SUBPASS_EXTERNAL, // 表示计算阶段
+    .dstSubpass = 0,                   // 图形子流程索引
+    .srcStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+    .dstStageMask = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT |
+                   VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+    .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
+    .dstAccessMask = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT |
+                    VK_ACCESS_SHADER_READ_BIT,
+    .dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT
+};
+</code></pre>
+<p>又或者定义一个图形渲染 -&gt; 计算后处理的依赖：</p>
 
-<h2 id="方法-2">方法</h2>
-<h3 id="caching-data-using-register-files">Caching Data Using Register Files</h3>
-<p>SAT的计算问题是内存限制的。<br>
-每个线程都先使用寄存器缓存数据。<br>
-并且warp中线程的通信泗洪shuffle操作完成。</p>
+<pre><code class="language-C++">VkSubpassDependency graphicToComp = {
+    .srcSubpass = 1,                    // 最后一个图形子流程
+    .dstSubpass = VK_SUBPASS_EXTERNAL,  // 后续计算阶段
+    .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+    .dstStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+    .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+    .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
+    .dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT
+};
+</code></pre>
 
-<h3 id="gpu聚合访问">GPU聚合访问</h3>
-<p>用于降低对Global Memory的访问成本。具体做法是，在<strong>同一个warp中的所有线程访问临近的内存位置</strong>。GPU可以将这些操作打包成一次数据传输，从而降低延迟、提升带宽。</p>
+<h1 id="easyvulkan中的renderpass">EasyVulkan中的RenderPass</h1>
 
-<ol>
-  <li>data向16 bits or 32 bits对齐。</li>
-  <li>globalID = (x + width * y + width * height * z),对内存位置的访问和GlobalID一致（尤其是2D图像，y连续访问不是聚合访问）。</li>
-</ol>
+<p><strong>构建一个含有颜色和深度附件的 Renderpass：</strong></p>
 
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102115812.png" alt="image.png" loading="lazy"></p>
+<pre><code class="language-C++">// 创建一个简单的 Renderpass，其中包含颜色和深度附件
+auto renderPass = renderPassBuilder
+    .addColorAttachment(swapchainFormat)               // 添加颜色附件
+    .addDepthStencilAttachment(depthFormat)            // 添加深度/模板附件
+    .beginSubpass()                                      // 开始一个子通道
+    .addColorReference(0)                                // 子通道引用第 0 个附件作为颜色附件
+    .setDepthStencilReference(1)                         // 子通道引用第 1 个附件作为深度/模板附件
+    .endSubpass()                                        // 结束子通道
+    .build("mainRenderPass");                            // 构建 Renderpass，并命名为 "mainRenderPass"
+</code></pre>
 
-<p><a href="https://docs.google.com/document/d/1R4-bzx7B4Samr4GWcQNvo-yN6V7qxtniZQmGluQTwT8/edit?usp=sharing">Google</a><br>
-<a href="https://docs.google.com/document/d/1Vne4JPgmYX9DFQ6Qu7OlWNAlr7hfni1HvbwmxMbJG64/edit?usp=sharing">Ch</a></p>
+<p>对于复杂的渲染流程，经常需要设置多个子通道以及它们之间的依赖关系。以下示例展示了<strong>如何配置多个子通道</strong>，并在它们之间添加依赖：</p>
 
-<h3 id="问题回顾">问题回顾</h3>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102115300.png" alt="image.png" loading="lazy"><br>
-计算前缀和在两个方向上进行。<br>
-但是：</p>
-<ol>
-  <li>两个方向需要使用不同的kernel函数（不同的着色器程序，或者引入不同的分支）。</li>
-  <li>列方向处理的数据不连续，无法实现聚合访问。</li>
-</ol>
+<pre><code class="language-C++">// 构建一个拥有多个子通道的 Renderpass
+auto renderPass = renderPassBuilder
+    .addColorAttachment(colorFormat)                   // 添加颜色附件
+    .addDepthStencilAttachment(depthFormat)            // 添加深度/模板附件
 
-<p>因此，SAT计算更常见的做法是<strong>Scan-transpose-scan</strong>。<br>
-接下来需要考虑<strong>矩阵转置是否是聚合操作</strong>。</p>
-<h3 id="矩阵转置">矩阵转置</h3>
-<h4 id="warp-level">warp level</h4>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102114752.png" alt="image.png" loading="lazy"></p>
-<h4 id="element-level">element level</h4>
-<p>在每个warp内部：<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102114951.png" alt="image.png" loading="lazy"></p>
-<h4 id="method直接做法">Method：直接做法</h4>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102120631.png" alt="image.png" loading="lazy"><br>
-写入操作不是聚合操作。<br>
-本文提出了BRLT，在Shared memory中对warp中的数据进行转置。</p>
+    // 第一个子通道配置：渲染到颜色附件和深度附件
+    .beginSubpass()
+    .addColorReference(0)
+    .setDepthStencilReference(1)
+    .endSubpass()
 
-<h3 id="brlt">BRLT</h3>
-<p><em>Block-Register-Local-Transpose Method</em><br>
-这是一种将数据从寄存器复制到共享内容再复制回寄存器的矩阵transpose方法。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102121418.png" alt="image.png" loading="lazy"></p>
+    // 第二个子通道配置：使用第一个子通道的颜色输出作为输入附件，同时写入到另一个颜色附件（例如后续处理）
+    .beginSubpass()
+    .addInputReference(0)
+    .addColorReference(2)
+    .endSubpass()
 
-<p>这种方法的仅<strong>使用共享内存作为缓冲区</strong>，transpose操作是在<strong>寄存器-共享内存之间</strong>完成的；传统算法的操作是在共享内存中完成，并且需要从主存中加载数据。</p>
-
-<h3 id="bank-conflict">Bank conflict</h3>
-<p><a href="https://docs.google.com/document/d/1m9uyMrOjMYgwPfExUukleEViUgA3CqzxVioyn1Agp8E/edit?usp=sharing">google</a><br>
-GPU共享内存以bank的形式被组织。N卡通常32banks，bank中数据单元大小为4或8。当一个warp中的不同线程访问到同一个bank时，会发生conflict，导致IO操作无法并行。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102113838.png" alt="image.png" loading="lazy"><br>
-例如，bank number=4.该任务是一个矩阵转置任务，Clock0时，四个线程写入第一列：<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102113958.png" alt="image.png" loading="lazy"><br>
-此时发生bank conflict。<br>
-但是如果修改共享内存大小为4*5:<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102114045.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102114053.png" alt="image.png" loading="lazy"></p>
-
-<h3 id="部分和计算">部分和计算</h3>
-<ol>
-  <li>将warp计算出的部分和存储在共享内存中。</li>
-  <li>在共享内存中计算数据的前缀和。</li>
-  <li>将数据从共享内存加载回对应的warp。</li>
-</ol>
-
-<h3 id="方法一scanrow-brlt">方法一：ScanRow-BRLT</h3>
-<p>Efficient Integral Image Computation on the GPU 2010中方法需要将行扫描的结果存储在全局内存中，transpose操作也在全局内存中完成。<br>
-本文中的方法:</p>
-<ol>
-  <li>将输入2D图像的一块直接加载到block中,</li>
-  <li>然后执行行扫描-BRLT-写回主存。因此转置操作在共享内存中完成。<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241230122606.png" alt="image.png" loading="lazy"><br>
-如上图所示，每个block负责32行的数据，每个warp处理32*32的块。<br>
-每个线程读取32个数据，<strong>线程之间</strong>使用LF-scan（利用shuffle操作）。<br>
-<strong>warp之间的通信：</strong><br>
-在一个线程中串行操作，复杂度O(n^2)：<br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102174554.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102175757.png" alt="image.png" loading="lazy">
-</li>
-</ol>
-
-<h4 id="思考">思考</h4>
-<ol>
-  <li>warp是被调度的基本单元，但并不意味着不同warp之间有先后顺序，也不意味着warp被完整调度。</li>
-  <li>为什么转置以后再写回主存，直接rigister-shared memory-rigister的模式完成两次算法IO更少。</li>
-  <li>如何处理更大的图像。</li>
-</ol>
-
-<h3 id="方法二brlt-scanrow">方法二：BRLT-ScanRow</h3>
-<p>与方法1类似，但是先转置再执行scan操作。重复两次。<strong>但是论文指出，该方法使用串行扫描算法，并且这种方法效率更高。</strong><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102175124.png" alt="image.png" loading="lazy"><br>
-warp之间使用共享内存通信，但是该方法的每个线程只需要一个位置的preSum，复杂度降低为O(n)<br>
-<img src="" alt="Uploading file...e22h5" loading="lazy"></p>
-
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102175257.png" alt="image.png" loading="lazy"><br>
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102175812.png" alt="" loading="lazy"></p>
-
-<h3 id="方法三register-based-scanrowcolumn-method">方法三：Register-based ScanRowColumn Method</h3>
-<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20241230123440.png" alt="image.png" loading="lazy"><br>
-每个block处理32行的数据，每个warp处理一行的数据。<br>
-例如warp0，扫描0-31号元素，使用shuffle操作传递到warp0的第二次扫描的第一个线程上。</p>
+    // 添加子通道间依赖：确保第一个子通道的写入操作完成后，第二个子通道才能读取
+    .addDependency(0, 1,
+        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+        VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+        VK_ACCESS_SHADER_READ_BIT)
+    
+    .build("multiPassRender");                          // 构建 Renderpass
+</code></pre>
 
 
     <!-- see https://giscus.app/ -->

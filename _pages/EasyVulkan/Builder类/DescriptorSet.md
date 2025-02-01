@@ -5,9 +5,10 @@ tags:
     - EasyVulkan
     - DescriptorSet
 date: "2025-01-27"
-thumbnail: "https://docs.vulkan.org/guide/latest/_images/memory_allocation_sub_allocation.png"
+thumbnail: "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011726.png"
 bookmark: true
 ---
+
 # Vulkan描述符集的简化之道：探索EasyVulkan的实现
 
 >在使用Vulkan时，需要使用描述符集来管理资源。描述符集是Vulkan中的一种资源管理机制，用于管理资源（如纹理、缓冲区等）的绑定和使用。然而，描述符集的创建和使用需要大量的代码操作，包括创建描述符池、创建layout binding、创建描述符池、创建和更新descriptorSet等。并且，增加新的资源时，也需要修改大量的代码，这无疑增加了开发者的负担。
@@ -112,9 +113,7 @@ void DescriptorSetBuilder::updateDescriptorSet(VkDescriptorSet descriptorSet) co
 }
 ```
 
-# 使用示例
-
-接下来来看看如何使用`DescriptorSetBuilder`：
+# EasyVulkan中的DescriptorSet
 
 ```cpp
 // 创建一个包含uniform buffer和纹理的描述符集

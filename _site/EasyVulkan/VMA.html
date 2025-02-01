@@ -179,6 +179,21 @@
         
     
 
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
     
     
     
@@ -258,6 +273,50 @@
                 </button>
 </div>
 <ul class="nav-list">
+<li id="nav-second" aria-label="Builder类">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/Builder%E7%B1%BB/" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Builder类</span>
+                        </a><button class="nav-list-expander" aria-label="toggle items in Builder类 category" aria-pressed="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                        </button>
+</div>
+<ul class="nav-list">
+<li id="nav-third" aria-label="CommandBuffer">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>CommandBuffer</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="DescriptorSet">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>DescriptorSet</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="RenderPass">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/RenderPass.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>RenderPass</span>
+                                    </a>
+                                </div>
+                            </li>
+</ul>
+</li>
+<li id="nav-second" aria-label="SynchronizationManager">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/SynchronizationManager.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>SynchronizationManager</span>
+                        </a>
+</div>
+</li>
 <li id="nav-second" aria-label="VMA">
                     <div class="nav-item">
                         <a href="/EasyVulkan/VMA.html" class="nav-list-link nav-sh">
@@ -922,7 +981,7 @@ allocInfo.memoryTypeIndex = findMemoryType(
 <span class="n">vmaCreateBuffer</span><span class="p">(</span><span class="n">allocator</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">bufferInfo</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">allocInfo</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buffer</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">allocation</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>内存使用策略枚举：</p>
+<h3 id="内存使用策略枚举">内存使用策略枚举：</h3>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="k">enum</span> <span class="n">VmaMemoryUsage</span> <span class="p">{</span>
     <span class="n">VMA_MEMORY_USAGE_UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">VMA_MEMORY_USAGE_GPU_ONLY</span><span class="p">,</span>        <span class="c1">// 纯设备内存</span>
@@ -933,7 +992,9 @@ allocInfo.memoryTypeIndex = findMemoryType(
 <span class="p">}</span> <span class="n">VmaMemoryUsage</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>VmaAllocationCreateFlags 枚举值说明：</p>
+<h3 id="requiredflags">requiredFlags</h3>
+
+<h3 id="vmaallocationcreateflags-枚举值说明">VmaAllocationCreateFlags 枚举值说明：</h3>
 
 <p><strong>VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT</strong></p>
 <ul>
@@ -1383,6 +1444,37 @@ void maintainResources() {
 <strong>DOOM Eternal</strong>：通过VMA内存池技术降低8%的显存占用</li>
 </ul>
 
+<h1 id="easyvulkan中的vma">EasyVulkan中的VMA</h1>
+<p>在EasyVulkan中，Buffer和Image的内存分配都使用了VMA。</p>
+
+<h2 id="buffer-builder">Buffer Builder</h2>
+<p>根据上文的问题，在创建Buffer时比较重要的信息包括：</p>
+<ol>
+  <li>Buffer size。</li>
+  <li>Buffer usage。</li>
+  <li>Buffer memory usage。</li>
+  <li>Buffer memory flags。</li>
+  <li>Buffer memory type index(property,optional)。<br>
+一个Buffer的创建流程可以简化为：</li>
+</ol>
+
+<pre><code class="language-C++">// Create a vertex buffer
+auto vertexBuffer = bufferBuilder
+    -&gt;setSize(sizeof(vertices))
+    -&gt;setUsage(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT)
+    -&gt;setMemoryUsage(VMA_MEMORY_USAGE_CPU_TO_GPU)
+    -&gt;setMemoryFlags(VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+                    VMA_ALLOCATION_CREATE_MAPPED_BIT)
+    -&gt;build("myVertexBuffer");
+
+// Create a storage buffer used on GPU only
+auto storageBuffer = bufferBuilder
+    -&gt;setSize(sizeof(storageData))
+    -&gt;setUsage(VK_BUFFER_USAGE_STORAGE_BUFFER_BIT)
+    -&gt;setMemoryUsage(VMA_MEMORY_USAGE_GPU_ONLY)
+    -&gt;build("myStorageBuffer");
+</code></pre>
+
 <p><a href="https://drive.google.com/file/d/1UUdl3FJjDqUbCYhrzNWvsavK8ewfMFPA/view?usp=sharing">VMA PDF文档｜Generated by Doxygen</a></p>
 
     <!-- see https://giscus.app/ -->
@@ -1445,6 +1537,17 @@ void maintainResources() {
             'type'     : "category",
             'tags'     : "",
             'url'      : "/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/index.html",
             'image'    : "/assets/img/thumbnail/empty.jpg",
             'date'     : "1900-01-01"
         });
@@ -1557,6 +1660,50 @@ void maintainResources() {
             'url'      : "/EasyVulkan/VMA.html",
             'image'    : "https://docs.vulkan.org/guide/latest/_images/memory_allocation_sub_allocation.png",
             'date'     : "2025-01-26"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan命令缓冲区",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, CommandBuffer",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011015.png",
+            'date'     : "2025-01-27"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan描述符集",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, DescriptorSet",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011726.png",
+            'date'     : "2025-01-27"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan渲染通道",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, RenderPass, Subpass, Attachment, Subpass Dependency",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/RenderPass.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202012410.png",
+            'date'     : "2025-01-29"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan同步机制",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, VMA",
+            'url'      : "/EasyVulkan/SynchronizationManager.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202013124.png",
+            'date'     : "2025-02-01"
         });
     
 

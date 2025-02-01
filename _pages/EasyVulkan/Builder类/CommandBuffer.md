@@ -5,12 +5,13 @@ tags:
     - EasyVulkan
     - CommandBuffer
 date: "2025-01-27"
-thumbnail: "https://docs.vulkan.org/guide/latest/_images/memory_allocation_sub_allocation.png"
+thumbnail: "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011015.png"
 bookmark: true
 ---
 
 # 命令池与命令缓冲区
 在Vulkan的渲染架构中，**命令池（Command Pool）和命令缓冲区（Command Buffer）**构成了GPU指令管理的核心机制。
+
 **命令池 (Command Pool)**:  命令池是命令缓冲区的内存分配器和管理器。你可以把它想象成一个命令缓冲区的“工厂”。 每个命令池都与一个特定的队列族索引 (Queue Family Index) 关联。这意味着从该命令池分配的命令缓冲区只能提交到与该队列族索引对应的队列中。
 - 内存分配: 命令池负责分配命令缓冲区所需的内存。Vulkan 允许驱动程序在命令池级别进行内存管理优化，例如预分配内存，从而提高命令缓冲区分配和释放的效率。
 - 生命周期管理: 命令池管理着它所分配的命令缓冲区的生命周期。你可以重置整个命令池，一次性释放所有命令缓冲区，也可以单独重置和重新使用命令缓冲区。
@@ -29,7 +30,16 @@ bookmark: true
 | 重置行为 | 可批量重置所有关联命令缓冲区 | 支持单独或批量重置 |
 | 内存管理 | 控制底层内存分配策略 | 使用预分配的内存空间 |
 
->回顾在[Vulkan初始化](http://blog.calendar.codes/EasyVulkan/Vulkan初始化.html)中，我们提到命令池创建时需要制定队列族，由该命令池创建的命令缓冲区也只能使用该队列族的队列来执行。
+<div markdown="0" style="text-align: center;">
+
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011015.png" alt="image description" style="max-width: 50%; height: auto;">
+
+<p style="text-align: center;">图 1：CommandPool 、CommandBuffer 、QueueFamily 、 Queue  的关系。</p>
+
+</div>
+
+>回顾在[Vulkan初始化](http://blog.calendar.codes/EasyVulkan/Vulkan初始化.html)中，我们提到命令池创建时需要指定队列族，由该命令池创建的命令缓冲区也只能使用该队列族的队列来执行。
+
 
 # 创建和使用
 ## 命令池创建
@@ -128,7 +138,8 @@ vkResetCommandBuffer(commandBuffer, 0); // 或者 VK_COMMAND_BUFFER_RESET_RELEAS
 vkDestroyCommandPool(device, commandPool, nullptr);
 ```
 
-# 高级用法-使用 VK_COMMAND_BUFFER_LEVEL_SECONDARY 被主命令缓冲区调用
+# 高级用法-二级缓冲区被主命令缓冲区调用
+
 **Vulkan 将命令缓冲区分为两种级别：**
 - 主命令缓冲区 (Primary Command Buffer, VK_COMMAND_BUFFER_LEVEL_PRIMARY):  主命令缓冲区可以提交到队列执行，并且可以调用二级命令缓冲区。它通常用于组织应用程序的主要渲染或计算流程。
 
@@ -289,5 +300,36 @@ vkCmdEndConditionalRenderingEXT(renderCmdBuffer);
 ### 3. 命令复用
 对于重复使用的渲染或计算序列，将其记录到二级命令缓冲区中，在多个主命令缓冲区中复用，可以减少重复记录的工作量。
 
-# EasyVulkan中的命令缓冲区管理
+# EasyVulkan中的CommandBuffer
 在EasyVulkan中，使用`CommandBufferBuilder`来创建和记录命令缓冲区，在注册到ResourceManager中时，会绑定对应的`CommandPool`。即name-> (CommandBuffer,CommandPool)
+
+**例如创建单个CommandBuffer：**
+
+```C++
+// 假设 graphicsPool 已经正确创建并初始化
+auto cmdBuffer = commandBufferBuilder
+    ->setCommandPool(graphicsPool)
+    ->setLevel(VK_COMMAND_BUFFER_LEVEL_PRIMARY)
+    ->build("mainCommandBuffer");
+```
+
+**创建多个CommandBuffer：**
+
+```C++
+// swapchainImageCount 为交换链图像数量
+auto cmdBuffers = commandBufferBuilder
+    ->setCommandPool(graphicsPool)
+    ->setCount(swapchainImageCount)
+    ->buildMultiple({"frame0", "frame1", "frame2"});
+```
+
+**创建多个二级CommandBuffer：**
+
+```C++
+// 假设 threadCount 是线程数量
+auto secondaryCmdBuffers = commandBufferBuilder
+    ->setCommandPool(graphicsPool)
+    ->setLevel(VK_COMMAND_BUFFER_LEVEL_SECONDARY)
+    ->setCount(threadCount)
+    ->buildMultiple();
+```

@@ -8,7 +8,7 @@ tags:
     - Attachment
     - Subpass Dependency
 date: "2025-01-29"
-thumbnail: "https://docs.vulkan.org/guide/latest/_images/memory_allocation_sub_allocation.png"
+thumbnail: "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202012410.png"
 bookmark: true
 ---
 
@@ -146,4 +146,50 @@ VkSubpassDependency graphicToComp = {
     .dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT
 };
 ```
+
 # EasyVulkan中的RenderPass
+
+**构建一个含有颜色和深度附件的 Renderpass：**
+
+```C++
+// 创建一个简单的 Renderpass，其中包含颜色和深度附件
+auto renderPass = renderPassBuilder
+    .addColorAttachment(swapchainFormat)               // 添加颜色附件
+    .addDepthStencilAttachment(depthFormat)            // 添加深度/模板附件
+    .beginSubpass()                                      // 开始一个子通道
+    .addColorReference(0)                                // 子通道引用第 0 个附件作为颜色附件
+    .setDepthStencilReference(1)                         // 子通道引用第 1 个附件作为深度/模板附件
+    .endSubpass()                                        // 结束子通道
+    .build("mainRenderPass");                            // 构建 Renderpass，并命名为 "mainRenderPass"
+```
+
+对于复杂的渲染流程，经常需要设置多个子通道以及它们之间的依赖关系。以下示例展示了**如何配置多个子通道**，并在它们之间添加依赖：
+
+```C++
+// 构建一个拥有多个子通道的 Renderpass
+auto renderPass = renderPassBuilder
+    .addColorAttachment(colorFormat)                   // 添加颜色附件
+    .addDepthStencilAttachment(depthFormat)            // 添加深度/模板附件
+
+    // 第一个子通道配置：渲染到颜色附件和深度附件
+    .beginSubpass()
+    .addColorReference(0)
+    .setDepthStencilReference(1)
+    .endSubpass()
+
+    // 第二个子通道配置：使用第一个子通道的颜色输出作为输入附件，同时写入到另一个颜色附件（例如后续处理）
+    .beginSubpass()
+    .addInputReference(0)
+    .addColorReference(2)
+    .endSubpass()
+
+    // 添加子通道间依赖：确保第一个子通道的写入操作完成后，第二个子通道才能读取
+    .addDependency(0, 1,
+        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+        VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+        VK_ACCESS_SHADER_READ_BIT)
+    
+    .build("multiPassRender");                          // 构建 Renderpass
+```
+
