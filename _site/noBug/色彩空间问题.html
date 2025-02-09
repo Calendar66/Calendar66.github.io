@@ -7,25 +7,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>
     
-        Vulkan同步机制
+        色彩空间错误导致图像亮度增加
     
 </title>
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Vulkan同步机制 | Calendar’s Blog</title>
+<title>色彩空间错误导致图像亮度增加 | Calendar’s Blog</title>
 <meta name="generator" content="Jekyll v4.3.4">
-<meta property="og:title" content="Vulkan同步机制">
+<meta property="og:title" content="色彩空间错误导致图像亮度增加">
 <meta property="og:locale" content="en_US">
-<meta name="description" content="Vulkan 通过提供多样且细粒度的同步机制，为开发者在控制渲染和计算流程时带来了极大的灵活性。Barrier、Semaphore、Fence 以及 Subpass Dependencies 各有不同的适用场景和影响： Barrier 强调 GPU 内部流水线阶段及内存的同步，适合在单个队列内确保读写有序。 Semaphore 强调队列之间的同步，用来连接多队列的工作流。 Fence 强调 CPU 对 GPU 任务完成的可见性，用于资源回收和多帧并行调度。 Subpass Dependencies 强调在同一 Render Pass 内分阶段进行渲染时的同步，更高效地处理共享附件。">
-<meta property="og:description" content="Vulkan 通过提供多样且细粒度的同步机制，为开发者在控制渲染和计算流程时带来了极大的灵活性。Barrier、Semaphore、Fence 以及 Subpass Dependencies 各有不同的适用场景和影响： Barrier 强调 GPU 内部流水线阶段及内存的同步，适合在单个队列内确保读写有序。 Semaphore 强调队列之间的同步，用来连接多队列的工作流。 Fence 强调 CPU 对 GPU 任务完成的可见性，用于资源回收和多帧并行调度。 Subpass Dependencies 强调在同一 Render Pass 内分阶段进行渲染时的同步，更高效地处理共享附件。">
-<link rel="canonical" href="http://localhost:4000/EasyVulkan/SynchronizationManager.html">
-<meta property="og:url" content="http://localhost:4000/EasyVulkan/SynchronizationManager.html">
+<meta name="description" content="正确处理sRGB色彩空间——记一次Vulkan图像过亮问题的排查">
+<meta property="og:description" content="正确处理sRGB色彩空间——记一次Vulkan图像过亮问题的排查">
+<link rel="canonical" href="http://localhost:4000/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html">
+<meta property="og:url" content="http://localhost:4000/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html">
 <meta property="og:site_name" content="Calendar’s Blog">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2025-02-01T00:00:00+08:00">
+<meta property="article:published_time" content="2025-02-09T00:00:00+08:00">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="Vulkan同步机制">
+<meta property="twitter:title" content="色彩空间错误导致图像亮度增加">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-02-01T00:00:00+08:00","datePublished":"2025-02-01T00:00:00+08:00","description":"Vulkan 通过提供多样且细粒度的同步机制，为开发者在控制渲染和计算流程时带来了极大的灵活性。Barrier、Semaphore、Fence 以及 Subpass Dependencies 各有不同的适用场景和影响： Barrier 强调 GPU 内部流水线阶段及内存的同步，适合在单个队列内确保读写有序。 Semaphore 强调队列之间的同步，用来连接多队列的工作流。 Fence 强调 CPU 对 GPU 任务完成的可见性，用于资源回收和多帧并行调度。 Subpass Dependencies 强调在同一 Render Pass 内分阶段进行渲染时的同步，更高效地处理共享附件。","headline":"Vulkan同步机制","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/EasyVulkan/SynchronizationManager.html"},"url":"http://localhost:4000/EasyVulkan/SynchronizationManager.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-02-09T00:00:00+08:00","datePublished":"2025-02-09T00:00:00+08:00","description":"正确处理sRGB色彩空间——记一次Vulkan图像过亮问题的排查","headline":"色彩空间错误导致图像亮度增加","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html"},"url":"http://localhost:4000/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -102,7 +102,7 @@
             
                 <style>
                         .thumbnail {
-                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202013124.png");
+                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/color_Conversion.png");
                         }
                     
                 </style>
@@ -441,11 +441,11 @@
     <p>
                 <a href="/">Home</a>
                 &gt;
-            <a href="/EasyVulkan/">EasyVulkan</a>
+            <a href="/noBug/">noBug</a>
                 &gt;
             
                 
-                    Vulkan同步机制
+                    色彩空间错误导致图像亮度增加
                 
             </p>
 </div>
@@ -454,7 +454,7 @@
     <div class="thumbnail">
         <div class="transbox">
             
-                <span class="post-title">Vulkan同步机制</span>
+                <span class="post-title">色彩空间错误导致图像亮度增加</span>
             
             <div class="post-info">
                 
@@ -466,7 +466,7 @@
                 <span class="info-box">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"></path></svg>
                     <span>
-                            2025-02-01
+                            2025-02-09
                         
                     </span>
                 </span>
@@ -485,621 +485,209 @@
     </div>
 </div>
 <div class="tag-box">
-<span class="tag theme-0" contentid="Vulkan">
+<span class="tag theme-0" contentid="Color Space">
+            Color Space
+        </span><span class="tag theme-1" contentid="Vulkan">
             Vulkan
-        </span><span class="tag theme-1" contentid="EasyVulkan">
-            EasyVulkan
-        </span><span class="tag theme-2" contentid="VMA">
-            VMA
+        </span><span class="tag theme-2" contentid="Bug">
+            Bug
         </span>
 </div>
 <main>
-    <blockquote>
-  <p>Vulkan 通过提供多样且细粒度的同步机制，为开发者在控制渲染和计算流程时带来了极大的灵活性。Barrier、Semaphore、Fence 以及 Subpass Dependencies 各有不同的适用场景和影响：</p>
-  <ul>
-    <li>Barrier 强调 GPU 内部流水线阶段及内存的同步，适合在单个队列内确保读写有序。</li>
-    <li>Semaphore 强调队列之间的同步，用来连接多队列的工作流。</li>
-    <li>Fence 强调 CPU 对 GPU 任务完成的可见性，用于资源回收和多帧并行调度。</li>
-    <li>Subpass Dependencies 强调在同一 Render Pass 内分阶段进行渲染时的同步，更高效地处理共享附件。</li>
-  </ul>
-</blockquote>
+    <h1 id="正确处理srgb色彩空间记一次vulkan图像过亮问题的排查">正确处理sRGB色彩空间——记一次Vulkan图像过亮问题的排查</h1>
 
-<h1 id="vulkan中的同步机制详解">Vulkan中的同步机制详解</h1>
-<p>在传统图形API如OpenGL中，驱动程序会自动处理资源同步，开发者无需关心底层执行顺序。但这种”黑箱”机制带来了两个严重问题：<strong>性能损耗不可控和多线程扩展困难。</strong><br>
-Vulkan 作为现代图形和计算的低层次API，其设计核心之一就是让开发者可以更细粒度地控制GPU和CPU之间的工作流程，以及不同GPU队列之间的执行顺序。而要实现稳定且高性能的渲染或计算，就必须要合理地利用好各种同步机制。本文将从几个常见的 Vulkan 同步原语（Barrier、Semaphore、Fence、Subpass Dependencies）入手，探讨它们各自的概念、适用场景、性能影响以及使用注意事项。希望通过本文，能为正在使用 Vulkan 或即将使用 Vulkan 的读者提供一些实践上的参考。</p>
+<hr>
 
-<h1 id="命令缓冲与队列线性流但可乱序完成">命令缓冲与队列：线性流但可乱序完成</h1>
-<p>在 Vulkan 中，所有命令都要先记录在 VkCommandBuffer 中，再提交到某个 VkQueue。在单个队列中，你提交的命令会按顺序进入 GPU 执行管线；但 GPU 可能在还没完成某个命令的写操作时，就已经开始处理后续命令的读阶段。</p>
+<h2 id="一问题背景与现象">一、问题背景与现象</h2>
 
-<ul>
-  <li>逻辑顺序：提交顺序一定依次排队</li>
-  <li>实际执行：可以重叠 / 并行 / 乱序完成</li>
-</ul>
-
-<h1 id="内存模型与缓存一致性">内存模型与缓存一致性</h1>
-<p>现代GPU采用分级缓存设计：</p>
-<blockquote>
-  <p>DDR显存 → L2缓存 → L1缓存（每个SM） → 寄存器</p>
-</blockquote>
-
-<p>当计算单元写入L1缓存后，数据不会立即同步到其他缓存层级。这就是<strong>非一致性内存访问</strong>的根源。<br>
-“可用（Available）”意味着数据已经被刷出到更大层级缓存或主存；“可见（Visible）”意味着后续阶段可以读取到最新的数据——需要对读取方无效化缓存或更新缓存。<br>
-或者说：</p>
+<h3 id="11-项目架构">1.1 项目架构</h3>
+<p>最近完成了一个基于Vulkan的混合渲染程序，核心架构包含计算管线和图形管线：</p>
 <ul>
   <li>
-<strong>Available</strong>：源阶段写完数据后，做缓存 Flush，让数据到了 L2 或更高层共享区域</li>
+<strong>计算管线</strong>：使用 <code class="language-plaintext highlighter-rouge">VK_FORMAT_R32G32B32A32_SFLOAT</code> 格式的纹理作为输入/输出</li>
   <li>
-<strong>Visible</strong>：目的阶段需要读数据时，做缓存 Invalidate，从而迫使硬件从 L2 或更高层共享区域读取数据，避免读到陈旧缓存</li>
+<strong>图形管线</strong>：通过相同格式的纹理进行采样，在片段着色器中将其渲染到屏幕</li>
 </ul>
 
-<p>例如：</p>
+<h3 id="12-异常现象">1.2 异常现象</h3>
+<p>程序运行时，屏幕上显示的图像<strong>比原始素材显著更亮</strong>，且在明暗过渡区域出现不自然的光晕效果。</p>
+<div style="text-align: center;">
 
-<pre><code class="language-C++">VkMemoryBarrier memBarrier{
-    .sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER,
-    .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
-    .dstAccessMask = VK_ACCESS_SHADER_READ_BIT
-};
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250209152909.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
 
-vkCmdPipelineBarrier(cmd,
-    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-    0, 1, &amp;memBarrier, 0, nullptr, 0, nullptr);
-</code></pre>
-<p>这个屏障完成：</p>
-<ul>
-  <li>刷新所有计算阶段的写入到L2缓存（可用性）</li>
-  <li>使片段着色器能读取最新数据（可见性）</li>
-</ul>
+<p style="text-align: center;">图 1:图片过亮</p>
 
-<p>由于非一致性内存访问问题的存在，<em>Vulkan还要求开发者显式地管理内存相关屏障，以确保数据在不同阶段之间的可见性和可用性。</em></p>
+</div>
 
-<p>因此，Vulkan的同步机制主要有两个目的：</p>
-<ul>
-  <li>确保数据在不同阶段之间的可见性和可用性(主要借助内存相关屏障)</li>
-  <li>确保执行顺序(主要借助pipeline屏障、semaphore、fence等)</li>
-</ul>
+<hr>
 
-<h1 id="barrier屏障">Barrier（屏障）</h1>
+<h2 id="二问题排查过程">二、问题排查过程</h2>
 
-<h2 id="barrier的概念">Barrier的概念</h2>
+<h3 id="21-初步怀疑gamma校正问题">2.1 初步怀疑：Gamma校正问题</h3>
+<p>观察到图像过亮后，首先怀疑<strong>Gamma校正未正确应用</strong>。以下是关键检查步骤：</p>
 
-<p>Vulkan 中的 Barrier 是一种细粒度的内存和执行顺序同步机制。Barrier 在 GPU 内部起到”分割线”的作用，确保某些阶段的操作在 Barrier 之前完成，才能进行后续的阶段。例如，在进行纹理的读写转换时，需要使用 Pipeline Barrier 来保证图像布局转换或访问掩码的更改已完成，才进行下一步的采样或写入。</p>
-
-<p>Barrier 有多种类型，最常见的包括：</p>
-<ul>
-  <li>Pipeline Barrier：用于指定源阶段（srcStageMask）到目标阶段（dstStageMask）的内存和执行依赖。</li>
-  <li>Memory Barrier：作用在整个资源上，用于指定对内存可见性的限制与保证。</li>
-  <li>Buffer Memory Barrier：只作用在特定的 Buffer 范围上。</li>
-  <li>Image Memory Barrier：只作用在特定的图像资源上，可以指定图像布局转换（image layout transition）。</li>
-</ul>
-
-<h2 id="opengl中的barrier和vulkan对比">Opengl中的Barrier和Vulkan对比</h2>
-<p>在Opengl中同样存在Barrier的概念，但是Vulkan中的barrier提供了更细粒度的控制。</p>
-
-<pre><code class="language-C++">// OpenGL隐式同步
-glDispatchCompute(1024, 1, 1);  // 计算着色器写入数据
-glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT); 
-glDrawArrays(GL_TRIANGLES, 0, 3); // 读取计算数据
-
-// Vulkan显式同步
-vkCmdDispatch(computeCmd, 1024, 1, 1);
-VkMemoryBarrier barrier{...};
-vkCmdPipelineBarrier(computeCmd, 
-    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-    VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
-    0, 1, &amp;barrier);
-vkCmdDraw(graphicCmd, 0, 3);
-</code></pre>
-
-<h2 id="barrier的适用场景">Barrier的适用场景</h2>
-<ul>
-  <li>图像布局转换：如从 VK_IMAGE_LAYOUT_UNDEFINED 转为 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL，或者从 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL 转为 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL，在开始或结束渲染通道时需要合适的图像布局。</li>
-  <li>
-<strong>内存可见性保证</strong>：当一个操作写入资源，另一个操作要读取该资源时，需要添加Barrier确保写入可见并完成。</li>
-  <li>
-<strong>不同着色阶段间的同步</strong>：例如，当顶点着色器阶段写入Buffer后，需要在片元着色器阶段进行读取，可通过Barrier来控制依赖顺序。</li>
-</ul>
-
-<h2 id="管线阶段分解">管线阶段分解</h2>
-<p>Vulkan将GPU工作分解为可组合的阶段：</p>
+<h4 id="1-检查图像加载逻辑">(1) 检查图像加载逻辑</h4>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 原始图像加载代码（发现问题）</span>
+<span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">channels</span><span class="p">;</span>
+<span class="n">stbi_uc</span><span class="o">*</span> <span class="n">pixels</span> <span class="o">=</span> <span class="n">stbi_load</span><span class="p">(</span><span class="s">"example2048.png"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">width</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">channels</span><span class="p">,</span> <span class="n">STBI_rgb_alpha</span><span class="p">);</span>
+</code></pre></div></div>
 <ul>
   <li>
-<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT</code>: 表示管线的起始阶段。</li>
+<strong>问题发现</strong>：<code class="language-plaintext highlighter-rouge">STBI_rgb_alpha</code> 将PNG的sRGB值直接读入内存，未执行sRGB→Linear转换</li>
   <li>
-<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT</code>: 间接绘制命令的阶段。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_VERTEX_INPUT_BIT</code>: 顶点输入操作的阶段。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_VERTEX_SHADER_BIT</code>: 顶点着色器执行的阶段。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT</code>: 片段着色器执行的阶段。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT</code>: 写入颜色附件的阶段。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT</code>: 计算着色器执行的阶段。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_TRANSFER_BIT</code>: 内存传输操作的阶段。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT</code>: 表示管线的结束阶段。</li>
+<strong>根本原因</strong>：图像数据以sRGB格式存储，但被当作线性值处理</li>
 </ul>
 
-<h2 id="访问掩码">访问掩码</h2>
-<p>GPU 有多级缓存（L1、L2），不同阶段可能对同一块内存资源有不同的缓存策略。为了避免缓存不一致（Incoherent），Vulkan 提供了 VK_ACCESS_* 标志来精确说明某个阶段对资源的访问类型。通过source access 与 destination access 结合，可以告诉 Vulkan “我要保证前面写的数据，在后面读的时候一定可见（Visible）”。</p>
-
-<p>具体包括：</p>
+<h4 id="2-验证交换链配置">(2) 验证交换链配置</h4>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 交换链颜色空间配置（默认值）</span>
+<span class="n">VkColorSpaceKHR</span> <span class="n">colorSpace</span> <span class="o">=</span> <span class="n">VK_COLOR_SPACE_SRGB_NONLINEAR_KHR</span><span class="p">;</span>
+</code></pre></div></div>
 <ul>
   <li>
-<code class="language-plaintext highlighter-rouge">VK_ACCESS_INDIRECT_COMMAND_READ_BIT</code>: 对间接命令数据的读取访问。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_ACCESS_INDEX_READ_BIT</code>: 对索引缓冲区的读取访问。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT</code>: 对顶点属性的读取访问。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_ACCESS_UNIFORM_READ_BIT</code>: 对统一缓冲区的读取访问。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_ACCESS_SHADER_READ_BIT</code>: 对着色器存储的读取访问。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_ACCESS_SHADER_WRITE_BIT</code>: 对着色器存储的写入访问。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_ACCESS_COLOR_ATTACHMENT_READ_BIT</code>: 对颜色附件的读取访问。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT</code>: 对颜色附件的写入访问。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT</code>: 对深度/模板附件的读取访问。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT</code>: 对深度/模板附件的写入访问。</li>
+<strong>关键发现</strong>：交换链自动执行Linear→sRGB转换，但输入的纹理数据已经是sRGB。</li>
 </ul>
 
-<h2 id="barrier的使用">Barrier的使用</h2>
-<p>一个Barrier的定义如下：</p>
+<hr>
 
-<pre><code class="language-C++">void vkCmdPipelineBarrier(
-    VkCommandBuffer                             commandBuffer,          // 记录barrier的命令缓冲区
-    VkPipelineStageFlags                        srcStageMask,          // 源管线阶段掩码，指定哪些管线阶段必须在barrier之前完成
-    VkPipelineStageFlags                        dstStageMask,          // 目标管线阶段掩码，指定哪些管线阶段必须等待barrier
-    VkDependencyFlags                           dependencyFlags,        // 依赖标志，如VK_DEPENDENCY_BY_REGION_BIT表示区域依赖
-    uint32_t                                    memoryBarrierCount,     // 全局内存屏障数量
-    const VkMemoryBarrier*                      pMemoryBarriers,       // 全局内存屏障数组
-    uint32_t                                    bufferMemoryBarrierCount, // 缓冲内存屏障数量
-    const VkBufferMemoryBarrier*                pBufferMemoryBarriers,   // 缓冲内存屏障数组
-    uint32_t                                    imageMemoryBarrierCount, // 图像内存屏障数量
-    const VkImageMemoryBarrier*                 pImageMemoryBarriers    // 图像内存屏障数组
-);
-</code></pre>
+<div style="text-align: center;">
 
-<ul>
-  <li>
-<code class="language-plaintext highlighter-rouge">VkDependencyFlags</code>主要用于控制屏障的行为，设置为0表示默认行为，同步将在整个渲染区域上全局进行，对于所有区域(所有像素)，所有指定的源操作都必须在任何目标操作开始之前完成；设置为VK_DEPENDENCY_BY_REGION_BIT则允许基于区域的依赖，同步只在每个区域内进行，而不是整个渲染目标，不同区域之间可以并行处理，适合TBR架构。</li>
-  <li>如果不使用内存相关的屏障，该命令定义了一个执行屏障，即在srcStageMask和dstStageMask之间插入一个同步点，确保所有指定源操作都完成，目标操作才开始。</li>
-  <li>如果使用内存相关的屏障，则屏障会根据自身的srcAccessMask和dstAccessMask的值，在srcStageMask和dstStageMask之间插入一个同步点，确保所有指定源操作都完成，目标操作才开始。</li>
-</ul>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/color_Conversion.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
 
-<h2 id="全局内存屏障">全局内存屏障</h2>
+<p style="text-align: center;">图 2:色彩空间转换错误</p>
 
-<pre><code class="language-C++">// 全局内存屏障：影响所有内存访问
-typedef struct VkMemoryBarrier {
-    VkStructureType    sType;                // 结构体类型，必须是 VK_STRUCTURE_TYPE_MEMORY_BARRIER
-    const void*        pNext;                // 扩展信息指针，通常为nullptr
-    VkAccessFlags      srcAccessMask;        // 源访问掩码，指定在barrier之前必须完成的内存访问类型
-    VkAccessFlags      dstAccessMask;        // 目标访问掩码，指定必须等待barrier的内存访问类型
-} VkMemoryBarrier;
-</code></pre>
+</div>
 
-<p>全局内存屏障由 VkMemoryBarrier 结构体描述，用于同步整个 GPU 内存中的所有数据。<strong>它并不针对具体的缓冲区或图像</strong>，而是作用于全局范围内的内存访问。通过设置源和目标访问掩码（srcAccessMask 和 dstAccessMask），开发者可以确保在某个阶段完成的所有内存写操作对后续阶段的所有内存读取操作可见。</p>
+<h2 id="三技术原理为什么冗余转换导致过亮">三、技术原理：为什么冗余转换导致过亮？</h2>
 
-<h2 id="缓冲区内存屏障">缓冲区内存屏障</h2>
+<h3 id="31-srgb与linear空间的数学关系">3.1 sRGB与Linear空间的数学关系</h3>
+<p>sRGB采用近似Gamma 2.2的<strong>非线性编码</strong>（分段函数）：</p>
 
-<pre><code class="language-C++">// 缓冲内存屏障：针对特定缓冲区的内存访问
-typedef struct VkBufferMemoryBarrier {
-    VkStructureType    sType;                // 结构体类型，必须是 VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER
-    const void*        pNext;                // 扩展信息指针，通常为nullptr
-    VkAccessFlags      srcAccessMask;        // 源访问掩码
-    VkAccessFlags      dstAccessMask;        // 目标访问掩码
-    uint32_t          srcQueueFamilyIndex;   // 源队列族索引，用于队列族所有权转移
-    uint32_t          dstQueueFamilyIndex;   // 目标队列族索引，用于队列族所有权转移
-    VkBuffer          buffer;                // 受影响的缓冲区对象
-    VkDeviceSize      offset;                // 受影响区域的起始偏移
-    VkDeviceSize      size;                  // 受影响区域的大小
-} VkBufferMem
-</code></pre>
+\[C_{sRGB} = \begin{cases}
+12.92C_{linear}, &amp; C_{linear} \leq 0.0031308 \\
+1.055C_{linear}^{1/2.4} - 0.055, &amp; \text{otherwise}
+\end{cases}\]
 
-<p>缓冲内存屏障由 VkBufferMemoryBarrier 结构体描述，专门用于同步对<strong>特定 VkBuffer 的内存访问</strong>。它不仅包含全局内存屏障的所有属性，还能指定屏障<strong>所作用的缓冲区、起始偏移量和数据大小。</strong></p>
-
-<p>srcQueueFamilyIndex和dstQueueFamilyIndex用于队列族所有权转移，当使用队列族所有权转移功能时，需要指定源队列族索引和目标队列族索引。如果不涉及队列族所有权转移，设置为VK_QUEUE_FAMILY_IGNORED。当计算队列族和图形队列族分离时，如果需要在图形队列中访问计算队列族的资源，需要使用队列族所有权转移(或者在资源创建时设置资源共享)。</p>
-
-<h2 id="图像内存屏障">图像内存屏障</h2>
-
-<pre><code class="language-C++">
-// 图像内存屏障：针对特定图像的内存访问
-typedef struct VkImageMemoryBarrier {
-    VkStructureType            sType;               // 结构体类型，必须是 VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
-    const void*                pNext;               // 扩展信息指针，通常为nullptr
-    VkAccessFlags             srcAccessMask;        // 源访问掩码
-    VkAccessFlags             dstAccessMask;        // 目标访问掩码
-    VkImageLayout             oldLayout;            // 转换前的图像布局
-    VkImageLayout             newLayout;            // 转换后的图像布局
-    uint32_t                  srcQueueFamilyIndex;  // 源队列族索引
-    uint32_t                  dstQueueFamilyIndex;  // 目标队列族索引
-    VkImage                   image;                // 受影响的图像对象
-    VkImageSubresourceRange   subresourceRange;     // 受影响的图像子资源范围
-} VkImageMemoryBarrier;
-
-// 子资源范围
-typedef struct VkImageSubresourceRange {
-    VkImageAspectFlags    aspectMask;       // 图像方面(颜色、深度、模板等)
-    uint32_t             baseMipLevel;      // 基础mip级别
-    uint32_t             levelCount;        // mip级别数量
-    uint32_t             baseArrayLayer;    // 基础数组层
-    uint32_t             layerCount;        // 数组层数量
-} VkImageSubresourceRange;
-</code></pre>
-
-<p>图像内存屏障由 <code class="language-plaintext highlighter-rouge">VkImageMemoryBarrier</code> 结构体描述，专门用于同步对<strong>特定 VkImage 的内存访问</strong>。它不仅包含全局内存屏障的所有属性，还能指定屏障<strong>所作用的图像、子资源范围</strong>。</p>
-
-<p><code class="language-plaintext highlighter-rouge">VkImageSubresourceRange</code> 用于指定图像的哪些部分受到影响。</p>
-<ul>
-  <li>aspectMask：指定图像的方面，如颜色、深度、模板等。</li>
-  <li>baseMipLevel：指定起始的mip级别。</li>
-  <li>levelCount：指定mip级别的数量。</li>
-  <li>baseArrayLayer：指定起始的数组层。</li>
-  <li>layerCount：指定数组层的数量。</li>
-</ul>
-
-<p>除此之外，<code class="language-plaintext highlighter-rouge">VkImageMemoryBarrier</code> 还包含<code class="language-plaintext highlighter-rouge">oldLayout</code>和<code class="language-plaintext highlighter-rouge">newLayout</code>，用于指定图像布局的转换。</p>
-
-<h3 id="图像布局">图像布局</h3>
-<blockquote>
-  <p>在 Vulkan 中，图像布局（Image Layout）用于描述 GPU 内部如何组织和访问图像数据。相比 OpenGL 的隐式管理，Vulkan 要求开发者显式指定和转换图像布局，方便GPU明确用途并进行对应的性能优化。</p>
-</blockquote>
-
-<blockquote>
-  <p>Transient Attachments（转瞬附件），可以利用 Vulkan 的自动转换特性：</p>
-  <ul>
-    <li>Transient Images： 创建时带有 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT，初始布局设为 VK_IMAGE_LAYOUT_UNDEFINED 表明无需保留内容。</li>
-    <li>自动转换： Vulkan 驱动会在 render pass 开始前、结束后自动插入外部依赖，完成从 UNDEFINED 到目标布局（如 COLOR_ATTACHMENT_OPTIMAL）以及结束后的转换至 PRESENT_SRC_KHR（用于交换链呈现）。</li>
-    <li><strong>各个场景的推荐布局：</strong></li>
-  </ul>
-</blockquote>
-
-<p>• <strong>颜色附件：</strong> VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL</p>
-
-<p>• <strong>深度/模板附件：</strong> VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL 或后续只读时使用 VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL</p>
-
-<p>• <strong>纹理采样：</strong> VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL</p>
-
-<p>• <strong>传输操作：</strong> VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL / VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL</p>
-
-<p>• <strong>交换链图像：</strong> VK_IMAGE_LAYOUT_PRESENT_SRC_KHR</p>
-
-<p>• <strong>初始状态或通用用途：</strong> VK_IMAGE_LAYOUT_UNDEFINED 或 VK_IMAGE_LAYOUT_GENERAL</p>
-
-<blockquote>
-  <p>部分观察表明英伟达驱动在内部对 layout 的处理较为宽松，因此在英伟达显卡上可以将所有布局均设置为General。但正确区分和管理 image layout 是 Vulkan 规范的要求，并且对跨平台兼容性和未来驱动的稳定性至关重要。因此，这种理论是不正确的，不能因此在开发中忽略布局转换的管理。</p>
-</blockquote>
-
-<h2 id="barrier的性能影响">Barrier的性能影响</h2>
-<ul>
-  <li>过度使用导致性能损耗：每个 Barrier 都会在流水线上插入一个同步点，如果频繁地插入不必要的Barrier，会增加<strong>GPU的停顿</strong>并降低并行效率。</li>
-  <li>恰当使用可以避免错误和竞态：Barrier 在正确的位置使用能够让数据流安全地”串行化”，避免读写冲突。</li>
-</ul>
-
-<h2 id="使用注意事项">使用注意事项</h2>
-<ul>
-  <li>阶段掩码精确化：在指定 srcStageMask 和 dstStageMask 时，要尽量精确地指定真实会产生和需要依赖的着色阶段或管线阶段，以减少不必要的同步。</li>
-  <li>布局转换与访问掩码：Barrier 需要指定图像的布局转换和访问掩码（srcAccessMask/dstAccessMask），要确保与实际使用场景匹配。</li>
-  <li>批量Barrier：避免在不同的资源上反复调用单个Barrier，可以把多个资源的Barrier一起批量提交，减少命令开销。</li>
-</ul>
-
-<h1 id="events更灵活的同步利器">Events：更灵活的同步利器</h1>
-<p>Pipeline Barrier 适用于同一个命令缓冲里强制“先做完 A，再做 B”。但如果你希望在并行中更灵活地“给 GPU 发信号”，可以用 Events:</p>
+<h3 id="32-冗余转换的数学推导">3.2 冗余转换的数学推导</h3>
+<p>假设原始sRGB值为 <strong>0.5</strong>（实际对应Linear值约为 <strong>0.214</strong>）：</p>
 <ol>
-  <li>Set Event (vkCmdSetEvent)：在指定的 pipeline 阶段完成后，标记某个事件为已触发</li>
-  <li>Wait Event (vkCmdWaitEvent)：在指定管线阶段等事件触发后，再继续执行</li>
+  <li>
+<strong>错误处理流程</strong>：
+    <ul>
+      <li>加载时未转换：<code class="language-plaintext highlighter-rouge">C_linear（误） = 0.5</code>
+</li>
+      <li>交换链自动转换：<code class="language-plaintext highlighter-rouge">C_{final} = 1.055 × 0.5^{1/2.4} - 0.055 ≈ 0.735</code>
+</li>
+    </ul>
+  </li>
+  <li>
+<strong>正确值应为</strong>：0.5（不执行任何转换）</li>
 </ol>
 
-<p>例如：</p>
-<pre><code class="language-C++">// A 和 B 两次计算
-vkCmdDispatch(...);
-vkCmdDispatch(...);
+<p><strong>视觉差异</strong>：0.735比0.5亮度提升47%，导致整体画面过亮。</p>
 
-// 设置事件，表示 A 和 B 都完成后触发
-vkCmdSetEvent(event, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT);
+<hr>
 
-// D 是独立计算，可与 A、B 并行
-vkCmdDispatch(...);
+<h2 id="四解决方案与评估">四、解决方案与评估</h2>
 
-// 在绘制（C）前等待事件，确保 A、B 完成
-vkCmdWaitEvents(1, &amp;event, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT, ...);
+<h3 id="41-方案一修改交换链色彩空间">4.1 方案一：修改交换链色彩空间</h3>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 使用PASS_THROUGH_EXT禁用自动转换</span>
+<span class="n">VkColorSpaceKHR</span> <span class="n">colorSpace</span> <span class="o">=</span> <span class="n">VK_COLOR_SPACE_PASS_THROUGH_EXT</span><span class="p">;</span>
+</code></pre></div></div>
 
-// 真正的绘制
-vkCmdDraw(...);
-</code></pre>
-<p>这样便可让 D 与 A、B 并行，只有在需要结果依赖的绘制（C）时才去等待。</p>
+<h3 id="42-方案二片段着色器手动转换">4.2 方案二：片段着色器手动转换</h3>
 
-<h1 id="semaphore信号量">Semaphore（信号量）</h1>
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 在片段着色器中添加转换逻辑</span>
+<span class="kt">vec3</span> <span class="nf">sRGBToLinear</span><span class="p">(</span><span class="kt">vec3</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">mix</span><span class="p">(</span><span class="n">c</span><span class="o">/</span><span class="mi">12</span><span class="p">.</span><span class="mi">92</span><span class="p">,</span> <span class="n">pow</span><span class="p">((</span><span class="n">c</span><span class="o">+</span><span class="mi">0</span><span class="p">.</span><span class="mo">055</span><span class="p">)</span><span class="o">/</span><span class="mi">1</span><span class="p">.</span><span class="mo">055</span><span class="p">,</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">2</span><span class="p">.</span><span class="mi">4</span><span class="p">)),</span> <span class="n">step</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mo">04045</span><span class="p">,</span> <span class="n">c</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">vec4</span> <span class="n">color</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">sampler</span><span class="p">,</span> <span class="n">uv</span><span class="p">);</span>
+    <span class="n">color</span><span class="p">.</span><span class="n">rgb</span> <span class="o">=</span> <span class="n">sRGBToLinear</span><span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">);</span>
+    <span class="n">outColor</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">rgb</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-<h2 id="概念">概念</h2>
+<p>先将颜色从sRGB空间转换到线性空间，颜色输出时，硬件再将颜色从线性空间转换到正确的sRGB空间。</p>
 
-<p>Semaphore（信号量）在 Vulkan 中主要用于<strong>队列之间</strong>的执行顺序同步。它不能被 CPU 查询，CPU无法通过 Semaphore 判断什么时候 GPU 完成了某一条指令；它更适合在 GPU 内部或不同队列之间”串起”执行顺序。例如，我们可能在一个队列上进行图像后处理，然后在另一个队列上进行呈现；在这两个队列之间需要一个 Semaphore 让呈现等待后处理完成。</p>
+<h2 id="五延伸知识常见色彩空间与应用">五、延伸知识：常见色彩空间与应用</h2>
 
-<h2 id="semaphore的适用场景">Semaphore的适用场景</h2>
-<ul>
-  <li>不同队列间依赖：渲染队列和呈现队列之间交换图像通常会用到 Semaphore 来协调。例如，vkAcquireNextImageKHR 返回的信号量会在图像可用时触发，渲染结束后再用一个信号量告知显示队列可以进行呈现。</li>
-  <li>多通道并行处理：如果使用多队列同时处理不同任务，在队列间需要明确地指定执行顺序时，使用 Semaphore 进行同步。</li>
-</ul>
-
-<h2 id="semaphore的性能影响">Semaphore的性能影响</h2>
-<ul>
-  <li>轻量但仅限 GPU 内部：相比Fence来说，Semaphore 更轻量，因为它无需让 CPU 轮询或等待，也不需要在 CPU 端可见。通常可以让不同队列并发工作，充分利用 GPU 资源。</li>
-  <li>等待延迟：如果在一个队列上等待另一个队列信号量，会引入一定延迟，要结合管线设计和命令流来优化。</li>
-</ul>
-
-<h1 id="fence栅栏">Fence（栅栏）</h1>
-
-<h2 id="概念-1">概念</h2>
-<p>Fence（栅栏）是另一种同步原语，与 Semaphore 不同的是，Fence 可以被 CPU 端查询。当一个命令缓冲区在 GPU 上执行完成后，Fence 会被置为已信号状态（signaled state），CPU 通过 vkWaitForFences 或 vkGetFenceStatus 等函数能够得知 GPU 的执行状态。</p>
-
-<h2 id="fence的适用场景">Fence的适用场景</h2>
-<ul>
-  <li>GPU 任务结束的 CPU 检测：在需要 CPU 端等待 GPU 完成某些任务（比如更新一块缓冲区后，需要 CPU 端再做一些操作）时使用。</li>
-  <li>动态资源回收：如果想知道 GPU 什么时候真正使用完一块资源（例如上一帧的 Uniform Buffer），Fence 可以帮助我们在 CPU 上安全地回收或复用资源。</li>
-  <li>多缓冲策略中的帧同步：常用在多帧并行（triple buffering 或 double buffering）时，CPU需要知道当前帧是否可以安全地写入时，会查询对应的 Fence。</li>
-</ul>
-
-<h2 id="fence的性能影响">Fence的性能影响</h2>
-<ul>
-  <li>CPU/GPU 同步开销：Fence 一旦被 CPU 等待（vkWaitForFences），就会造成 CPU 和 GPU 之间的同步停顿，影响并行度。</li>
-  <li>延迟增加：如果没有必要的地方使用 Fence，会导致 CPU 过度等待，引起帧率下降或延迟增大。</li>
-</ul>
-
-<h2 id="使用注意事项-1">使用注意事项</h2>
-<ul>
-  <li>批量等待：在需要等待多个Fence时，尽量使用批量等待，而不是一个个等待。</li>
-  <li>复用 Fence：Fence 在被 signaled 之后，可通过 vkResetFences 重置来重复使用，避免频繁创建销毁。</li>
-  <li>避免无谓等待：在管线设计中，如果可以让 CPU 继续做其他工作，就尽量不要阻塞 CPU，只有在需要保证资源一致性时再使用 Fence。</li>
-</ul>
-
-<blockquote>
-  <p>Queue Submit &amp; 信号量等待会带来隐式内存保证：</p>
-  <ul>
-    <li>当一个队列提交被另一个队列通过信号量（Semaphore）等待时，Vulkan 会隐式地完成所有写入的 flush，使得内存可见给后续队列。</li>
-    <li>当一个队列提交完成并且 Fence 被置位，表示 GPU -&gt; CPU 的所有工作也可见。</li>
-  </ul>
-</blockquote>
-
-<h1 id="subpass-dependencies子通道依赖">Subpass Dependencies（子通道依赖）</h1>
-<h2 id="概念-2">概念</h2>
-<p>Vulkan 中的 Render Pass 可以由多个 Subpass 组成，每个 Subpass 是一个渲染阶段。Subpass Dependencies 用于指定 Subpass 之间的执行和内存依赖关系，从而在同一个 Render Pass 内实现图像的输入/输出同步。因此在同一个 Render Pass 内，Subpass Dependencies 可以减少外部 Barrier 的使用。</p>
-
-<p>一般地，Subpass Dependencies 会指定：</p>
-<ul>
-  <li>源子通道（srcSubpass）和目标子通道（dstSubpass）</li>
-  <li>源阶段与目标阶段（srcStageMask, dstStageMask）</li>
-  <li>源访问掩码与目标访问掩码（srcAccessMask, dstAccessMask）</li>
-  <li>依赖标志（dependencyFlags）</li>
-</ul>
-
-<h2 id="subpass-依赖的适用场景">Subpass 依赖的适用场景</h2>
-<ul>
-  <li>多渲染阶段共享同一图像：例如，在一个 Subpass 中写入颜色附件，接下来一个 Subpass 需要使用它作为输入附件（input attachment）。</li>
-  <li>分阶段渲染：如果想在一个 Render Pass 内连续执行多个着色阶段，而这几个阶段都在同一个 GPU 队列上运行，那么 Subpass Dependencies 就是最合适的同步方式。</li>
-</ul>
-
-<h2 id="subpass-依赖的性能影响">Subpass 依赖的性能影响</h2>
-<ul>
-  <li>减少开销：使用 Subpass Dependencies 在同一个 Render Pass 内可以减少图像布局切换和相关命令的开销。</li>
-  <li>提高带宽利用率：Subpass Dependencies 可以帮助 Vulkan 在同一 Render Pass 内合理地利用附件。</li>
-</ul>
-
-<h2 id="使用注意事项-2">使用注意事项</h2>
-<ul>
-  <li>需要在创建 Render Pass 时指定：一旦 Render Pass 的依赖关系确定，就不能再动态修改。</li>
-  <li>适当规划多 Subpass 结构：过度的 Subpass 拆分会导致复杂的依赖管理，不是所有的场景都适合在一个 Render Pass 内解决。</li>
-  <li>配合 input attachment 使用：当一个 Subpass 的输出作为下一个 Subpass 的 input attachment 时，需要正确设置依赖，确保不会读写冲突。</li>
-</ul>
-
-<h1 id="同步方法对比">同步方法对比</h1>
-<p>不同的同步机制往往对应着不同的使用层次和需求，下面简要对比：</p>
+<h1 id="vulkan-色彩空间对应关系">Vulkan 色彩空间对应关系</h1>
 
 <table>
   <thead>
     <tr>
-      <th>同步原语</th>
-      <th>主要作用</th>
-      <th>适用场景</th>
-      <th>CPU 可见性</th>
-      <th>性能影响</th>
+      <th>色彩空间</th>
+      <th>Gamma曲线</th>
+      <th>主要应用场景</th>
+      <th>Vulkan对应枚举值</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Barrier</td>
-      <td>GPU 内部执行与内存同步</td>
-      <td>管线阶段、内存访问控制、布局转换</td>
-      <td>不可见</td>
-      <td>需要精确指定，过多会影响并行性</td>
+      <td>sRGB</td>
+      <td>~2.2</td>
+      <td>Web图像、消费级显示器</td>
+      <td><code class="language-plaintext highlighter-rouge">VK_COLOR_SPACE_SRGB_NONLINEAR_KHR</code></td>
     </tr>
     <tr>
-      <td>Semaphore</td>
-      <td>队列间同步</td>
-      <td>多队列交互，如图像获取与提交</td>
-      <td>不可见</td>
-      <td>轻量级，主要在GPU端</td>
+      <td>Linear</td>
+      <td>1.0</td>
+      <td>物理光照计算、HDR渲染</td>
+      <td><code class="language-plaintext highlighter-rouge">VK_COLOR_SPACE_PASS_THROUGH_EXT</code></td>
     </tr>
     <tr>
-      <td>Fence</td>
-      <td>CPU 等待 GPU 完成</td>
-      <td>资源回收、GPU任务结束时需 CPU 介入</td>
-      <td>可见</td>
-      <td>CPU 阻塞可能拖慢帧率</td>
+      <td>Adobe RGB</td>
+      <td>2.2</td>
+      <td>专业摄影、印刷出版</td>
+      <td>无直接对应值</td>
     </tr>
     <tr>
-      <td>Subpass</td>
-      <td>Render Pass 内部同步</td>
-      <td>多个渲染阶段共享附件，减少外部Barrier</td>
-      <td>不可见</td>
-      <td>在同一 Render Pass 内更高效</td>
+      <td>DCI-P3</td>
+      <td>2.6</td>
+      <td>数字影院、高端视频制作</td>
+      <td><code class="language-plaintext highlighter-rouge">VK_COLOR_SPACE_DCI_P3_NONLINEAR_EXT</code></td>
+    </tr>
+    <tr>
+      <td>Rec.2020</td>
+      <td>混合</td>
+      <td>8K/4K HDR电视</td>
+      <td>
+<code class="language-plaintext highlighter-rouge">VK_COLOR_SPACE_BT2020_LINEAR_EXT</code><br><code class="language-plaintext highlighter-rouge">VK_COLOR_SPACE_BT2020_NONLINEAR_EXT</code>
+</td>
+    </tr>
+    <tr>
+      <td>scRGB（线性）</td>
+      <td>1.0</td>
+      <td>HDR合成、科学可视化</td>
+      <td><code class="language-plaintext highlighter-rouge">VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT</code></td>
     </tr>
   </tbody>
 </table>
 
-<h1 id="设计与实践建议">设计与实践建议</h1>
+<h1 id="六easyvulkan中的色彩空间">六、EasyVulkan中的色彩空间</h1>
+<p>在EasyVulkan中，可以在交换链创建前指定色彩空间：</p>
 
-<ol>
-  <li>尽量减少无意义的Barrier
-    <ul>
-      <li>保证数据访问安全的前提下，减少不必要的 Pipeline Barrier，可以合并多个资源的Barrier或者使用更精准的阶段掩码。</li>
-    </ul>
-  </li>
-  <li>巧用Subpass减少外部同步
-    <ul>
-      <li>同一 Render Pass 内的多个阶段尽量用 Subpass Dependencies 处理，可以避免过多的图像布局切换和额外的 Barrier 开销。</li>
-    </ul>
-  </li>
-  <li>合理划分队列并使用Semaphore
-    <ul>
-      <li>如果 GPU 拥有异步计算队列或传输队列，适当将工作分摊在不同队列。使用 Semaphore 进行队列间同步，充分利用 GPU 并行。</li>
-    </ul>
-  </li>
-  <li>Fence用于 CPU/GPU 交互
-    <ul>
-      <li>只有在需要 CPU 等待 GPU 的结果时才使用 Fence，避免无谓的阻塞。要注意等待方式（阻塞或轮询）的选择及资源回收。</li>
-    </ul>
-  </li>
-  <li>监控和调试
-    <ul>
-      <li>使用 Vulkan 的验证层（Validation Layers）或 GPU 调试工具，来确认 Barrier 和同步的正确性，避免出现 GPU 死锁或数据争用。</li>
-    </ul>
-  </li>
-</ol>
-
-<h1 id="同步示例">同步示例</h1>
-<p>假设当前任务中需要四个阶段:计算任务A和B、图形渲染任务C，显示任务D，并且存在依赖关系A-&gt;B-&gt;C-&gt;D。</p>
-
-<p>任务在不同队列上执行:</p>
-<ul>
-  <li>计算队列：任务 A 和 B</li>
-  <li>图形队列：任务 C</li>
-  <li>展示队列：任务 D</li>
-</ul>
-
-<h2 id="同步设计分类">同步设计分类</h2>
-<p>同步设计主要分为两类:</p>
-
-<ol>
-  <li>
-    <p>队列内部顺序：同一队列中提交的命令缓冲区会按提交顺序依次执行，无需额外的同步。</p>
-  </li>
-  <li>
-    <p>跨队列同步：不同队列之间必须显式使用同步原语（主要是信号量）来保证执行顺序，同时在命令缓冲区内部也可能需要插入 pipeline barrier 以保证内存访问顺序。</p>
-  </li>
-</ol>
-
-<h2 id="设计方案详解">设计方案详解</h2>
-
-<h3 id="1-任务-a-和-b计算任务">1. 任务 A 和 B（计算任务）</h3>
-
-<h4 id="同一队列或同一命令缓冲区的情况">同一队列或同一命令缓冲区的情况</h4>
-<p>如果 A 和 B 都在同一计算队列中，并且可以放入同一个命令缓冲区，那么 Vulkan 隐式保证它们的顺序执行。如果 A 的输出要供 B 使用，则在 A 与 B 之间插入一个 pipeline barrier，用于：</p>
-<ul>
-  <li>确保 A 的写操作在 B 开始前完成</li>
-  <li>做好内存可见性和资源状态转换（例如 buffer/image 的 layout 转换）</li>
-</ul>
-
-<h4 id="分成两个命令缓冲区的情况">分成两个命令缓冲区的情况</h4>
-<p>如果你希望将 A 和 B 分开提交，也可以让同一队列的提交依赖于前一次提交的结束，这时队列内部的隐式顺序即可保证（也可以用 fence 在 CPU 侧等待 A 完成后再提交 B，但一般不需要额外的 GPU 信号量）。</p>
-
-<h3 id="2-任务-b--任务-c计算到图形的跨队列同步">2. 任务 B → 任务 C（计算到图形的跨队列同步）</h3>
-
-<p>由于任务 B 在计算队列执行，任务 C 在图形队列执行，所以需要使用信号量来跨队列同步：</p>
-<ul>
-  <li>在提交任务 B 的命令缓冲区时，在 VkSubmitInfo 中指定一个信号量（例如 sem_compute2graphics），当 B 完成时，信号量会被触发</li>
-  <li>在提交任务 C 的命令缓冲区时，在 VkSubmitInfo 中设置等待 sem_compute2graphics。这样可以确保任务 C 开始之前，计算队列上任务 B 已经完全结束，并且相关数据已经正确写入</li>
-</ul>
-
-<h3 id="3-任务-c--任务-d图形到展示的跨队列同步">3. 任务 C → 任务 D（图形到展示的跨队列同步）</h3>
-
-<p>类似地，任务 C 在图形队列执行，而任务 D（例如呈现操作）在展示队列上执行，同样需要使用信号量进行跨队列同步：</p>
-<ul>
-  <li>在提交任务 C 时，在 VkSubmitInfo 中指定一个信号量（例如 sem_graphics2present），在任务 C 完成后该信号量被触发</li>
-  <li>在提交任务 D（通常是在呈现队列上调用 vkQueuePresentKHR 时），在 VkPresentInfoKHR 中设置等待 sem_graphics2present。这样能确保任务 D（图像展示）开始前，图形渲染任务 C 已完全完成，并且渲染结果已经准备好用于展示</li>
-</ul>
-
-<h3 id="4-总体提交流程示例">4. 总体提交流程示例</h3>
-
-<p>假设你已经创建好两个信号量：sem_compute2graphics 和 sem_graphics2present。整个提交流程可以大致描述为：</p>
-
-<ol>
-  <li>提交任务 A 和 B 到计算队列
-    <ul>
-      <li>如果在同一命令缓冲区内：
-        <ul>
-          <li>录制命令：先执行任务 A</li>
-          <li>插入合适的 pipeline barrier（保证 A 的结果对 B 可见）</li>
-          <li>执行任务 B</li>
-          <li>在命令缓冲区末尾，通过 VkSubmitInfo 指定在 B 结束时信号 sem_compute2graphics</li>
-        </ul>
-      </li>
-      <li>如果分为两个提交：
-        <ul>
-          <li>第一个提交（任务 A）直接提交</li>
-          <li>第二个提交（任务 B）可以通过队列隐式顺序保证（或使用 fence 确保 A 完成），并在提交时信号 sem_compute2graphics</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>提交任务 C 到图形队列
-    <ul>
-      <li>在 VkSubmitInfo 中设置等待信号量 sem_compute2graphics（对应等待阶段：等待 B 完成）</li>
-      <li>录制任务 C 的渲染命令</li>
-      <li>在任务 C 命令缓冲区结束时，指定信号 sem_graphics2present，用于通知下一阶段</li>
-    </ul>
-  </li>
-  <li>提交任务 D（展示）
-    <ul>
-      <li>在展示操作时（例如 vkQueuePresentKHR 调用时），在 VkPresentInfoKHR 中设置等待信号量 sem_graphics2present，保证任务 D 执行前图形渲染任务 C 已完成</li>
-    </ul>
-  </li>
-</ol>
-
-<h2 id="栅栏的应用">栅栏的应用</h2>
-<p>在渲染循环中，通常会有多帧同时处于 “in-flight” 状态。如果你在开始一帧之前需要确保上一帧（或同一缓冲区对应的上一个帧）的所有 GPU 操作已经完成，那么你就需要在该帧开始前检查并等待相应的栅栏。因此，每一帧一开始需要vkWaitForFences。</p>
-
-<h1 id="easyvulkan中的同步管理">EasyVulkan中的同步管理</h1>
-<p>EasyVulkan通过封装 Vulkan 的同步对象，提供了一整套简单而灵活的同步管理方案。核心类 SynchronizationManager 就是这一解决方案的代表。下面我们从几个方面来介绍它的设计理念与实现思路。</p>
-
-<h2 id="统一创建与管理">统一创建与管理</h2>
-<p>SynchronizationManager 封装了创建信号量和栅栏的过程，允许开发者通过简单的接口来创建同步对象，而无需关心底层的 Vulkan 调用细节。例如：</p>
-
-<pre><code class="language-C++">// 创建自定义的信号量和栅栏
-auto transferComplete = syncManager-&gt;createSemaphore("transferComplete");
-auto cmdFence = syncManager-&gt;createFence(false, "cmdBufferFence");
+<pre><code class="language-C++">swapchainManager-&gt;setPreferredColorSpace(VK_COLOR_SPACE_SRGB_NONLINEAR_KHR);
+swapchainManager-&gt;createSwapchain(800, 600);
 </code></pre>
 
-<p>这里，createSemaphore 与 createFence 接口不仅简化了对象创建，还支持为同步对象命名，这有助于调试和资源追踪。</p>
+<p>交换链创建时，会优先创建具有指定format和color_space的交换链图像，如果不存在同时满足的情况，则会<strong>优先选择color_space</strong>，然后匹配合适的fromat。</p>
 
-<h2 id="帧同步管理">帧同步管理</h2>
-<p>在现代图形应用中，为了实现流畅的多缓冲（如三重缓冲）渲染，通常需要为每一帧分别创建同步对象。SynchronizationManager 内置了 createFrameSynchronization 接口，可以一次性为所有并行帧创建所需的信号量和栅栏。内部会为每一帧创建：</p>
-<ul>
-  <li>图像可用信号量：确保交换链图像获取到位。</li>
-  <li>渲染完成信号量：通知呈现引擎渲染工作已经结束。</li>
-  <li>帧内栅栏：用于 CPU 等待 GPU 渲染完成。</li>
-</ul>
+<pre><code class="language-C++">// First try to find a format with our preferred color space and SRGB format
+for (const auto&amp; availableFormat : availableFormats) {
+    if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &amp;&amp;
+        availableFormat.colorSpace == m_preferredColorSpace) {
+        return availableFormat;
+    }
+}
 
-<pre><code class="language-C++">// 设置三重缓冲，每帧同步对象自动创建
-syncManager-&gt;createFrameSynchronization(3);
+// If not found, try to find any format with our preferred color space
+for (const auto&amp; availableFormat : availableFormats) {
+    if (availableFormat.colorSpace == m_preferredColorSpace) {
+        return availableFormat;
+    }
+}
 </code></pre>
-
-<p>在渲染循环中，可以直接通过索引获取对应帧的同步对象：</p>
-
-<pre><code class="language-C++">auto imageAvailable = syncManager-&gt;getImageAvailableSemaphore(currentFrame);
-auto renderFinished = syncManager-&gt;getRenderFinishedSemaphore(currentFrame);
-auto inFlightFence = syncManager-&gt;getInFlightFence(currentFrame);
-</code></pre>
-
-<h2 id="自动资源清理与异常处理">自动资源清理与异常处理</h2>
-<p>SynchronizationManager 在内部维护了所有同步对象的生命周期。在其析构函数中，会自动调用 cleanup 方法，<strong>确保所有 Vulkan 同步对象得到正确释放</strong>，从而避免内存泄漏和资源错误。此外，各接口均提供了异常处理机制，当遇到同步对象创建失败或参数错误时，会抛出异常，帮助开发者及时定位问题。</p>
-
 
     <!-- see https://giscus.app/ -->
     <div class="giscus" id="giscus" style="margin: 4rem auto;"></div>

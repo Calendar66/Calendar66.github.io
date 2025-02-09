@@ -165,6 +165,15 @@
         
     
 
+        
+    
+
+        
+    
+
+        
+    
+
     
     
     
@@ -313,6 +322,34 @@
                     <span>Home</span>
                 </a>
 </div>
+</li>
+<li id="nav-first" aria-label="noBug">
+            <div class="nav-item">
+                <a href="/noBug/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>noBug</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in noBug category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list">
+<li id="nav-second" aria-label="色彩空间问题">
+                    <div class="nav-item">
+                        <a href="/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>色彩空间问题</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="vector.back()引发的指针错误">
+                    <div class="nav-item">
+                        <a href="/noBug/vector.back()%E5%BC%95%E5%8F%91%E7%9A%84%E6%8C%87%E9%92%88%E9%94%99%E8%AF%AF.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>vector.back()引发的指针错误</span>
+                        </a>
+</div>
+</li>
+</ul>
 </li>
 </ul>
 </nav>
@@ -1086,6 +1123,51 @@ vkCmdEndConditionalRenderingEXT(renderCmdBuffer);
 3. 命令复用
 对于重复使用的渲染或计算序列，将其记录到二级命令缓冲区中，在多个主命令缓冲区中复用，可以减少重复记录的工作量。
 
+打包提交CommandBuffer
+在Vulkan中，提交多个不同的command buffer到同一个队列与使用单个command buffer相比，性能差异主要受以下因素影响：
+
+1. CPU开销
+
+
+  多次提交多个command buffer：  
+  若每次提交均调用vkQueueSubmit（尤其是分散的多次调用），会增加CPU负担。驱动需要为每次提交处理验证、同步资源及命令传输，频繁的小批次提交可能导致CPU成为瓶颈。
+  单次提交单个command buffer：  
+  减少vkQueueSubmit调用次数可降低CPU开销。驱动优化空间更大，可能合并内部操作，提升效率。
+
+
+2. GPU执行效率
+
+
+  状态切换与批处理：  
+  多个command buffer可能导致频繁的状态切换（如管线绑定、资源更新）。若这些command buffer未优化，GPU可能在执行时产生空闲。而单个command buffer可通过连续记录减少状态切换，提升吞吐量。
+  提交批次的影响：  
+  GPU通常以提交批次为单位调度任务。多次提交可能分割任务，导致GPU无法充分并行；而单次提交（或一次提交多个command buffer）可能形成更大的批次，利于硬件优化。
+
+
+3. 同步与依赖
+
+
+  显式同步需求：  
+  多次提交常需依赖信号量或栅栏确保执行顺序，可能引入GPU等待。单次提交内部命令天然有序，减少同步需求，降低延迟。
+
+
+4. 驱动与硬件的优化
+
+
+  驱动处理差异：  
+  部分驱动可能优化多command buffer的合并执行（尤其在单次vkQueueSubmit提交多个时），性能接近单个command buffer。但多次分散提交可能无法享受此类优化。
+  硬件特性：  
+  某些GPU架构更擅长处理大命令流，而小批次可能导致调度开销。
+
+
+实践建议
+
+
+  优先减少提交次数：通过单次vkQueueSubmit提交多个command buffer（而非多次调用），可平衡CPU/GPU效率，接近单一大command buffer的性能。
+  合并录制需权衡：若多个command buffer内容固定且需重用，分开录制可能更灵活；若内容动态变化，合并录制可能减少状态切换，但需评估CPU录制开销。
+  场景依赖：对实时渲染等高吞吐场景，倾向于减少提交次数与状态切换；对复杂依赖或并行录制需求，可接受适度性能损失以换取灵活性。
+
+
 EasyVulkan中的CommandBuffer
 在EasyVulkan中，使用CommandBufferBuilder来创建和记录命令缓冲区，在注册到ResourceManager中时，会绑定对应的CommandPool。即name-&gt; (CommandBuffer,CommandPool)
 
@@ -1230,6 +1312,17 @@ auto secondaryCmdBuffers = commandBufferBuilder
 
         posts.push({
             'title'    : "Index",
+            'path'     : "noBug",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/noBug/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
             'path'     : "技术学习 > GPU通用计算",
             'type'     : "category",
             'tags'     : "",
@@ -1357,6 +1450,28 @@ auto secondaryCmdBuffers = commandBufferBuilder
             'url'      : "/EasyVulkan/SynchronizationManager.html",
             'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202013124.png",
             'date'     : "2025-02-01"
+        });
+    
+
+        posts.push({
+            'title'    : "vector.back()引发的指针错误",
+            'path'     : "noBug",
+            'type'     : "post",
+            'tags'     : "指针, Vulkan, Bug",
+            'url'      : "/noBug/vector.back()%E5%BC%95%E5%8F%91%E7%9A%84%E6%8C%87%E9%92%88%E9%94%99%E8%AF%AF.html",
+            'image'    : "https://www.kawabangga.com/wp-content/uploads/2015/04/logo-cpp.jpg",
+            'date'     : "2025-02-06"
+        });
+    
+
+        posts.push({
+            'title'    : "色彩空间错误导致图像亮度增加",
+            'path'     : "noBug",
+            'type'     : "post",
+            'tags'     : "Color Space, Vulkan, Bug",
+            'url'      : "/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/color_Conversion.png",
+            'date'     : "2025-02-09"
         });
     
 

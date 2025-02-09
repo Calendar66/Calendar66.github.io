@@ -1,0 +1,182 @@
+{
+  "main": {
+    "id": "5836d6025aa1c228",
+    "type": "split",
+    "children": [
+      {
+        "id": "6013baf3fab1e59e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "136b94ad5b098849",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "EasyVulkan/Builder类/CommandBuffer.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "CommandBuffer"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "5dd02e2731daa4bb",
+    "type": "split",
+    "children": [
+      {
+        "id": "e5b23b2b4453ea66",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "bc0a7f5463199de0",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "2bf8c05ed2cd7318",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "layout",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "bf0069e798e1ebef",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "right": {
+    "id": "a455babc476da00e",
+    "type": "split",
+    "children": [
+      {
+        "id": "772ae26844ebf347",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1b8a6d75eace4dff",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "EasyVulkan/Builder类/CommandBuffer.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "CommandBuffer 的反向链接列表"
+            }
+          },
+          {
+            "id": "b90c819c7a7b8196",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "noBug/vector.back()引发的指针错误.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "vector.back()引发的指针错误 的出链列表"
+            }
+          },
+          {
+            "id": "41c83237082de833",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "7b3e14790d9c4cd1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "EasyVulkan/Builder类/CommandBuffer.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "CommandBuffer 的大纲"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "136b94ad5b098849",
+  "lastOpenFiles": [
+    "EasyVulkan/SynchronizationManager.md",
+    "EasyVulkan/Builder类/RenderPass.md",
+    "EasyVulkan/Builder类/DescriptorSet.md",
+    "noBug/vector.back()引发的指针错误.md",
+    "index.md",
+    "noBug",
+    "技术学习/图像降采样.md"
+  ]
+}

@@ -300,6 +300,41 @@ vkCmdEndConditionalRenderingEXT(renderCmdBuffer);
 ### 3. 命令复用
 对于重复使用的渲染或计算序列，将其记录到二级命令缓冲区中，在多个主命令缓冲区中复用，可以减少重复记录的工作量。
 
+# 打包提交CommandBuffer
+在Vulkan中，提交多个不同的command buffer到同一个队列与使用单个command buffer相比，性能差异主要受以下因素影响：
+
+### 1. **CPU开销**
+
+- **多次提交多个command buffer**：  
+    若每次提交均调用`vkQueueSubmit`（尤其是分散的多次调用），会增加CPU负担。驱动需要为每次提交处理验证、同步资源及命令传输，频繁的小批次提交可能导致CPU成为瓶颈。
+- **单次提交单个command buffer**：  
+    减少`vkQueueSubmit`调用次数可降低CPU开销。驱动优化空间更大，可能合并内部操作，提升效率。
+
+### 2. **GPU执行效率**
+
+- **状态切换与批处理**：  
+    多个command buffer可能导致频繁的状态切换（如管线绑定、资源更新）。若这些command buffer未优化，GPU可能在执行时产生空闲。而单个command buffer可通过连续记录减少状态切换，提升吞吐量。
+- **提交批次的影响**：  
+    GPU通常以提交批次为单位调度任务。多次提交可能分割任务，导致GPU无法充分并行；而单次提交（或一次提交多个command buffer）可能形成更大的批次，利于硬件优化。
+
+### 3. **同步与依赖**
+
+- **显式同步需求**：  
+    多次提交常需依赖信号量或栅栏确保执行顺序，可能引入GPU等待。单次提交内部命令天然有序，减少同步需求，降低延迟。
+
+### 4. **驱动与硬件的优化**
+
+- **驱动处理差异**：  
+    部分驱动可能优化多command buffer的合并执行（尤其在单次`vkQueueSubmit`提交多个时），性能接近单个command buffer。但多次分散提交可能无法享受此类优化。
+- **硬件特性**：  
+    某些GPU架构更擅长处理大命令流，而小批次可能导致调度开销。
+
+### 实践建议
+
+- **优先减少提交次数**：通过单次`vkQueueSubmit`提交多个command buffer（而非多次调用），可平衡CPU/GPU效率，接近单一大command buffer的性能。
+- **合并录制需权衡**：若多个command buffer内容固定且需重用，分开录制可能更灵活；若内容动态变化，合并录制可能减少状态切换，但需评估CPU录制开销。
+- **场景依赖**：对实时渲染等高吞吐场景，倾向于减少提交次数与状态切换；对复杂依赖或并行录制需求，可接受适度性能损失以换取灵活性。
+
 # EasyVulkan中的CommandBuffer
 在EasyVulkan中，使用`CommandBufferBuilder`来创建和记录命令缓冲区，在注册到ResourceManager中时，会绑定对应的`CommandPool`。即name-> (CommandBuffer,CommandPool)
 

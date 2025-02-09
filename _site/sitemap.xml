@@ -17,6 +17,10 @@
 <lastmod>1900-01-01T00:00:00+08:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/noBug/</loc>
+<lastmod>1900-01-01T00:00:00+08:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/</loc>
 <lastmod>1900-01-01T00:00:00+08:00</lastmod>
 </url>
@@ -63,5 +67,13 @@
 <url>
 <loc>http://localhost:4000/EasyVulkan/SynchronizationManager.html</loc>
 <lastmod>2025-02-01T00:00:00+08:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/noBug/vector.back()%E5%BC%95%E5%8F%91%E7%9A%84%E6%8C%87%E9%92%88%E9%94%99%E8%AF%AF.html</loc>
+<lastmod>2025-02-06T00:00:00+08:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html</loc>
+<lastmod>2025-02-09T00:00:00+08:00</lastmod>
 </url>
 </urlset>

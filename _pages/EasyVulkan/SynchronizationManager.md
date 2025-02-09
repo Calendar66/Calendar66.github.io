@@ -219,12 +219,30 @@ typedef struct VkImageSubresourceRange {
 - layerCount：指定数组层的数量。
 
 除此之外，`VkImageMemoryBarrier` 还包含`oldLayout`和`newLayout`，用于指定图像布局的转换。
+
+### 图像布局
 >在 Vulkan 中，图像布局（Image Layout）用于描述 GPU 内部如何组织和访问图像数据。相比 OpenGL 的隐式管理，Vulkan 要求开发者显式指定和转换图像布局，方便GPU明确用途并进行对应的性能优化。
+
 
 >Transient Attachments（转瞬附件），可以利用 Vulkan 的自动转换特性：
 - Transient Images： 创建时带有 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT，初始布局设为 VK_IMAGE_LAYOUT_UNDEFINED 表明无需保留内容。
 - 自动转换： Vulkan 驱动会在 render pass 开始前、结束后自动插入外部依赖，完成从 UNDEFINED 到目标布局（如 COLOR_ATTACHMENT_OPTIMAL）以及结束后的转换至 PRESENT_SRC_KHR（用于交换链呈现）。
 - 
+**各个场景的推荐布局：**
+
+• **颜色附件：** VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+
+• **深度/模板附件：** VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL 或后续只读时使用 VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+
+• **纹理采样：** VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+
+• **传输操作：** VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL / VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+
+• **交换链图像：** VK_IMAGE_LAYOUT_PRESENT_SRC_KHR
+
+• **初始状态或通用用途：** VK_IMAGE_LAYOUT_UNDEFINED 或 VK_IMAGE_LAYOUT_GENERAL
+
+ >部分观察表明英伟达驱动在内部对 layout 的处理较为宽松，因此在英伟达显卡上可以将所有布局均设置为General。但正确区分和管理 image layout 是 Vulkan 规范的要求，并且对跨平台兼容性和未来驱动的稳定性至关重要。因此，这种理论是不正确的，不能因此在开发中忽略布局转换的管理。
 
 ## Barrier的性能影响
 - 过度使用导致性能损耗：每个 Barrier 都会在流水线上插入一个同步点，如果频繁地插入不必要的Barrier，会增加**GPU的停顿**并降低并行效率。
@@ -348,6 +366,71 @@ Vulkan 中的 Render Pass 可以由多个 Subpass 组成，每个 Subpass 是一
 5. 监控和调试
    - 使用 Vulkan 的验证层（Validation Layers）或 GPU 调试工具，来确认 Barrier 和同步的正确性，避免出现 GPU 死锁或数据争用。
 
+# 同步示例
+假设当前任务中需要四个阶段:计算任务A和B、图形渲染任务C，显示任务D，并且存在依赖关系A->B->C->D。
+
+任务在不同队列上执行:
+- 计算队列：任务 A 和 B 
+- 图形队列：任务 C
+- 展示队列：任务 D
+
+## 同步设计分类
+同步设计主要分为两类:
+
+1. 队列内部顺序：同一队列中提交的命令缓冲区会按提交顺序依次执行，无需额外的同步。
+
+2. 跨队列同步：不同队列之间必须显式使用同步原语（主要是信号量）来保证执行顺序，同时在命令缓冲区内部也可能需要插入 pipeline barrier 以保证内存访问顺序。
+
+## 设计方案详解
+
+### 1. 任务 A 和 B（计算任务）
+
+#### 同一队列或同一命令缓冲区的情况
+如果 A 和 B 都在同一计算队列中，并且可以放入同一个命令缓冲区，那么 Vulkan 隐式保证它们的顺序执行。如果 A 的输出要供 B 使用，则在 A 与 B 之间插入一个 pipeline barrier，用于：
+- 确保 A 的写操作在 B 开始前完成
+- 做好内存可见性和资源状态转换（例如 buffer/image 的 layout 转换）
+
+#### 分成两个命令缓冲区的情况
+如果你希望将 A 和 B 分开提交，也可以让同一队列的提交依赖于前一次提交的结束，这时队列内部的隐式顺序即可保证（也可以用 fence 在 CPU 侧等待 A 完成后再提交 B，但一般不需要额外的 GPU 信号量）。
+
+### 2. 任务 B → 任务 C（计算到图形的跨队列同步）
+
+由于任务 B 在计算队列执行，任务 C 在图形队列执行，所以需要使用信号量来跨队列同步：
+- 在提交任务 B 的命令缓冲区时，在 VkSubmitInfo 中指定一个信号量（例如 sem_compute2graphics），当 B 完成时，信号量会被触发
+- 在提交任务 C 的命令缓冲区时，在 VkSubmitInfo 中设置等待 sem_compute2graphics。这样可以确保任务 C 开始之前，计算队列上任务 B 已经完全结束，并且相关数据已经正确写入
+
+### 3. 任务 C → 任务 D（图形到展示的跨队列同步）
+
+类似地，任务 C 在图形队列执行，而任务 D（例如呈现操作）在展示队列上执行，同样需要使用信号量进行跨队列同步：
+- 在提交任务 C 时，在 VkSubmitInfo 中指定一个信号量（例如 sem_graphics2present），在任务 C 完成后该信号量被触发
+- 在提交任务 D（通常是在呈现队列上调用 vkQueuePresentKHR 时），在 VkPresentInfoKHR 中设置等待 sem_graphics2present。这样能确保任务 D（图像展示）开始前，图形渲染任务 C 已完全完成，并且渲染结果已经准备好用于展示
+
+### 4. 总体提交流程示例
+
+假设你已经创建好两个信号量：sem_compute2graphics 和 sem_graphics2present。整个提交流程可以大致描述为：
+
+1. 提交任务 A 和 B 到计算队列
+   - 如果在同一命令缓冲区内：
+     - 录制命令：先执行任务 A
+     - 插入合适的 pipeline barrier（保证 A 的结果对 B 可见）
+     - 执行任务 B
+     - 在命令缓冲区末尾，通过 VkSubmitInfo 指定在 B 结束时信号 sem_compute2graphics
+   - 如果分为两个提交：
+     - 第一个提交（任务 A）直接提交
+     - 第二个提交（任务 B）可以通过队列隐式顺序保证（或使用 fence 确保 A 完成），并在提交时信号 sem_compute2graphics
+
+2. 提交任务 C 到图形队列
+   - 在 VkSubmitInfo 中设置等待信号量 sem_compute2graphics（对应等待阶段：等待 B 完成）
+   - 录制任务 C 的渲染命令
+   - 在任务 C 命令缓冲区结束时，指定信号 sem_graphics2present，用于通知下一阶段
+
+3. 提交任务 D（展示）
+   - 在展示操作时（例如 vkQueuePresentKHR 调用时），在 VkPresentInfoKHR 中设置等待信号量 sem_graphics2present，保证任务 D 执行前图形渲染任务 C 已完成
+
+## 栅栏的应用
+在渲染循环中，通常会有多帧同时处于 “in-flight” 状态。如果你在开始一帧之前需要确保上一帧（或同一缓冲区对应的上一个帧）的所有 GPU 操作已经完成，那么你就需要在该帧开始前检查并等待相应的栅栏。因此，每一帧一开始需要vkWaitForFences。
+
+
 
 # EasyVulkan中的同步管理
 EasyVulkan通过封装 Vulkan 的同步对象，提供了一整套简单而灵活的同步管理方案。核心类 SynchronizationManager 就是这一解决方案的代表。下面我们从几个方面来介绍它的设计理念与实现思路。
@@ -385,3 +468,4 @@ auto inFlightFence = syncManager->getInFlightFence(currentFrame);
 
 ## 自动资源清理与异常处理
 SynchronizationManager 在内部维护了所有同步对象的生命周期。在其析构函数中，会自动调用 cleanup 方法，**确保所有 Vulkan 同步对象得到正确释放**，从而避免内存泄漏和资源错误。此外，各接口均提供了异常处理机制，当遇到同步对象创建失败或参数错误时，会抛出异常，帮助开发者及时定位问题。
+
