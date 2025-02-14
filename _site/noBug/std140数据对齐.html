@@ -7,25 +7,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>
     
-        图像降采样
+        共享内存中的std140对齐
     
 </title>
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>图像降采样 | Calendar’s Blog</title>
+<title>共享内存中的std140对齐 | Calendar’s Blog</title>
 <meta name="generator" content="Jekyll v4.3.4">
-<meta property="og:title" content="图像降采样">
+<meta property="og:title" content="共享内存中的std140对齐">
 <meta property="og:locale" content="en_US">
-<meta name="description" content="最近的一个横向中涉及对图像进行降采样的问题，最近两周实现和对比了一些降采样的方法，在本文中进行归纳总结。 本文的主要内容包括：1.介绍几种常见的降采样方法。2.对比不同方法的性能。3.基于计算着色器实现区域平均。">
-<meta property="og:description" content="最近的一个横向中涉及对图像进行降采样的问题，最近两周实现和对比了一些降采样的方法，在本文中进行归纳总结。 本文的主要内容包括：1.介绍几种常见的降采样方法。2.对比不同方法的性能。3.基于计算着色器实现区域平均。">
-<link rel="canonical" href="http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html">
-<meta property="og:url" content="http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html">
+<meta name="description" content="Vulkan中的std140布局：从原理到实践">
+<meta property="og:description" content="Vulkan中的std140布局：从原理到实践">
+<link rel="canonical" href="http://localhost:4000/noBug/std140%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90.html">
+<meta property="og:url" content="http://localhost:4000/noBug/std140%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90.html">
 <meta property="og:site_name" content="Calendar’s Blog">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2025-01-12T00:00:00+08:00">
+<meta property="article:published_time" content="2025-02-13T00:00:00+08:00">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="图像降采样">
+<meta property="twitter:title" content="共享内存中的std140对齐">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-01-12T00:00:00+08:00","datePublished":"2025-01-12T00:00:00+08:00","description":"最近的一个横向中涉及对图像进行降采样的问题，最近两周实现和对比了一些降采样的方法，在本文中进行归纳总结。 本文的主要内容包括：1.介绍几种常见的降采样方法。2.对比不同方法的性能。3.基于计算着色器实现区域平均。","headline":"图像降采样","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html"},"url":"http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-02-13T00:00:00+08:00","datePublished":"2025-02-13T00:00:00+08:00","description":"Vulkan中的std140布局：从原理到实践","headline":"共享内存中的std140对齐","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/noBug/std140%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90.html"},"url":"http://localhost:4000/noBug/std140%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -102,7 +102,7 @@
             
                 <style>
                         .thumbnail {
-                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250112201138.png");
+                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250214000847.png");
                         }
                     
                 </style>
@@ -452,11 +452,11 @@
     <p>
                 <a href="/">Home</a>
                 &gt;
-            <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">技术学习</a>
+            <a href="/noBug/">noBug</a>
                 &gt;
             
                 
-                    图像降采样
+                    共享内存中的std140对齐
                 
             </p>
 </div>
@@ -465,7 +465,7 @@
     <div class="thumbnail">
         <div class="transbox">
             
-                <span class="post-title">图像降采样</span>
+                <span class="post-title">共享内存中的std140对齐</span>
             
             <div class="post-info">
                 
@@ -477,7 +477,7 @@
                 <span class="info-box">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"></path></svg>
                     <span>
-                            2025-01-12
+                            2025-02-13
                         
                     </span>
                 </span>
@@ -496,336 +496,298 @@
     </div>
 </div>
 <div class="tag-box">
-<span class="tag theme-0" contentid="Image Processing">
-            Image Processing
+<span class="tag theme-0" contentid="数据对齐">
+            数据对齐
         </span><span class="tag theme-1" contentid="Vulkan">
             Vulkan
-        </span><span class="tag theme-2" contentid="Opengl">
-            Opengl
-        </span><span class="tag theme-0" contentid="降采样">
-            降采样
+        </span><span class="tag theme-2" contentid="Bug">
+            Bug
         </span>
 </div>
 <main>
+    <h1 id="vulkan中的std140布局从原理到实践">Vulkan中的std140布局：从原理到实践</h1>
+
+<h2 id="1-引言">1. 引言</h2>
+
+<p>在Vulkan开发中，shader与CPU端数据交互是一个常见需求。然而，由于GPU和CPU的内存布局规则可能不同，如果不注意数据对齐，很容易导致数据访问错误。本文将详细介绍std140布局规则，帮助你正确处理Vulkan中的uniform buffer数据。</p>
+
+<h2 id="2-内存对齐基础">2. 内存对齐基础</h2>
+
+<h3 id="21-为什么需要内存对齐">2.1 为什么需要内存对齐？</h3>
+
+<p>内存对齐主要有两个目的：</p>
+<ol>
+  <li>确保数据访问效率</li>
+  <li>满足硬件访问要求</li>
+</ol>
+
+<p>在Vulkan中，不同的buffer类型有不同的对齐要求：</p>
+<ul>
+  <li>Uniform Buffer Objects (UBO) : 必须使用std140布局</li>
+  <li>Storage Buffer Objects (SSBO) : 可以使用更宽松的std430布局</li>
+</ul>
+
+<h2 id="3-std140布局规则详解">3. std140布局规则详解</h2>
+
+<h3 id="31-基本类型对齐规则">3.1 基本类型对齐规则</h3>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span> <span class="n">binding</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">uniform</span> <span class="n">UBO</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">a</span><span class="p">;</span>    <span class="c1">// 4字节对齐</span>
+    <span class="kt">double</span> <span class="n">b</span><span class="p">;</span>   <span class="c1">// 8字节对齐</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>      <span class="c1">// 4字节对齐</span>
+    <span class="kt">bool</span> <span class="n">d</span><span class="p">;</span>     <span class="c1">// 4字节对齐</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<div style="text-align: center;">
+
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250214000847.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
+
+<p style="text-align: center;">图 1:UBO对齐</p>
+
+</div>
+
+<h3 id="32-向量类型对齐">3.2 向量类型对齐</h3>
+
+<p>shader中的定义：</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span> <span class="n">binding</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">uniform</span> <span class="n">UBO</span> <span class="p">{</span>
+    <span class="kt">vec2</span> <span class="n">a</span><span class="p">;</span>     <span class="c1">// 8字节对齐</span>
+    <span class="kt">vec3</span> <span class="n">b</span><span class="p">;</span>     <span class="c1">// 16字节对齐</span>
+    <span class="kt">vec4</span> <span class="n">c</span><span class="p">;</span>     <span class="c1">// 16字节对齐</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>在CPU侧定义时，需要显式的加入padding或使用特殊方式：</p>
+<ol>
+  <li>使用Padding：</li>
+</ol>
+
+<pre><code class="language-C++">struct UBO {
+    struct Vec2 {
+        float x;
+        float y;
+        float padding[2];    // 补充到16字节
+    } a;                     // vec2 a
+
+    struct Vec3 {
+        float x;
+        float y;
+        float z;
+        float padding;       // 补充到16字节
+    } b;                     // vec3 b
+
+    struct Vec4 {
+        float x;
+        float y;
+        float z;
+        float w;
+    } c;                     // vec4 c
+};
+</code></pre>
+
+<ol>
+  <li>使用glm。</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">UBO</span> <span class="p">{</span>
+    <span class="n">glm</span><span class="o">::</span><span class="n">vec2</span> <span class="n">a</span><span class="p">;</span> <span class="c1">// glm中的向量自动应用了对齐原则</span>
+    <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span> <span class="n">b</span><span class="p">;</span> <span class="c1">// 对齐到16字节</span>
+    <span class="n">glm</span><span class="o">::</span><span class="n">vec4</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<ol>
+  <li>使用alignas关键字：</li>
+</ol>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">UBO</span> <span class="p">{</span>
+    <span class="k">alignas</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="n">Vec2</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">alignas</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="n">Vec3</span> <span class="n">b</span><span class="p">;</span>
+    <span class="k">alignas</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="n">Vec4</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="33-数组对齐规则">3.3 数组对齐规则</h3>
+
+<p>在std140中，数组元素有特殊的对齐要求：</p>
+<ul>
+  <li>每个元素都会对齐到16字节（vec4的大小）</li>
+  <li>即使是基本类型的数组也遵循这个规则</li>
+</ul>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 着色器代码</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span> <span class="n">binding</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">uniform</span> <span class="n">UBO</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>   <span class="c1">// 每个float占用16字节</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>C++对应代码：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">UBO</span> <span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">ArrayElement</span> <span class="p">{</span>
+        <span class="kt">float</span> <span class="n">value</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">padding</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>  <span class="c1">// 添加填充至16字节</span>
+    <span class="p">}</span> <span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="34-结构体对齐">3.4 结构体对齐</h3>
+
+<p>结构体对齐需要遵循以下规则：</p>
+<ol>
+  <li>结构体起始位置按最大成员对齐(即对齐时按照最大成员对齐)</li>
+  <li>结构体大小必须是最大对齐要求的整数倍</li>
+  <li>成员按各自的对齐规则对齐</li>
+</ol>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">Data</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">a</span><span class="p">;</span>     <span class="c1">// offset 0</span>
+    <span class="kt">vec2</span> <span class="n">b</span><span class="p">;</span>      <span class="c1">// offset 8  (需要8字节对齐)</span>
+    <span class="kt">float</span> <span class="n">c</span><span class="p">;</span>     <span class="c1">// offset 16</span>
+    <span class="kt">vec3</span> <span class="n">d</span><span class="p">;</span>      <span class="c1">// offset 32 (需要16字节对齐)</span>
+<span class="p">};</span>
+
+<span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">,</span> <span class="n">binding</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">uniform</span> <span class="n">UBO</span> <span class="p">{</span>
+    <span class="n">Data</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<div style="text-align: center;">
+
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250214001404.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
+
+<p style="text-align: center;">图 2:结构体对齐</p>
+
+</div>
+
+<p>C++对应代码：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">Data</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">a</span><span class="p">;</span>                    <span class="c1">// 0-4</span>
+    <span class="kt">float</span> <span class="n">padding1</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>          <span class="c1">// 4-8</span>
+    <span class="k">alignas</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec2</span> <span class="n">b</span><span class="p">;</span>    <span class="c1">// 8-16</span>
+    <span class="kt">float</span> <span class="n">c</span><span class="p">;</span>                    <span class="c1">// 16-20</span>
+    <span class="kt">float</span> <span class="n">padding2</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>          <span class="c1">// 20-32</span>
+    <span class="k">alignas</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span> <span class="n">d</span><span class="p">;</span>   <span class="c1">// 32-48</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>如果是Data[ ],那么Data[1]将从48字节开始。</p>
+
+<h2 id="4-常见陷阱与解决方案">4. 常见陷阱与解决方案</h2>
+
+<h3 id="41-vec3的陷阱">4.1 vec3的陷阱</h3>
+
+<p>在std140中，vec3会被当作vec4处理：</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 错误示范</span>
+<span class="k">struct</span> <span class="nc">BadLayout</span> <span class="p">{</span>
+    <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span> <span class="n">position</span><span class="p">;</span>    <span class="c1">// 可能导致错误的内存访问</span>
+    <span class="kt">float</span> <span class="n">value</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// 正确示范</span>
+<span class="k">struct</span> <span class="nc">CorrectLayout</span> <span class="p">{</span>
+    <span class="k">alignas</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="n">glm</span><span class="o">::</span><span class="n">vec3</span> <span class="n">position</span><span class="p">;</span>  <span class="c1">// 确保16字节对齐</span>
+    <span class="kt">float</span> <span class="n">value</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">padding</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>                <span class="c1">// 添加必要的填充</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h3 id="42-数组步长问题">4.2 数组步长问题</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 错误示范</span>
+<span class="k">struct</span> <span class="nc">BadArray</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>    <span class="c1">// 不会自动满足std140布局</span>
+<span class="p">};</span>
+
+<span class="c1">// 正确示范</span>
+<span class="k">struct</span> <span class="nc">CorrectArray</span> <span class="p">{</span>
+    <span class="k">struct</span> <span class="p">{</span>
+        <span class="kt">float</span> <span class="n">value</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">padding</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+    <span class="p">}</span> <span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>       <span class="c1">// 每个元素16字节对齐</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h2 id="5alignas关键字">5.alignas关键字</h2>
+<p>C++11引入的alignas说明符是我们精确控制内存布局的利器：</p>
+
+<pre><code class="language-C++">struct ProblematicStruct {
+    float a;       // 4字节
+    vec3 b;        // 16字节对齐 ← 问题根源！
+};
+
+// 使用alignas修正版
+struct AlignedStruct {
+    alignas(16) float a;  // 强制16字节对齐
+    vec3 b;               // 现在安全了
+};
+</code></pre>
+
+<p>alignas的注意事项：</p>
+
+<ul>
+  <li>指定值必须是2的幂次</li>
+  <li>不能小于类型的自然对齐要求</li>
+  <li>对结构体使用时影响整个结构体的对齐
+    <h2 id="6最佳实践思路从shader确定对齐方式">6.最佳实践思路：从shader确定对齐方式</h2>
     <blockquote>
-  <p>最近的一个横向中涉及对图像进行降采样的问题，最近两周实现和对比了一些降采样的方法，在本文中进行归纳总结。<br>
-本文的主要内容包括：1.介绍几种常见的降采样方法。2.对比不同方法的性能。3.基于计算着色器实现区域平均。</p>
-</blockquote>
-
-<h1 id="定义">定义</h1>
-<p>图像降采样(Image Downsampling)是指通过减少图像的像素数量来降低图像分辨率的过程。具体来说，它是将高分辨率的原始图像转换为较低分辨率的图像，同时尽可能保持图像的视觉质量和关键信息。</p>
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250111165135.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 1：区域均值降采样。</p>
-</div>
-
-<p>常见的图像降采样方法包括：</p>
-<ul>
-  <li>最近邻插值  选择最接近的像素值</li>
-  <li>双线性插值  使用周围4个像素的加权平均</li>
-  <li>双三次插值  使用周围16个像素的加权平均</li>
-  <li>区域平均  计算采样区域内所有像素的平均值</li>
-</ul>
-
-<h1 id="问题目标">问题目标</h1>
-<ul>
-  <li>将图像的分辨率降低到 $\frac{W}{2^n} \times \frac{H}{2^n}$。</li>
-  <li>在保证图片质量的前提下，尽可能提高计算速度。</li>
-  <li>使用C++、OpenGL或Vulkan实现。</li>
-</ul>
-
-<h1 id="下采样方法">下采样方法</h1>
-<p>为了平衡计算速度和图片质量，本文主要研究双线性插值或区域平均。</p>
-<h2 id="双线性插值">双线性插值</h2>
-<h3 id="图形api中的双线性插值">图形API中的双线性插值</h3>
-<p>在OpenGL或Vulkan等图形API中，双线性插值被广泛的支持，例如在OpenGL中，可以使用<code class="language-plaintext highlighter-rouge">glTexImage2D</code>函数来创建一个纹理，并指定<code class="language-plaintext highlighter-rouge">GL_LINEAR</code>作为纹理过滤器，从而在片段着色器中使用双线性插值对该纹理进行采样。除了GL_LINEAR外，还包括：</p>
-<ul>
-  <li>
-<code class="language-plaintext highlighter-rouge">GL_NEAREST</code>：最近邻插值</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">GL_NEAREST_MIPMAP_LINEAR</code>：根据bias参数选择两个mipmap层，mipmap层内部进行最近邻插值，mipmap层之间使用线性插值。</li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">GL_NEAREST_MIPMAP_NEAREST</code>：选择最近的mipmap层，在单个mipmap中最近邻插值。</p>
+      <p>[Shader Uniform Block] → [分析成员对齐] → [生成C++结构] → [验证字节偏移]</p>
+    </blockquote>
   </li>
-  <li>
-<code class="language-plaintext highlighter-rouge">GL_LINEAR_MIPMAP_NEAREST</code>：选择最近的mipmap层，在单个mipmap中双线性插值。</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">GL_LINEAR_MIPMAP_LINEAR</code>：根据bias参数选择两个mipmap层，mipmap层内部进行双线性插值，mipmap层之间使用线性插值。</li>
 </ul>
 
-<p>在Vulkan中，将图像绑定到描述符集时，可以为该图像创建采样器，可以为采样器指定类似于前文OpenGL提供的采样参数,具体包括：</p>
-<ul>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_FILTER_NEAREST</code>：最近邻插值</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_FILTER_LINEAR</code>：双线性插值</li>
-</ul>
+<p>实战案例：</p>
 
-<p>如果开启mipmap，则可以指定：</p>
-<ul>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_SAMPLER_MIPMAP_MODE_NEAREST</code>：对mipmap进行最近邻插值</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">VK_SAMPLER_MIPMAP_MODE_LINEAR</code>：对mipmap进行双线性插值</li>
-</ul>
+<p>GLSL定义：</p>
 
-<h3 id="双线性插值理论">双线性插值理论</h3>
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250112143008.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 2：双线性插值。</p>
-</div>
-
-<p>双线性插值需要使用最近的四个像素进行插值，计算公式如下：<br>
-\(I(x, y) = (1 - dx) * (1 - dy) * I(0, 0) + dx * (1 - dy) * I(1, 0) + (1 - dx) * dy * I(0, 1) + dx * dy * I(1, 1)\)<br>
-其中，$I(x, y)$是插值后的像素值，$I(0, 0)$、$I(1, 0)$、$I(0, 1)$、$I(1, 1)$是最近的四个像素值，$dx$和$dy$是插值点相对于最近四个像素点的偏移量。</p>
-
-<p>将双线性插值应用于降采样时，如果将分辨率降低为原始分辨率的$\frac{1}{2}$，那么等价于对四个像素进行区域平均，即：<br>
-\(I(0.5,0.5) = (1-0.5) * (1-0.5) * I(0, 0) + 0.5 * (1-0.5) * I(1, 0) + (1-0.5) * 0.5 * I(0, 1) + 0.5 * 0.5 * I(1, 1) \\
-I(0.5,0.5) = \frac{I(0, 0) + I(1, 0) + I(0, 1) + I(1, 1)}{4} \phantom{* (1-0.5) * I(0, 0) + 0.5 * (1-0.5) * I(1, 0) + (1-0.5) * 0.5 * I(0, 1) + 0.5 * 0.5 * I(1, 1)}\)</p>
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250111174608.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 3：图像分辨率降低一半时，双线性插值等价于区域平均。</p>
-</div>
-
-<p>然而，当降采样比率较大时($\frac{width_{original}}{width_{downsampled}} &gt; 2$)，双线性插值会”遗漏”一些像素，从而带来图像质量的显著损失。如下图所示，蓝色的像素是原始图像中的像素，深色的像素是降采样后对应回原图的区域，橙色圆形是该区域的中心，对橙色圆形进行双线性插值时参与的只有蓝色圆形所示的点，其他像素被”遗漏”。</p>
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250111175256.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 4：降采样样比率较大时，双线性插值会"遗漏"一些像素。</p>
-</div>
-
-<p>因此，为了保证降采样图像的质量，逐级降采样是更好的选择。所谓逐级降采样，是指将图像先降采样到$\frac{1}{2}$，再降采样到$\frac{1}{4}$，再降采样到$\frac{1}{8}$，以此类推。</p>
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250112012642.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 5：逐级降采样。</p>
-</div>
-
-<p>这种逐级降采样的方式非常适合在图形管线中实现。在OpenGL中，我们可以通过两种方式来实现:</p>
-<ol>
-  <li>使用<code class="language-plaintext highlighter-rouge">glGenerateMipmap</code>函数自动生成mipmap序列，这是最简单直接的方法</li>
-  <li>将原始图像作为输入纹理，通过多次渲染并利用双线性插值采样到更小的目标图像上，逐步完成降采样过程</li>
-</ol>
-
-<p>与OpenGL不同，Vulkan没有提供类似<code class="language-plaintext highlighter-rouge">glGenerateMipmap</code>的便捷函数。在Vulkan中，我们需要通过重复调用<code class="language-plaintext highlighter-rouge">vkCmdBlitImage</code>命令来手动生成每一级mipmap。虽然这种方式需要更多的代码，但也给了开发者更大的灵活性和控制权。<br>
-下文将对比这三种方式的时间和优缺点。</p>
-
-<h2 id="区域平均理论">区域平均理论</h2>
-<p>区域平均是一种简单直观且计算高效的图像降采样方法。它通过以下步骤实现图像的降采样处理：</p>
-
-<ol>
-  <li>根据目标图像尺寸，将原始图像划分为多个大小相等、互不重叠的矩形区域</li>
-  <li>对每个矩形区域内的所有像素值进行算术平均计算</li>
-  <li>将计算得到的平均值赋给降采样后图像中对应位置的像素</li>
-</ol>
-
-<p>这种方法的一大优势在于其灵活性： 它可以通过<strong>单次计算过程</strong>将图像直接降采样到任意目标尺寸，而<strong>不需要多次迭代</strong>。这种特性使其在某些场景下具有明显的性能优势。</p>
-<h1 id="实现和对比">实现和对比</h1>
-<h2 id="glgeneratemipmap">glGenerateMipmap</h2>
-<p>直接调用函数即可。</p>
-
-<h2 id="逐级降采样">逐级降采样</h2>
-<p>思路：输入纹理A，将纹理B作为帧缓冲的颜色附件，纹理B的分辨率是纹理A的$\frac{1}{2}$。<br>
-<strong>准备阶段：</strong></p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>width, height
-For mipmapLevel = 0 to mipmapLevelMax:
-    Create Texture[mipmapLevel] with width ,height
-    Create Framebuffer[mipmapLevel] with Texture[mipmapLevel]
-    width, height = width / 2, height / 2
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">layout</span><span class="p">(</span><span class="n">std140</span><span class="p">)</span> <span class="k">uniform</span> <span class="n">MatrixBlock</span> <span class="p">{</span>
+    <span class="kt">mat4</span> <span class="n">projection</span><span class="p">;</span>   <span class="c1">// 偏移0</span>
+    <span class="kt">mat3</span> <span class="n">orientation</span><span class="p">;</span>  <span class="c1">// 偏移64（4*4*4）</span>
+    <span class="kt">float</span> <span class="n">opacity</span><span class="p">;</span>     <span class="c1">// 偏移64 + 48 = 112</span>
+<span class="p">};</span>
 </code></pre></div></div>
 
-<p><strong>渲染阶段：</strong></p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>For mipmapLevel = 0 to mipmapLevelMax:
-    Bind Framebuffer[mipmapLevel]
-    Bind Texture[mipmapLevel-1]
-    Render
+<p>对应的C++结构：</p>
+
+<pre><code class="language-C++">struct MatrixBlock {
+    // mat4 = 4个vec4
+    alignas(16) glm::vec4 proj[4];  // 偏移0-63
+    
+    // mat3需要视为3个vec4
+    alignas(16) glm::vec4 orient[3]; // 每个vec4存储vec3+padding
+                                     // 偏移64-111
+    
+    alignas(16) float opacity;       // 偏移112-127
+    // 总大小128字节（必须为16的倍数）
+};
+</code></pre>
+
+<p>调试技巧：</p>
+
+<pre><code class="language-C++">// 使用offsetof验证每个成员的偏移量
+static_assert(offsetof(MatrixBlock, opacity) == 112, 
+              "Alignment check failed!");
+</code></pre>
+
+<h2 id="7一个关于共享内存的bug">7.一个关于共享内存的bug</h2>
+<h3 id="背景说明">背景说明</h3>
+<p>在现代GPU架构中，共享内存（Shared Memory）是一项关键资源，主要用于加速内存访问和提高数据复用率。然而，共享内存的使用并非无限，每款GPU都设定了其最大共享内存限制。这一限制直接影响到着色器程序的性能和稳定性。以NVIDIA RTX 1650为例，其共享内存容量为48KB。</p>
+
+<p>在开发过程中，我在计算着色器中声明了一个共享内存数组：</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shared</span> <span class="kt">vec3</span> <span class="n">sMem</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">32</span><span class="p">][</span><span class="mi">33</span><span class="p">];</span>
 </code></pre></div></div>
 
-<h2 id="vulkan-mipmap生成">Vulkan Mipmap生成</h2>
-<p>重复调用<code class="language-plaintext highlighter-rouge">vkCmdBlitImage</code>命令，将mipmapLevel-1的图像blit到mipmapLevel。</p>
+<p>理论上，该数组的大小为3 * 32 * 33 * sizeof(vec3)，即38,016字节（约37.125KB），并未超过RTX 1650的共享内存限制。此外，在编写和调试过程中，Vulkan验证层并未提示任何关于共享内存超限的错误信息。然而，当程序运行到特定阶段时，却意外地发生了崩溃。</p>
 
-<h2 id="时间统计方法">时间统计方法</h2>
-<h3 id="cpu时间">CPU时间</h3>
-<p>CPU时间是指CPU侧执行代码的时间(包含CPU侧的处理，指令提交到GPU，GPU执行，GPU返回结果的时间)，即资源分配和GPU执行的时间。<br>
-1.使用<code class="language-plaintext highlighter-rouge">std::chrono::high_resolution_clock::now()</code>和<code class="language-plaintext highlighter-rouge">std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(end - start).count()</code>来统计时间。<br>
-2.使用Nvidia Nsight Compute来统计CPU时间。</p>
-<h3 id="gpu时间">GPU时间</h3>
-<p>GPU时间是指GPU执行该指令提交到GPU的任务的时间。<br>
-1.使用Querypool。<br>
-2.使用Nvidia Nsight Compute的GPU Trace Profiler来统计GPU时间。</p>
+<h3 id="问题根源">问题根源</h3>
+<p>经过进一步查阅资料和深入分析，共享内存也需要遵守std140布局规则，vec3类型的数据会被当作vec4来对齐。因此，上述声明的共享内存实际上等同于：</p>
 
-<h2 id="结果">结果</h2>
-<p>输入2048*2048的图像。<br>
-<strong>第一帧：</strong></p>
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shared</span> <span class="kt">vec4</span> <span class="n">sMem</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">32</span><span class="p">][</span><span class="mi">33</span><span class="p">];</span>
+</code></pre></div></div>
 
-<table>
-  <thead>
-    <tr>
-      <th>方法</th>
-      <th>CPU时间(ms)</th>
-      <th>GPU时间(ms)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>glGenerateMipmap</td>
-      <td>10.8</td>
-      <td>2.2</td>
-    </tr>
-    <tr>
-      <td>逐级降采样</td>
-      <td>9.8</td>
-      <td>1.4</td>
-    </tr>
-    <tr>
-      <td>Vulkan Mipmap</td>
-      <td>1.9</td>
-      <td>1.5</td>
-    </tr>
-  </tbody>
-</table>
-
-<blockquote>
-  <p>注：</p>
-  <ol>
-    <li>逐级降采样中，CPU时间是指创建帧缓冲和纹理的时间。</li>
-    <li>VUlkan Mipmap生成的CPU时间只包含blit指令产生的CPU时间(统计该Command提交到返回到时间)，不包含纹理图像创建的时间(VUlkan在创建纹理图像时需要指定Mipmap level，并为之分配内存)。</li>
-  </ol>
-</blockquote>
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250112193902.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 6：Vulkan降采样指令返回时间。</p>
-</div>
-
-<p><strong>第二帧：</strong></p>
-
-<table>
-  <thead>
-    <tr>
-      <th>方法</th>
-      <th>CPU时间(ms)</th>
-      <th>GPU时间(ms)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>glGenerateMipmap</td>
-      <td>2.4</td>
-      <td>2.1</td>
-    </tr>
-    <tr>
-      <td>逐级降采样</td>
-      <td>9.3</td>
-      <td>1.5</td>
-    </tr>
-    <tr>
-      <td>Vulkan Mipmap</td>
-      <td>1.8</td>
-      <td>1.5</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>从上述结果中可以看出，第一次调用glGenerateMipmap时，CPU时间较长，而Vulkan Mipmap的CPU时间较短，这可能是因为glGenerateMipmap在第一次调用时需要进行一些初始化工作，而Vulkan Mipmap在第一次调用时已经完成了纹理图像的创建。<br>
-就GPU侧的速度而言，逐级降采样和Vulkan Mipmap的速度相近，二者都快于glGenerateMipmap。<br>
-glGenerateMipmap函数对我们而言就像是一个黑盒子，第二帧的时间显著减少，是否意味着glGenerateMipmap函数在第二次调用时实际没有执行任何操作？为了解答该问题，我使用Nsight Compute的GPU Trace Profiler来查看glGenerateMipmap执行时GPU的占用情况。</p>
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250107002707.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 7：第二帧时glGenerateMipmap执行时GPU的占用情况。</p>
-</div>
-
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250107002723.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 8：第二帧时不调用glGenerateMipmap时GPU的占用情况。</p>
-</div>
-
-<p>从图中可以看出，glGenerateMipmap执行时和不调用该函数相比，GPU的占用率明显更高，因此第二帧时glGenerateMipmap的调用时只有CPU侧的部分资源分配任务被跳过，GPU侧的任务没有明显变化。</p>
-
-<h1 id="区域平均">区域平均</h1>
-<p>上述借助双线性插值的方法本质上都是一个“逐级”的过程，这其中驱动层面上会产生额外的开销。并且，数据在GPU的主存和片上内存之间来回传输，存在IO开销。</p>
-
-<p>区域平均则是一个“单次”的过程，它通过一次计算过程将图像直接降采样到任意目标尺寸，而<strong>不需要多次迭代</strong>。</p>
-
-<p>然而，区域平均无法像双线性插值利用硬件特性，需要我们自己实现。</p>
-
-<p>一种最直接的方法是在片段着色器中读取NxN的像素，然后计算平均值。然而，数据的读取和累加操作是在<strong>单个片段着色器中顺序执行的</strong>，计算效率低下。</p>
-
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250110141416.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 9：区域平均的计算过程。</p>
-</div>
-
-<h2 id="使用compute-shader">使用Compute Shader</h2>
-<p>为了提高利用并行性，我们可以使用Compute Shader来进行区域平均。<br>
-<strong>算法实现：</strong><br>
-1.每个线程读取32个像素。<br>
-2.在线程内部计算列方向上的求和，根据降采样比率决定累加的数据数量。<br>
-3.将中间结果写入恭喜那个内存中。<br>
-4.LandID&lt;output_size*output_size的像素读取m个共享内存中的数据。<br>
-5.计算行方向上的累加并写入输出图像中。</p>
-
-<p>每个warp中包含32个线程，因此一个Warp处理32*32的区域，如下图所示：</p>
-
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250112195910.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 10：Warp处理32*32的区域，每个线程读取32个数据。</p>
-</div>
-
-<p>为了简化过程，我们以4*4的区域为例（假设一个warp中只包含4个线程，每个线程读取4个数据），进行讲解。下采样比率为2，即输出图像的分辨率为输入图像的$\frac{1}{2}$ 。</p>
-
-<h3 id="读取数据">读取数据</h3>
-<p>线程根据所在的workgroupID，WarpID，以及线程ID，计算出该线程需要读取的像素的坐标，然后读取这些像素的值到寄存器中。</p>
-
-<h3 id="计算列方向上的求和">计算列方向上的求和</h3>
-<p>列方向上的输出维度为2，因此每$\frac{4}{2}$个像素进行一次累加。</p>
-
-<h3 id="写入共享内存">写入共享内存</h3>
-<p>将中间结果写入共享内存中。</p>
-
-<h3 id="读取共享内存">读取共享内存</h3>
-<p>LandID&lt;2*2的线程读取共享内存中的结果到寄存器。</p>
-
-<h3 id="计算行方向上的累加">计算行方向上的累加</h3>
-<p>计算行方向上的累加并写入输出图像中。</p>
-
-<p>累加过程如图所示：</p>
-<div style="text-align: center;">
-    <img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250112201138.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
-    <p style="text-align: center;">图 11：累加流程。</p>
-</div>
-
-<h2 id="实验结果">实验结果</h2>
-<p>输入2048*2048的图像，降采样到64*64。</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>方法</th>
-      <th>CPU时间(ms)</th>
-      <th>GPU时间(ms)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>glGenerateMipmap</td>
-      <td>2.4</td>
-      <td>2.1</td>
-    </tr>
-    <tr>
-      <td>逐级降采样</td>
-      <td>9.3</td>
-      <td>1.5</td>
-    </tr>
-    <tr>
-      <td>Vulkan Mipmap</td>
-      <td>1.8</td>
-      <td>1.5</td>
-    </tr>
-    <tr>
-      <td>区域平均(CS)</td>
-      <td>0.9</td>
-      <td>0.9</td>
-    </tr>
-  </tbody>
-</table>
+<p>这样一来，实际占用的内存大小为3 * 32 * 33 * sizeof(vec4)，即50,688字节（约49.5KB），已经超过了RTX 1650的最大共享内存限制。在程序运行时，由于超出共享内存的限制，导致数据访问异常，最终引发了崩溃。</p>
 
     <!-- see https://giscus.app/ -->
     <div class="giscus" id="giscus" style="margin: 4rem auto;"></div>
