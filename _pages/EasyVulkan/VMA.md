@@ -505,7 +505,7 @@ VmaAllocation allocation;
 vmaCreateBuffer(allocator, &bufferInfo, &allocInfo, &buffer, &allocation, nullptr);
 ```
 
-### 内存使用策略枚举：
+### VmaMemoryUsage枚举：
 ```cpp
 typedef enum VmaMemoryUsage {
     VMA_MEMORY_USAGE_UNKNOWN = 0,
@@ -517,7 +517,6 @@ typedef enum VmaMemoryUsage {
 } VmaMemoryUsage;
 ```
 
-### requiredFlags
 
 
 ### VmaAllocationCreateFlags 枚举值说明：
@@ -526,6 +525,7 @@ typedef enum VmaMemoryUsage {
 - 指示内存将被主机按顺序写入
 - 适用于单次或连续写入的缓冲区
 - 可能影响内存类型选择以优化顺序访问
+- 例如每帧都需要更新的动态 uniform 数据和需要被频繁更新的顶点数据
 
 **VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT**
 - 指示内存将被主机随机读写访问
