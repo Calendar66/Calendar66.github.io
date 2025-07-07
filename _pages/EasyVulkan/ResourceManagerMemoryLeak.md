@@ -1,10 +1,9 @@
-
 ---
 title: "EasyVulkan资源管理中的内存泄漏问题"
 tags:
     - Vulkan
     - EasyVulkan
-    - Debug
+    - ResourceManager
 date: "2025-07-07"
 thumbnail: "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/LOGO.png"
 bookmark: true
