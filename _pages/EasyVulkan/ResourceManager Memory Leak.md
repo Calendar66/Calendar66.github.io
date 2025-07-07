@@ -6,7 +6,7 @@ tags:
     - EasyVulkan
     - Debug
 date: "2025-07-07"
-thumbnail: "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250513124719.png"
+thumbnail: "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/LOGO.png"
 bookmark: true
 ---
 >近期的某项目中需要在每一帧动态创建新的资源。然而程序执行时内存占用逐渐增加，怀疑出现了内存泄漏问题。因此重新回顾了EasyVulkan的ResourceManager逻辑并进行了优化。
