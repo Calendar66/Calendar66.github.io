@@ -499,7 +499,7 @@ if (vkCreateDevice(physicalDevice, &deviceCreateInfo, nullptr, &device) != VK_SU
             └── 队列族 1
                 └── 队列 0
 ```
-上面展示了如何指定队列族和队列数量来创建逻辑设备，下面展示如何从逻辑设备获取队列：
+上面展示了如何指定队列族和队列数量来创建逻辑设备，下面介绍如何从逻辑设备获取队列：
 ```C++
 // 从逻辑设备获取队列
 VkQueue graphicsQueue;

@@ -1,5 +1,5 @@
 ---
-title: "VK_EXT_debug_utils扩展介绍"
+title: "VK_EXT_debug_utils扩展的技术应用与分析"
 tags:
     - Vulkan
     - EasyVulkan
@@ -9,81 +9,84 @@ thumbnail: "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsi
 bookmark: true
 ---
 
-# Vulkan调试利器：深入解析VK\_EXT\_debug\_utils扩展
+# `VK_EXT_debug_utils` 扩展详解
 
-Vulkan™ 是一款高性能的图形和计算API，赋予了开发者极大的硬件控制自由度。但随之而来的，是调试复杂性的增加。当程序出错时，标准的Vulkan验证层（Validation Layers）虽然会提供错误信息，但有时信息过于抽象和冗长，让开发者难以迅速找到真正的问题所在。
+Vulkan™ 是一款为高性能图形与计算设计的底层API，它为开发者提供了对硬件的显式控制能力。然而，这种控制的精细度也相应地增加了应用程序的调试复杂性。标准的Vulkan验证层（Validation Layers）能够报告API使用错误，但其输出信息有时较为抽象，可能导致开发者难以快速定位问题的具体根源。
 
-本文将详细介绍一个可大幅提升调试效率的重要扩展：`VK_EXT_debug_utils`。
+本文旨在详细介绍 `VK_EXT_debug_utils` 扩展，并阐述其在提升Vulkan应用程序调试效率方面的重要作用。
 
-# 令人头疼的错误信息：问题究竟在哪？
+# Vulkan 验证层信息的局限性
 
-在编写Vulkan程序时，如果遇到以下类似的验证层错误信息，想必不少开发者都会感到困惑：
-
-```
-VUID-vkCmdBeginRenderPass-initialLayout-00897(ERROR / SPEC): msgNum: -1777306431 - [AppName: EasyVulkan Application] Validation Error: [ VUID-vkCmdBeginRenderPass-initialLayout-00897 ] Object 0: handle = 0x72303f0000000052, type = VK_OBJECT_TYPE_IMAGE; Object 1: handle = 0xcad092000000000d, type = VK_OBJECT_TYPE_RENDER_PASS; Object 2: handle = 0x4256c1000000005d, type = VK_OBJECT_TYPE_FRAMEBUFFER; Object 3: handle = 0x2a7f70000000053, type = VK_OBJECT_TYPE_IMAGE_VIEW; | MessageID = 0x961074c1 | ...
-```
-
-这段信息精确地指出了错误的原因（例如，`RenderPass`布局设置与`Framebuffer`中ImageView的用途不一致），但其列出的对象句柄仅是一系列十六进制的数字。在实际复杂的项目中，迅速定位这些句柄对应的具体对象非常困难，尤其当项目规模庞大时，查找错误源头无异于大海捞针。
-
-# `VK_EXT_debug_utils`：让调试更直观
-
-幸运的是，`VK_EXT_debug_utils` 扩展提供了一种简单有效的方法来解决这个问题。它允许为Vulkan对象（如`VkImage`, `VkBuffer`, `VkQueue`, `VkCommandBuffer`）以及命令缓冲区的特定区域赋予直观易懂的**名称（name）和标签（tag）**。
-
-启用该扩展并为对象赋予名称后，前述复杂难懂的验证层错误信息将变得更加友好：
+在开发Vulkan应用程序时，开发者可能会遇到类似以下的验证层输出信息：
 
 ```
-Object 0: handle = 0x72303f0000000052, name = fs-downsampled-image-pass2-0, type = VK_OBJECT_TYPE_IMAGE; ...
+
+VUID-vkCmdBeginRenderPass-initialLayout-00897(ERROR / SPEC): msgNum: -1777306431 - [AppName: EasyVulkan Application] Validation Error: [ VUID-vkCmdBeginRenderPass-initialLayout-00897 ] Object 0: handle = 0x72303f0000000052, type = VK\_OBJECT\_TYPE\_IMAGE; Object 1: handle = 0xcad092000000000d, type = VK\_OBJECT\_TYPE\_RENDER\_PASS; Object 2: handle = 0x4256c1000000005d, type = VK\_OBJECT\_TYPE\_FRAMEBUFFER; Object 3: handle = 0x2a7f70000000053, type = VK\_OBJECT\_TYPE\_IMAGE\_VIEW; | MessageID = 0x961074c1 | ...
+
 ```
 
-开发者通过自定义的名称（如“fs-downsampled-image-pass2-0”）可立即找到对应的资源，大幅缩短了问题定位时间。
+尽管此信息准确地指出了错误类型（例如，`RenderPass` 的 `initialLayout` 与 `Framebuffer` 中 `ImageView` 的实际用途不匹配），但其中涉及的Vulkan对象仅通过其十六进制句柄（handle）来标识。在包含大量对象的复杂项目中，仅凭句柄值很难将错误与具体的代码逻辑或资源关联起来，这无疑增加了定位问题所需的时间和精力。
+
+# 利用 `VK_EXT_debug_utils` 提升调试信息的可读性
+
+`VK_EXT_debug_utils` 扩展提供了一套机制来解决上述问题。该扩展允许开发者为Vulkan对象（如 `VkImage`, `VkBuffer`, `VkQueue`, `VkCommandBuffer`）以及命令缓冲区中的特定区域附加用户定义的**名称（name）和标签（tag）**。
+
+启用该扩展并为对象分配名称后，验证层的错误报告会包含这些附加信息，示例如下：
+
+```
+
+Object 0: handle = 0x72303f0000000052, name = fs-downsampled-image-pass2-0, type = VK\_OBJECT\_TYPE\_IMAGE; ...
+
+````
+
+通过 "fs-downsampled-image-pass2-0" 这样的自定义名称，开发者可以更直观地识别出产生问题的具体资源，从而显著缩短调试周期。
 
 # `VK_EXT_debug_utils` 的核心功能
 
-`VK_EXT_debug_utils` 扩展提供了以下几个关键功能：
+该扩展主要提供以下几项功能：
 
 ## 1. 调试信使（Debug Messenger）
 
-通过`vkCreateDebugUtilsMessengerEXT`创建回调，实时接收验证层和其他来源的调试消息。
-
-开发者可以定义回调函数，自行控制消息处理方式，例如输出到控制台或日志文件，甚至中断程序执行。
+通过 `vkCreateDebugUtilsMessengerEXT` 函数可以创建一个回调机制，用于接收来自验证层或其他来源的调试消息。开发者能够自定义回调函数来处理这些消息，例如将其输出至控制台、写入日志文件，或在特定严重性级别下触发断点。
 
 ## 2. 对象命名（Object Naming）
 
-利用`vkSetDebugUtilsObjectNameEXT`，可为Vulkan对象指定人类可读的名称。这些名称将直接显示在验证层和图形调试工具中，极大提高了代码可读性。
+`vkSetDebugUtilsObjectNameEXT` 函数允许为任意Vulkan对象关联一个人类可读的字符串名称。这些名称会在验证层消息和各类图形调试工具（如 RenderDoc、NVIDIA Nsight）中显示，有效提高了对象的可识别性。
 
 ## 3. 对象标记（Object Tagging）
 
-通过`vkSetDebugUtilsObjectTagEXT`，开发者可以给对象附加少量二进制数据作为标记，用于存放自定义元数据。（但相比对象命名，使用场景较少）
+通过 `vkSetDebugUtilsObjectTagEXT` 函数，可以为Vulkan对象附加一小块二进制数据作为标记。此功能可用于存储自定义的元数据，但与对象命名相比，其应用场景相对较少。
 
-## 4. 命令缓冲区的标签和标记（Labels & Markers）
+## 4. 命令缓冲区标签（Command Buffer Labels）
 
-使用`vkCmdBeginDebugUtilsLabelEXT` 和`vkCmdEndDebugUtilsLabelEXT`标记命令缓冲区内特定的区域，有助于更清晰地分析命令序列。
+`vkCmdBeginDebugUtilsLabelEXT` 和 `vkCmdEndDebugUtilsLabelEXT` 函数用于在命令缓冲区中标记一个命令区域（region）。这有助于在图形调试器中对渲染帧的各个阶段进行逻辑分组和可视化，从而简化对复杂命令序列的分析。`vkCmdInsertDebugUtilsLabelEXT` 则用于插入单个标记点。
 
-# 如何在项目中使用`VK_EXT_debug_utils`
+# 在项目中使用 `VK_EXT_debug_utils` 的标准流程
 
-通常而言，集成该扩展的步骤为：
+集成该扩展通常遵循以下步骤：
+
 1.  **检查扩展支持**：
-    在创建 `VkInstance` 之前，检查物理设备是否支持 `VK_EXT_DEBUG_UTILS_EXTENSION_NAME`。
+    在创建 `VkInstance` 前，查询物理设备以确认其是否支持 `VK_EXT_DEBUG_UTILS_EXTENSION_NAME` 扩展。
 
 2.  **启用扩展**：
-    在 `VkInstanceCreateInfo` 的 `ppEnabledExtensionNames` 数组中加入 `VK_EXT_DEBUG_UTILS_EXTENSION_NAME`。
+    在填充 `VkInstanceCreateInfo` 结构体时，将 `VK_EXT_DEBUG_UTILS_EXTENSION_NAME` 添加到 `ppEnabledExtensionNames` 数组中。
 
 3.  **加载扩展函数指针**：
-    Vulkan扩展的函数不像核心API那样可以直接调用，你需要通过 `vkGetInstanceProcAddr` (对于实例级函数) 或 `vkGetDeviceProcAddr` (对于设备级函数) 来获取它们的函数指针。
-    例如：
+    Vulkan扩展中的函数需要通过 `vkGetInstanceProcAddr` (实例级函数) 或 `vkGetDeviceProcAddr` (设备级函数) 动态加载。
     ```c++
     // 实例级函数
     PFN_vkCreateDebugUtilsMessengerEXT  pfnVkCreateDebugUtilsMessengerEXT = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
     PFN_vkDestroyDebugUtilsMessengerEXT pfnVkDestroyDebugUtilsMessengerEXT = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
-    // 设备级函数 (注意：vkSetDebugUtilsObjectNameEXT 是设备级函数)
+
+    // 设备级函数
     PFN_vkSetDebugUtilsObjectNameEXT    pfnVkSetDebugUtilsObjectNameEXT = (PFN_vkSetDebugUtilsObjectNameEXT)vkGetDeviceProcAddr(device, "vkSetDebugUtilsObjectNameEXT");
     PFN_vkCmdBeginDebugUtilsLabelEXT    pfnVkCmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT)vkGetDeviceProcAddr(device, "vkCmdBeginDebugUtilsLabelEXT");
-    // ... 其他函数
+    // ... 加载其他所需函数
     ```
-    通常，你会将这些函数指针存储在全局变量或特定的结构体中以便后续调用。
+    通常建议将这些函数指针存储在统一的结构体或类中，以便于在程序各处调用。
 
-4.  **创建 Debug Messenger (可选但强烈推荐)**：
-    * 定义一个回调函数，其签名必须符合 `PFN_vkDebugUtilsMessengerCallbackEXT`。
+4.  **创建 Debug Messenger (推荐)**：
+    * 定义一个符合 `PFN_vkDebugUtilsMessengerCallbackEXT` 签名的回调函数。
         ```c++
         VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
             VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -98,16 +101,17 @@ Object 0: handle = 0x72303f0000000052, name = fs-downsampled-image-pass2-0, type
                     if (pCallbackData->pObjects[i].pObjectName) {
                         std::cerr << ", name = " << pCallbackData->pObjects[i].pObjectName;
                     }
-                    // 你还可以根据 pCallbackData->pObjects[i].objectType 打印类型
+                    std::cerr << ", type = " << pCallbackData->pObjects[i].objectType; // 示例: 打印对象类型
                     std::cerr << std::endl;
                 }
             }
-            return VK_FALSE; // 返回VK_TRUE会中断触发回调的API调用（如果它是验证错误）
+            // 回调函数必须返回 VK_FALSE
+            return VK_FALSE;
         }
         ```
-    * 填充 `VkDebugUtilsMessengerCreateInfoEXT` 结构体。
+    * 填充 `VkDebugUtilsMessengerCreateInfoEXT` 结构体，指定感兴趣的消息严重性和类型。
         ```c++
-        VkDebugUtilsMessengerCreateInfoEXT createInfo = {};
+        VkDebugUtilsMessengerCreateInfoEXT createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
         createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
                                      VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT    |
@@ -117,90 +121,85 @@ Object 0: handle = 0x72303f0000000052, name = fs-downsampled-image-pass2-0, type
                                  VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
                                  VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
         createInfo.pfnUserCallback = debugCallback;
-        createInfo.pUserData = nullptr; // 可选的用户数据
+        createInfo.pUserData = nullptr; // 可选，传递用户自定义数据
         ```
-    * 调用 `pfnVkCreateDebugUtilsMessengerEXT` 创建信使。记得在程序结束时调用 `pfnVkDestroyDebugUtilsMessengerEXT` 销毁它。
+    * 调用 `pfnVkCreateDebugUtilsMessengerEXT` 创建信使实例，并在程序退出前使用 `pfnVkDestroyDebugUtilsMessengerEXT` 销毁它。
 
 5.  **为对象命名**：
-    在你创建Vulkan对象（如 `VkImage`, `VkBuffer`, `VkSwapchainKHR`, `VkQueue`, `VkCommandBuffer` 等）之后，立即使用 `pfnVkSetDebugUtilsObjectNameEXT` 为它们命名。
+    在创建Vulkan对象后，使用 `pfnVkSetDebugUtilsObjectNameEXT` 为其指定名称。
     ```c++
-    // 假设 myImage 是一个 VkImage 句柄，device 是 VkDevice
+    // 假设 myImage 是一个 VkImage 句柄
+    // device 是 VkDevice 句柄
     // pfnVkSetDebugUtilsObjectNameEXT 是已加载的函数指针
 
-    VkDebugUtilsObjectNameInfoEXT nameInfo = {};
+    VkDebugUtilsObjectNameInfoEXT nameInfo{};
     nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
     nameInfo.objectType = VK_OBJECT_TYPE_IMAGE;
-    nameInfo.objectHandle = (uint64_t)myImage; // 必须转换为 uint64_t
-    nameInfo.pObjectName = "MyAwesomeFullscreenTexture";
+    nameInfo.objectHandle = (uint64_t)myImage; // 句柄必须转换为 uint64_t
+    nameInfo.pObjectName = "SceneAlbedoTexture";
 
-    if (pfnVkSetDebugUtilsObjectNameEXT) { // 确保函数指针有效
+    if (pfnVkSetDebugUtilsObjectNameEXT != nullptr) {
         pfnVkSetDebugUtilsObjectNameEXT(device, &nameInfo);
     }
     ```
-    **一个小技巧**：你可以封装一个辅助函数，在每次创建Vulkan对象后自动调用命名函数，这样可以避免遗漏。
+    一种有效的实践是封装一个辅助函数，在创建Vulkan对象的函数中自动调用命名函数，以确保所有关键资源都被命名。
 
-6.  **在命令缓冲区中使用标签和标记**：
+6.  **在命令缓冲区中使用标签**：
     ```c++
     // 假设 cmdBuffer 是一个 VkCommandBuffer
     // pfnVkCmdBeginDebugUtilsLabelEXT 和 pfnVkCmdEndDebugUtilsLabelEXT 是已加载的函数指针
 
-    if (pfnVkCmdBeginDebugUtilsLabelEXT) {
-        VkDebugUtilsLabelEXT labelInfo = {};
+    if (pfnVkCmdBeginDebugUtilsLabelEXT != nullptr) {
+        VkDebugUtilsLabelEXT labelInfo{};
         labelInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
-        labelInfo.pLabelName = "RenderScene-OpaqueObjects";
-        labelInfo.color[0] = 0.1f; // 可选的颜色，调试器可能会用
-        labelInfo.color[1] = 0.8f;
-        labelInfo.color[2] = 0.1f;
+        labelInfo.pLabelName = "Shadow Pass";
+        // 颜色为可选字段，可被调试器用于可视化
+        labelInfo.color[0] = 0.5f;
+        labelInfo.color[1] = 0.5f;
+        labelInfo.color[2] = 0.5f;
         labelInfo.color[3] = 1.0f;
         pfnVkCmdBeginDebugUtilsLabelEXT(cmdBuffer, &labelInfo);
     }
 
-    // ... 记录绘制不透明物体的命令 ...
+    // ... 记录用于渲染阴影的命令 ...
 
-    if (pfnVkCmdEndDebugUtilsLabelEXT) {
+    if (pfnVkCmdEndDebugUtilsLabelEXT != nullptr) {
         pfnVkCmdEndDebugUtilsLabelEXT(cmdBuffer);
     }
     ```
 
+# EasyVulkan 框架中的封装与应用
 
+EasyVulkan 框架在 `VulkanDebug` 命名空间内对 `VK_EXT_debug_utils` 的功能进行了封装，以简化其使用。
 
-# EasyVulkan中的封装支持
-
-EasyVulkan框架通过`VulkanDebug`命名空间对上述功能进行了封装，使得调用更简洁明了：
-
-## 初始化Debug Messenger
+## 初始化 Debug Messenger
 
 ```cpp
-// 创建VkInstance时启用扩展和验证层
+// 在创建 VkInstance 时启用扩展与验证层
 std::vector<const char*> instanceExtensions = {VK_EXT_DEBUG_UTILS_EXTENSION_NAME};
 std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 
 if (ev::VulkanDebug::checkValidationLayerSupport(validationLayers)) {
-    // 设置debug messenger创建信息
+    // 填充 VkDebugUtilsMessengerCreateInfoEXT 结构体
     VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
     ev::VulkanDebug::populateDebugMessengerCreateInfo(debugCreateInfo);
     
-    // 创建debug messenger
+    // 创建 Debug Messenger 实例
     VkDebugUtilsMessengerEXT debugMessenger;
     ev::VulkanDebug::createDebugUtilsMessengerEXT(
         instance, &debugCreateInfo, nullptr, &debugMessenger);
 }
-```
+````
 
-这段代码完成了以下工作：
-1. 检查是否支持所需的验证层
-2. 使用默认设置填充debug messenger创建信息
-3. 创建debug messenger以接收验证层消息
-
-无需手动获取函数指针，EasyVulkan已在内部处理了这些细节。
+上述代码封装了验证层支持检查、`createInfo` 结构体填充以及信使创建的逻辑，隐藏了动态加载函数指针的细节。
 
 ## 为Vulkan对象命名
 
-EasyVulkan提供了简洁的API来为Vulkan对象命名：
+EasyVulkan 提供了统一的接口为不同类型的Vulkan对象命名：
 
 ```cpp
 // 为缓冲区命名
-VkBuffer vertexBuffer = ...; // 假设这是已创建的顶点缓冲区
+VkBuffer vertexBuffer = ...; // 已创建的顶点缓冲区
 ev::VulkanDebug::setDebugObjectName(
     device, 
     VK_OBJECT_TYPE_BUFFER, 
@@ -209,7 +208,7 @@ ev::VulkanDebug::setDebugObjectName(
 );
 
 // 为图像命名
-VkImage textureImage = ...; // 假设这是已创建的纹理图像
+VkImage textureImage = ...; // 已创建的纹理图像
 ev::VulkanDebug::setDebugObjectName(
     device, 
     VK_OBJECT_TYPE_IMAGE, 
@@ -218,7 +217,7 @@ ev::VulkanDebug::setDebugObjectName(
 );
 
 // 为管线命名
-VkPipeline graphicsPipeline = ...; // 假设这是已创建的图形管线
+VkPipeline graphicsPipeline = ...; // 已创建的图形管线
 ev::VulkanDebug::setDebugObjectName(
     device, 
     VK_OBJECT_TYPE_PIPELINE, 
@@ -227,14 +226,14 @@ ev::VulkanDebug::setDebugObjectName(
 );
 ```
 
-这种命名方式简化了调试过程，当验证层报告错误时，会显示这些自定义名称而不是难以识别的句柄值。
+这种方式使得在验证层报告中可以直接看到如 "MainVertexBuffer" 这样的名称，而不是十六进制句柄。
 
 ## 使用命令缓冲区调试标签
 
-EasyVulkan还提供了添加命令缓冲区调试标签的便捷方法：
+EasyVulkan 同样简化了在命令缓冲区中插入调试标签的过程：
 
 ```cpp
-// 开始一个命令区域
+// 开始一个调试区域
 float shadowPassColor[4] = {0.8f, 0.0f, 0.0f, 1.0f}; // 红色
 ev::VulkanDebug::beginDebugLabel(
     device, 
@@ -243,70 +242,63 @@ ev::VulkanDebug::beginDebugLabel(
     shadowPassColor
 );
 
-// 在这里记录阴影贴图渲染命令
+// ... 记录阴影贴图渲染相关命令 ...
 vkCmdBeginRenderPass(...);
-// ...其他渲染命令...
+// ...
 vkCmdEndRenderPass(...);
 
-// 结束命令区域
+// 结束调试区域
 ev::VulkanDebug::endDebugLabel(device, commandBuffer);
 
-// 插入单个标记点
+// 插入一个独立的调试标记
 float markerColor[4] = {1.0f, 1.0f, 0.0f, 1.0f}; // 黄色
 ev::VulkanDebug::insertDebugLabel(
     device, 
     commandBuffer, 
-    "Important Draw Call", 
+    "Key Draw Call Marker", 
     markerColor
 );
 ```
 
-这些标签在图形调试工具（如RenderDoc）中以彩色区域显示，使得复杂的帧分析变得更加直观。
+这些标签在 RenderDoc 等图形调试工具中会被可视化为带有颜色和名称的区域，有助于分析和理解复杂帧的结构。
 
-## 实际应用示例：调试多重渲染通道
+## 应用案例：调试多通道渲染管线
 
-在一个典型的后处理渲染管线中，我们可以这样使用EasyVulkan的调试工具：
+在一个包含多个渲染通道的后处理管线中，可按如下方式使用EasyVulkan的调试功能：
 
 ```cpp
-// 为所有离屏渲染目标命名
+// 为所有离屏渲染目标图像命名
 for (size_t i = 0; i < offscreenImages.size(); i++) {
+    std::string imageName = "offscreen-rt-" + std::to_string(i);
     ev::VulkanDebug::setDebugObjectName(
         device,
         VK_OBJECT_TYPE_IMAGE,
         (uint64_t)offscreenImages[i],
-        "offscreen-rt-" + std::to_string(i)
+        imageName.c_str()
     );
 }
 
-// 记录命令时添加调试标签
+// 在命令记录期间为每个渲染阶段添加标签
 float gbufferColor[4] = {0.0f, 0.5f, 0.9f, 1.0f}; // 蓝色
 ev::VulkanDebug::beginDebugLabel(device, cmd, "G-Buffer Pass", gbufferColor);
-// G-Buffer渲染命令...
+// ... G-Buffer 渲染命令 ...
 ev::VulkanDebug::endDebugLabel(device, cmd);
 
 float shadowColor[4] = {0.1f, 0.1f, 0.1f, 1.0f}; // 灰色
 ev::VulkanDebug::beginDebugLabel(device, cmd, "Shadow Pass", shadowColor);
-// 阴影渲染命令...
+// ... 阴影渲染命令 ...
 ev::VulkanDebug::endDebugLabel(device, cmd);
 
 float lightingColor[4] = {1.0f, 0.8f, 0.0f, 1.0f}; // 金色
 ev::VulkanDebug::beginDebugLabel(device, cmd, "Lighting Pass", lightingColor);
-// 光照计算命令...
+// ... 光照计算命令 ...
 ev::VulkanDebug::endDebugLabel(device, cmd);
 
 float postFxColor[4] = {0.8f, 0.4f, 0.9f, 1.0f}; // 紫色
 ev::VulkanDebug::beginDebugLabel(device, cmd, "Post-Processing", postFxColor);
-// 后处理命令...
+// ... 后处理命令 ...
 ev::VulkanDebug::endDebugLabel(device, cmd);
 ```
 
-这样，在调试工具中查看渲染过程时，不同的渲染阶段会清晰地以不同颜色显示，大大提高了调试效率。
+通过这种方式，在图形调试器中审查渲染帧时，各个渲染阶段将以不同的颜色块清晰地区分，极大地提高了分析效率。
 
-
-## 实际使用场景举例
-
-在复杂的渲染流程中，可以使用EasyVulkan便捷地添加调试标签与命名，显著提升分析效率。例如在渲染G-Buffer、阴影映射、光照计算、后处理阶段时，分别设置不同的标签以快速区分。
-
-# 总结
-
-`VK_EXT_debug_utils` 扩展为Vulkan开发提供了强有力的调试支持，通过清晰直观的命名与标签体系，有效减少了调试过程中的困难与复杂度，帮助开发者迅速定位并解决问题。尤其配合EasyVulkan的封装使用，更进一步提升了开发效率和调试体验。
