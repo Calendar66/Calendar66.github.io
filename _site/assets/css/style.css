@@ -29,7 +29,12 @@ html, body {
   font-family: "Times", "Times New Roman", serif;
 }
 .fonts-loaded mark {
-  font-family: "Righteous", sans-serif;
+  font-family: "Times", "Times New Roman", serif;
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: 500;
 }
 
 a {
@@ -50,7 +55,11 @@ h1, h2, h3, mark {
 }
 
 mark {
-  background-color: transparent;
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: 500;
 }
 
 svg {
@@ -390,6 +399,9 @@ input::-webkit-search-results-decoration {
   .site-name mark {
     color: #66545E;
     word-break: break-word;
+    background-color: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
   }
   .site-name img {
     display: inline-block;

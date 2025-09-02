@@ -247,6 +247,9 @@
   mark { 
     color:$color-wenge;
     word-break:break-word;
+    background-color: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
   }
 
   img {

@@ -33,7 +33,14 @@ html, body {
 .fonts-loaded {
   a, span, p { font-family: #{$main-font}, 'Times', 'Times New Roman', serif; }
   h1, h2, h3 { font-family: #{$main-font}, 'Times', 'Times New Roman', serif; }
-  mark { font-family:'Righteous', sans-serif; }
+  mark { 
+    font-family: #{$main-font}, 'Times', 'Times New Roman', serif;
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
 }
 
 a { text-decoration:none; }
@@ -43,7 +50,13 @@ h1, h2, h3, mark {
   margin:0;
   font-family: #{$main-font}, 'Times', 'Times New Roman', serif;
 }
-mark { background-color:transparent; }
+mark { 
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: 500;
+}
 
 svg {
   width:16px;

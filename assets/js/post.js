@@ -2,6 +2,57 @@ document.addEventListener('DOMContentLoaded', function(){
     var innerContent = document.querySelector('main');
     let currentTheme = localStorage.getItem('theme');
 
+    // Process ==text== highlighting syntax
+    function processHighlights(element) {
+        // Get all text nodes in the element
+        var walker = document.createTreeWalker(
+            element,
+            NodeFilter.SHOW_TEXT,
+            {
+                acceptNode: function(node) {
+                    // Skip if parent is already a mark element or code element
+                    if (node.parentNode.tagName === 'MARK' || 
+                        node.parentNode.tagName === 'CODE' || 
+                        node.parentNode.tagName === 'PRE') {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                    return NodeFilter.FILTER_ACCEPT;
+                }
+            }
+        );
+
+        var textNodes = [];
+        var node;
+        while (node = walker.nextNode()) {
+            textNodes.push(node);
+        }
+
+        // Process each text node
+        textNodes.forEach(function(textNode) {
+            var text = textNode.textContent;
+            if (text.includes('==') && text.match(/==[^=]+?==/g)) {
+                // Replace ==text== with <mark>text</mark>
+                var newHTML = text.replace(/==(.*?)==/g, '<mark>$1</mark>');
+                
+                // Create a temporary element to hold the HTML
+                var temp = document.createElement('span');
+                temp.innerHTML = newHTML;
+                
+                // Replace the text node with the new elements
+                var parent = textNode.parentNode;
+                while (temp.firstChild) {
+                    parent.insertBefore(temp.firstChild, textNode);
+                }
+                parent.removeChild(textNode);
+            }
+        });
+    }
+
+    // Apply highlighting to the main content
+    if (innerContent) {
+        processHighlights(innerContent);
+    }
+
     // tocbot
     var headings = innerContent.querySelectorAll('h1, h2');
     var prevHead;
