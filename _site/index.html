@@ -180,6 +180,21 @@
         
     
 
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
     
     
     
@@ -303,6 +318,14 @@
                             </li>
 </ul>
 </li>
+<li id="nav-second" aria-label="ResourceManagerMemoryLeak">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/ResourceManagerMemoryLeak.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>ResourceManagerMemoryLeak</span>
+                        </a>
+</div>
+</li>
 <li id="nav-second" aria-label="SynchronizationManager">
                     <div class="nav-item">
                         <a href="/EasyVulkan/SynchronizationManager.html" class="nav-list-link nav-sh">
@@ -324,6 +347,14 @@
                         <a href="/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html" class="nav-list-link nav-sh">
                             <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
                             <span>Vulkan初始化</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="VulkanDebug">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/VulkanDebug.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>VulkanDebug</span>
                         </a>
 </div>
 </li>
@@ -443,6 +474,2360 @@
 </h1>
 <div id="category-list">
     <ul class="paginated-list" data-current-page="1" aria-live="polite">
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/3D%20SDF/3.%E4%BC%98%E5%8C%96VPL%E9%87%87%E6%A0%B7.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250902104454.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/3D%20SDF/3.%E4%BC%98%E5%8C%96VPL%E9%87%87%E6%A0%B7.html"><h1 class="title_post">3.优化VPLs采样</h1></a>
+                        <a href="/3D%20SDF/3.%E4%BC%98%E5%8C%96VPL%E9%87%87%E6%A0%B7.html" class="txt_post">
+                            动机
+一个典型的RSM可能包含成千上万甚至数百万个VPLs。对着色点 p，计算每一个VPL的贡献是极其耗费性能的。一个朴素的优化是只在着色点 p 周围的一个固定半径内采样VPLs。
+
+但是，即便如此，也不是所有邻近的VPL都同样重要。有些VPL可能因为角度、遮挡或者自身亮度很低，对着色点 p 的贡献微乎其微。如果我们用均匀采样（Uniform Sampling），在采样区域内随机或均匀地选取VPLs，就会浪费大量的计算在这些贡献很小的VPL上，导致结果充满噪点（noise），或者需要极大量的样本才能获得平滑的效果。
+
+重要性采样 (Importance Sampling)
+重要性采样的核心思想是：与其均匀地采样，不如“智能”地将更多的采样机会分配给那些贡献最大的VPLs。这样，我们就可以用更少的样本数量，获得更高质量、更低噪点的结果。
+
+一个VPL对点 p 的光照贡献有多“重要”呢？这通常取决于以下几个因素，这构成了我们的重要性度量（Importance Metric）：
+
+
+  VPL的辐射通量（Flux）：VPL本身越亮，它的贡献就越大。
+  几何项（G-Term）：
+    
+      着色点 p 的法线 n 与 VPL -&gt; p 方向的夹角 ($cos\theta_p$)。
+      VPL的法线 $n_{vpl}$ 与 p -&gt; VPL 方向的夹角 ($cos\theta_{vpl}$)。
+      p 与VPL之间的距离衰减 ($1/d^2$)。
+    
+  
+  BRDF：着色点 p 的表面材质属性。
+
+
+综合起来，一个VPL的贡献可以近似地用下面的渲染方程的简化形式来描述：
+
+\[L_o(p, \omega_o) = \int_{\Omega} f_r(p, \omega_i, \omega_o) \cdot L_i(p, \omega_i) \cdot \cos(\theta_i) \, d\omega_i\]
+
+在使用VPLs时，这个积分变成了对所有VPLs的求和：
+
+\[L_{indirect}(p) \approx \sum_{k=1}^{N} \frac{\Phi_k}{\pi} \cdot BRDF(p) \cdot \frac{\max(0, n \cdot \omega_k) \cdot \max(0, n_k \cdot -\omega_k)}{||p_k - p||^2} \cdot V(p, p_k)\]
+
+其中：
+
+
+  $\Phi_k$ 是第k个VPL的通量（flux）。
+  $BRDF(p)$ 是点p的BRDF（代码中是 albedo / PI）。
+  $p_k, n_k$ 是第k个VPL的位置和法线。
+  $\omega_k$ 是从p指向 $p_k$ 的归一化向量。
+  $V(p, p_k)$ 是可见性函数（在代码中通过剔除背面和距离过近的点来简化）。
+
+
+重要性采样的目标就是找到一个概率密度函数（PDF），使得采样分布与这个贡献函数尽可能相似。这里类似于光线追中中蒙题卡洛采样的思想，使用PDF确定光线。
+
+均匀采样 vs. 重要性采样
+均匀采样
+
+这是传统的、非重要性采样的方法。
+
+// === UNIFORM SAMPLING - Original Strategy ===
+vec2 offs[32] = vec2[32](...); // 预定义的32个均匀分布的采样偏移
+int N = min(samples, 32);
+...
+for (int i = 0; i &lt; N; ++i) {
+    // 对偏移加上一点随机扰动，减少条带状瑕疵
+    vec2 jitter = ...;
+    vec2 duv = (offs[i] + jitter * 0.05) * radius / ...;
+    vec2 uv = clamp(baseUV + duv, 0.0, 1.0);
+    
+    // 从RSM纹理中获取VPL信息
+    vec3 vplPos = texture(rsmPositionTex, uv).xyz;
+    vec3 vplNor = normalize(texture(rsmNormalTex, uv).xyz);
+    vec3 flux   = texture(rsmFluxTex, uv).xyz;
+    
+    // ... (检查VPL有效性) ...
+    
+    // 计算光照贡献
+    vec3 wi = vplPos - p;
+    float dist = length(wi);
+    wi = normalize(wi);
+    
+    float cos1 = max(dot(n, wi), 0.0);
+    float cos2 = max(dot(vplNor, -wi), 0.0);
+    
+    float distWeight = 1.0 / (1.0 + dist * dist);
+    float sampleWeight = cos1 * cos2 * distWeight; // 权重
+    
+    vec3 brdf = albedo / 3.14159;
+    bounce += brdf * flux * sampleWeight;
+    totalWeight += sampleWeight;
+}
+
+
+解释:
+
+
+  它使用一个固定的采样模式 offs 在着色点周围的RSM区域内进行采样。
+  每个样本被选中的概率是相同的。
+  它计算每个VPL的贡献 (brdf * flux * sampleWeight)，然后累加起来。
+  这种方法简单直接，但效率低下。如果采样区域内大部分VPL的 flux 很小或者 sampleWeight 接近于0，那么很多采样都是无效的。
+
+
+
+
+三阶段自适应重要性采样
+阶段 1: 粗略分析 (Coarse Analysis Pass)
+
+这个阶段的目标是快速找到哪个方向的VPLs最重要。
+
+// Phase 1: Coarse Analysis Pass (8 samples)
+vec2 coarseOffs[8] = vec2[8](...); // 8个方向上的粗略采样点
+float maxImportance = 0.0;
+vec2 bestRegion = vec2(0.0);
+
+for (int i = 0; i &lt; 8; ++i) {
+    vec2 duv = coarseOffs[i] * radius * 0.5 / ...;
+    vec2 uv = clamp(baseUV + duv, 0.0, 1.0);
+    
+    // 获取VPL信息
+    vec3 vplPos = texture(rsmPositionTex, uv).xyz;
+    vec3 vplNor = texture(rsmNormalTex, uv).xyz;
+    vec3 flux = texture(rsmFluxTex, uv).xyz;
+    
+    if (length(vplPos) &lt; 0.1) continue;
+    
+    // 计算重要性度量
+    vec3 wi = normalize(vplPos - p);
+    float cos1 = max(dot(n, wi), 0.0);
+    float cos2 = max(dot(vplNor, -wi), 0.0);
+    float fluxMag = length(flux);
+    
+    float importance = cos1 * cos2 * fluxMag; // 核心：重要性函数
+    if (importance &gt; maxImportance) {
+        maxImportance = importance;
+        bestRegion = duv; // 记录下最重要的区域的偏移方向
+    }
+}
+
+
+解释:
+
+
+  它只用了8个样本，在周围8个方向上进行探测。
+  它计算了一个重要性度量（Importance Metric）：
+\(\)\(\text{Importance} = \max(0, n \cdot \omega_i) \cdot \max(0, n_{vpl} \cdot -\omega_i) \cdot ||\text{Flux}||\)
+\(\)这个公式忽略了距离衰减（因为这是一个方向性探测）和BRDF（假设为常数），但抓住了影响贡献度的核心要素：几何关系和VPL亮度。
+  循环结束后，bestRegion 变量存储了最有潜力的采样方向。
+
+
+阶段 2: 集中密集采样 (Focused Dense Sampling)
+
+在找到“黄金区域”后，这个阶段将大部分样本（20个）集中投放到该区域内部及其周围。
+
+// Phase 2: Focused Dense Sampling (20 samples)
+vec2 denseOffs[20] = vec2[20](...); // 20个在小范围内的密集偏移
+...
+for (int i = 0; i &lt; 20; ++i) {
+    vec2 localOffset = denseOffs[i] * 0.3;
+    // 关键：所有采样都围绕着 bestRegion 进行
+    vec2 duv = (bestRegion + localOffset * radius / ...);
+    vec2 uv = clamp(baseUV + duv, 0.0, 1.0);
+    
+    // ... 和均匀采样类似，获取VPL信息并计算贡献 ...
+    
+    bounce += brdf * flux * sampleWeight;
+    totalWeight += sampleWeight;
+}
+
+
+解释:
+
+
+  所有的采样偏移 duv 都是基于第一阶段找到的 bestRegion 计算的。这确保了大部分计算资源都用在了刀刃上。
+  这种策略极大地提高了采样的效率，因为我们更有可能采样到贡献大的VPLs。
+
+
+阶段 3: 覆盖采样 (Coverage Sampling)
+
+只在最亮的区域采样可能会导致问题：如果场景中有多个次要的光源贡献区域，完全忽略它们会造成能量损失和颜色偏移。这个阶段用少量样本（4个）来覆盖更广泛的区域，以拾取那些被前两个阶段可能忽略掉的贡献。
+
+// Phase 3: Coverage Sampling (4 samples)
+vec2 coverageOffs[4] = vec2[4](...); // 4个随机分布在较大范围的偏移
+...
+for (int i = 0; i &lt; 4; ++i) {
+    vec2 duv = coverageOffs[i] * radius / ...;
+    // ... 计算并累加贡献 ...
+}
+
+
+解释:
+
+
+  这4个样本被放置在采样半径内比较分散的位置，扮演着“查漏补补缺”的角色。
+  它确保了即使我们的“最佳区域”判断有误，或者存在多个重要区域时，渲染结果也不会出现大的瑕疵。
+
+
+效果对比
+不启用重要性采样：
+
+启用重要性采样：
+
+
+其实除了墙角处效果有明显区别，其他多数区域效果并没有明显提升，可能是由于当前的采样点数量（32）已经足够大，即使均匀采样也能取得不错的效果
+
+速度对比
+然而，启用重要性采样后，帧时间从12ms降低到9ms。在代码中，均匀采样和重要性采样都采样32个点，在采样点数量一致的情况下，执行速度的提升主要是由于==重要性采样的工作模式对GPU的并行处理流水线极为友好，而均匀采样的“盲目性”则会频繁地打断流水线，造成效率下降。==
+
+线程发散 (Thread Divergence)
+
+GPU并非一个一个地处理像素，而是将屏幕上成百上千的像素（着色器实例）打包成一个个线程组（在NVIDIA上称为Warp，通常是32个线程；在AMD上称为Wavefront）。在同一个线程组内，所有线程在同一时刻执行完全相同的指令。
+
+现在我们来看循环内部的关键判断语句：
+
+// 这三行是性能的关键
+if (length(vplPos) &lt; 0.1) continue; // VPL无效，跳过
+if (dist &lt; 0.05) continue;         // VPL离自己太近，跳过
+if (cos1 &lt; 0.05 || cos2 &lt; 0.05) continue; // VPL朝向不对，跳过
+
+
+当一个线程组（比如32个相邻的像素）遇到if语句时，会发生什么？
+
+
+  
+    理想情况 (高连贯性): 如果线程组里所有32个线程的判断结果都一样（比如都为true或都为false），那么GPU就可以无缝地、集体地执行if块内的代码或者集体跳过。这是最高效的。
+  
+  
+    糟糕情况 (线程发散): 如果线程组里部分线程结果为true，另一部分为false，就发生了“线程发散”。这时，GPU不得不同时处理两个分支。它会先执行if为true的路径，此时false的线程被临时“关闭”等待；然后再执行if为false的路径，此时true的线程被“关闭”等待。最终，整个线程组的耗时是两条路径耗时之和，效率大打折扣。
+  
+
+
+现在我们把这个原理应用到两种采样方法上：
+
+均匀采样 (12ms，慢)
+
+
+  它的采样点是分散的、随机的。
+  对于一个线程组（32个相邻像素），它们各自随机采样的32个VPL，情况会非常混乱：
+    
+      像素A的第5个样本可能是无效的 (continue)。
+      邻居像素B的第5个样本可能是有效的 (执行完整计算)。
+      邻居像素C的第5个样本可能因为朝向不对而continue。
+    
+  
+  这就导致在循环的几乎每一次迭代中，线程组内部都存在大量的线程发散。GPU的流水线被频繁地打断和等待，即使很多线程因为continue跳过了大量计算，但整个线程组仍然要为那些没有跳过的“幸运”线程付出等待的时间成本。
+
+
+重要性采样 (9ms，快)
+
+
+  它的采样点是高度结构化和局部化的。
+  由于相邻像素的位置和法线通常很相似，它们在第一阶段找到的bestRegion（最佳区域）也极有可能是同一个或非常邻近的区域。
+  因此，当一个线程组（32个相邻像素）进入第二阶段的密集采样时，它们采样的VPL都来自RSM纹理上的一小块相似区域。
+  结果就是：
+    
+      如果这个区域的VPL是有效的，那么线程组里几乎所有线程采到的VPL也都是有效的，大家一起执行完整的计算。
+      如果这个区域的VPL是无效的，那么线程组里几乎所有线程都会触发continue，大家一起跳过。
+    
+  
+  这种高度的执行连贯性最大化了GPU的并行效率。虽然它可能执行了更多次完整的循环体（因为采到的都是有效样本），但由于没有线程发散造成的流水线停顿，整体的“吞吐量”反而更高，执行速度更快。
+
+
+缓存效率 (Cache Locality)
+采样点的分布也会影响缓存的效率，这一思想在我们之前的一个优化模糊算法的项目中也有体现。
+
+
+  均匀采样的样本在RSM纹理上是随机分散的，这会导致纹理缓存（Texture Cache）命中率低。GPU需要频繁地从速度较慢的显存中去读取数据。
+  重要性采样的样本高度集中在bestRegion周围，这使得纹理缓存命中率极高。一旦第一个线程读取了某一块纹理数据，它就会被加载到高速缓存中，后续线程（无论是同一个像素的后续样本，还是邻居像素的样本）都能极快地从缓存中获取数据，进一步提升了性能。
+
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/3D%20SDF" class="category">3D SDF</a>
+                            
+                                <span class="date">· 2025-08-25</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/3D%20SDF/2.RSM%E9%98%B4%E5%BD%B1%E5%92%8C%E4%B8%80%E6%AC%A1%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250902115532.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/3D%20SDF/2.RSM%E9%98%B4%E5%BD%B1%E5%92%8C%E4%B8%80%E6%AC%A1%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7.html"><h1 class="title_post">2.RSM阴影和一次间接光照</h1></a>
+                        <a href="/3D%20SDF/2.RSM%E9%98%B4%E5%BD%B1%E5%92%8C%E4%B8%80%E6%AC%A1%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7.html" class="txt_post">
+                            动机
+
+  [!小球的底部没有接受到反射光。]
+
+
+
+处理这种情况（缺少一次间接光照）最直接的方法是使用RSM。但是正如之前的博客提到的，基于光线步进的软阴影和基于Shadow Map的阴影(RSM和Shadow Map可以看作一类方法)可以被看作两种生成阴影的方法。
+因此在使用RSM之前，还需要将之前的阴影生成的方法改为基于Shadow Map的方法。
+
+软阴影算法问题
+==产生的阴影总是矩形规则的==
+这里询问了AI模型，他的回答是：
+- 核心原因
+  - RSM 阴影是不规则的：它在“光空间”里真地投影几何体。我们先用一个正交光相机把场景光线步进出 position/normal/flux，再在主通道里对这些“光照纹理”做深度比较+PCF 聚合。阴影轮廓因此跟真实物体的光空间轮廓一致（还会叠加分辨率、采样核与偏置带来的不规则性）。
+  - 软阴影是近似的：`softShadow()` 只是沿单条光线做 SDF 步进，用 `res = min(res, k*h/t)` 这种“局部距离比值”近似可见性。你的房间由多块轴对齐平面用 `min()` 拼出来，接收面本身就是“最近表面”，沿光线的距离场变化在平面/平面交线处是分段线性的，叠加步长上限/阈值后，投到墙上的等值线就会呈现出规则的、近似矩形的边界。这不是几何投影结果，而是该近似在“由平面拼接”的场景里呈现的典型伪影。
+
+- 进一步理解
+  - RSM 近似了“面积光/多 VPL”的可见性，聚合了很多光空间样本，所以会出现椭圆/弧形乃至锯齿感的真实阴影边界。
+  - 软阴影近似的是“点光 + 距离场安全步进”，对由 `min(平面…)` 组成的房间会把阴影边界“对齐”到这些平面的主方向，肉眼看起来就是规则矩形。
+
+- 优化的思路
+  - 在阴影查询中排除接收面：对当前像素所属材质做一次“无接收面”的 `sceneSDF`（或把该平面 SDF 加小偏移/屏蔽），避免接收面主导 `h/t`。
+  - 多方向/多半径采样（模拟面积光，PCSS 风格）：对 `rd` 周围做抖动采样而不是单射线。
+  - 真正按光空间做一次二次步进（从光源/光相机到接收点再做 SDF 硬测试+PCF）——本质上等价于你现在的 RSM 路线。
+
+时间原因，我还没有做深入的分析，先保留问题，之后详细分析。
+
+  分析软阴影算法的阴影形状
+
+
+RSM计算
+[[Study/Games104/补充/RSM|RSM]]
+
+最终效果
+
+
+    
+    抱歉，您的浏览器不支持内嵌视频。
+
+
+核心问题与整体思路
+
+
+  问题：SDF 场景通常用 Ray Marching 做直接光照与阴影，但间接光（全局光照）成本高、质量难平衡。
+  RSM 思路：从光源视角渲染一次场景，得到三张纹理：
+    
+      Position（世界坐标）
+      Normal（世界法线）
+      Flux（经材质反射后的辐射通量，近似出射光能）
+ 这些纹理中的每个像素可视作一个虚拟点光源（Virtual Point Light, VPL）。主渲染时，围绕当前像素在 RSM 中邻域采样若干 VPL，估算一次反弹间接光。
+    
+  
+
+
+流水线分两步：
+1) Light-pass：构建光源正交相机，Ray Marching 与材质评估，输出 Position/Normal/Flux。
+2) Main-pass：投影到光相机平面，做阴影可见性（PCF/深度比较），并在 RSM 上做邻域采样累积间接光，和直接光组合。
+
+SDF 基础与 Ray Marching 复盘
+
+本文代码中的 SDF 以球体和房间（墙/地/顶）构成。距离场与法线估计：
+
+  距离场：给定位置 p，返回到最近表面的符号距离 $d(p)$
+  法线近似：用四点差分估计梯度
+\(\nabla d(p) \approx \Big(
+d(p+\epsilon\,k_{xyy}) - d(p+\epsilon\,k_{yyx}),
+d(p+\epsilon\,k_{yxy}) - d(p+\epsilon\,k_{xxx}),
+d(p+\epsilon\,k_{xxy}) - d(p+\epsilon\,k_{yyx})
+\Big)\,\text{并归一化}\)
+实际代码采用紧凑写法（四向量加权求和）。Ray Marching 采用安全步进策略：每步前进当前距离场值（设下限避免驻留）。
+
+
+关键参数：
+
+  MAX_STEPS = 128：最多步进次数
+  MAX_DIST = 100.0：最大追踪距离
+  SURF_DIST = 0.006：命中阈值
+  步长下限如 max(dS, 0.003) 防止在平面/浅角处过度迭代
+
+
+Part 1：从光源视角生成 RSM（三缓冲）
+
+文件：shaders/rsm_light.frag
+
+1. 光源正交相机与射线构建
+
+代码（节选）：
+vec2 uv = fragTexCoord * 2.0 - 1.0;
+vec3 ro = u.lightOrigin.xyz
+        + u.lightRight.xyz * (uv.x * u.lightOrthoHalfSize.x)
+        + u.lightUp.xyz    * (uv.y * u.lightOrthoHalfSize.y);
+vec3 rd = normalize(u.lightDir.xyz);
+
+
+  将屏幕 $[0,1]$ UV 映射为光相机平面上的世界位置 ro。
+  使用正交投影：所有像素射线方向 rd 相同（与光方向一致）。
+  lightRight/lightUp 为光相机基向量，lightOrthoHalfSize 控制覆盖范围（半宽/半高）。
+
+
+数学上，光相机平面参数化为：
+\(\mathbf{ro}(u,v)=\mathbf{o}_L + (2u-1)\,s_x\,\mathbf{r}_L + (2v-1)\,s_y\,\mathbf{u}_L\)
+其中 $\mathbf{o}_L$是 lightOrigin， $\mathbf{r}_L$, $\mathbf{u}_L$ 分别是 lightRight, lightUp，$s_x,s_y$ 为半尺寸。
+
+==ro = u.lightOrigin + 水平位移 + 垂直位移==，在3D空间中构建了一个矩形平面。这个平面的中心是 lightOrigin，朝向由 lightRight 和 lightUp 决定，大小由 lightOrthoHalfSize 决定。
+
+注意，当lightOrthoHalfSize值太小时，发出的射线无法覆盖整个场景，RSM的第一个pass只能在场景的一部分上记录G-Buffer，因此会出现明显的光照错误。
+
+错误的光照场景：
+
+// 当前的策略是，在光源视锥体以外的所有区域均视作点亮
+if (any(lessThan(uv, vec2(0.0))) || any(greaterThan(uv, vec2(1.0)))) {
+	return 1.0; // outside light frustum -&gt; treat as lit
+}
+
+
+调整光源的大小正确覆盖整个场景：
+
+
+2. Ray Marching 与命中属性
+
+float d = rayMarch(ro, rd);
+if (d &gt;= MAX_DIST) { outPosition=outNormal=outFlux=vec4(0.0); return; }
+vec3 pos = ro + rd * d;
+vec3 nor = getNormal(pos);
+float nDotL = max(dot(nor, -rd), 0.0);
+
+
+
+  未命中写 0，主渲染即可判定该像素无效 VPL。
+  命中后得到世界坐标 pos 与法线 nor。
+
+
+法向量计算
+对于传统的三角形网格模型，法线通常是预先计算好并存储在顶点数据中的。但SDF描述的是一个隐式曲面（implicit surface），它不是由顶点或三角形定义的，而是由一个函数 sceneSDF(p) 定义的。这个函数返回空间中任意点 p 到场景最近表面的距离。曲面本身就存在于所有满足 sceneSDF(p) = 0 的点上。
+
+核心思想：法线是SDF的梯度
+
+一个标量场（如此处的SDF）的梯度是一个向量，它指向该场值增长最快的方向。对于SDF来说，在表面上的任意一点，距离值增长最快的方向正好是垂直于表面向外的方向——法线方向。
+数学公式
+
+一个函数 $f(x, y, z)$ 的梯度，记作 $\nabla f$，其数学定义如下：
+
+\[\nabla f(p) = \left( \frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}, \frac{\partial f}{\partial z} \right)\]
+
+其中，$p = (x, y, z)$，$\frac{\partial f}{\partial x}$ 是函数 $f$ 对 $x$ 的偏导数。这个向量的每个分量表示函数在对应坐标轴方向上的变化率。
+
+数值近似
+
+理论上，我们只需要计算 sceneSDF 函数在点 p 处的偏导数即可得到梯度。但在着色器代码中，sceneSDF 函数通常非常复杂，包含各种旋转、平移和 min、max 等操作。对这样的函数进行分析求导（analytically derive the partial derivatives）几乎是不可能的。
+
+因此，我们采用一种数值近似的方法，称为有限差分 (Finite Differences)。其基本思想是：通过在目标点 p 附近的一个极小邻域内对SDF进行采样，来估算其在各个方向上的变化率。
+
+最常用的方法是中心差分法 (Central Differences)。它估算偏导数的方法如下：
+
+\[\frac{\partial f}{\partial x} \approx \frac{f(x+h, y, z) - f(x-h, y, z)}{2h}\]
+
+这里，$h$ 是一个非常小的数（在代码中通常称为 epsilon 或 h）。我们通过在x轴正方向和负方向上各移动一点点，然后用两者SDF值的差来近似该方向的变化率。
+
+将这个方法应用到所有三个坐标轴，我们就可以得到梯度的近似值：
+
+\[\nabla \text{sceneSDF}(p) \approx \frac{1}{2h} \begin{pmatrix}
+\text{sceneSDF}(p + (h, 0, 0)) - \text{sceneSDF}(p - (h, 0, 0)) \\
+\text{sceneSDF}(p + (0, h, 0)) - \text{sceneSDF}(p - (0, h, 0)) \\
+\text{sceneSDF}(p + (0, 0, h)) - \text{sceneSDF}(p - (0, 0, h))
+\end{pmatrix}\]
+
+这种方法需要调用6次 sceneSDF 函数，计算成本较高。
+
+优化数值近似方法
+如前文所言，使用有限差分需要计算6次场景函数。这里采用了一种常见的优化技巧：通过在空间中构造一个微小的四面体（tetrahedron）来进行采样，仅需要调用4次 sceneSDF 就能估算出梯度。
+
+// 计算SDF在点p处的法线
+// 原理：通过采样p点周围极小范围内的SDF值来估算SDF场的梯度，梯度方向即为法线方向
+vec3 getNormal(vec3 p) {
+    const float h = 0.001;
+    const vec2 k = vec2(1, -1);
+    return normalize(k.xyy * sceneSDF(p + k.xyy * h) +
+                     k.yyx * sceneSDF(p + k.yyx * h) +
+                     k.yxy * sceneSDF(p + k.yxy * h) +
+                     k.xxx * sceneSDF(p + k.xxx * h));
+}
+
+
+
+  const float h = 0.001;
+    
+      定义了一个极小的偏移量 h。这个值需要足够小以精确估算梯度，但又不能太小，否则可能因为浮点数精度问题导致结果错误。0.001 是一个常用的经验值。
+    
+  
+  const vec2 k = vec2(1, -1);
+    
+      这是一个辅助向量，用于巧妙地生成四面体的四个顶点方向向量。通过 swizzling 操作（如 k.xyy），我们可以用它组合出 (1, -1, -1), (-1, -1, 1), (-1, 1, -1), 和 (1, 1, 1) 这些向量。
+    
+  
+  核心计算
+    
+      k.xyy 对应 vec3(1, -1, -1)
+      k.yyx 对应 vec3(-1, -1, 1)
+      k.yxy 对应 vec3(-1, 1, -1)
+      k.xxx 对应 vec3(1, 1, 1)
+    
+
+    整个表达式计算了一个向量：
+grad.x = 1 * sceneSDF(p + h*vec3(1,-1,-1)) - 1 * sceneSDF(p + h*vec3(-1,-1,1)) - 1 * sceneSDF(p + h*vec3(-1,1,-1)) + 1 * sceneSDF(p + h*vec3(1,1,1))
+
+    虽然这个表达式看起来和我们之前推导的中心差分法不同，但它在数学上也是对梯度的有效近似。它通过组合这四个采样点的值，巧妙地估算出了SDF在x, y, z三个方向上的变化率。这种方法的优势在于减少了 sceneSDF 的调用次数（从6次降到4次）。
+  
+  return normalize(...)
+    
+      我们需要的是单位法向量，所以必须使用 normalize() 函数将其归一化。
+    
+  
+
+
+3. 材质与通量（Flux）评估
+
+vec3 albedo = getMaterialAlbedo(pos);
+vec3 lightColor = u.lightColors[0].rgb * u.lightColors[0].a;
+vec3 flux = albedo * lightColor * u.lightDir.w * nDotL * 2.0;
+
+
+
+  albedo 与 sceneSDF 对齐判断：哪个物体最近即取其材质色。
+  flux 近似为一次漫反射出射能量：
+\(\Phi(\mathbf{x}) \approx \rho(\mathbf{x})\,E_L\,\max(0,\mathbf{n}\cdot\mathbf{l})\,g\)
+其中 $\rho$ 为反照率，$E_L$ 为光强（含颜色/强度），$g$ 是经验增益（代码中为 2.0，用于增强间接光）。
+
+
+4. 输出三缓冲（MRT）
+
+outPosition = vec4(pos, 1.0);
+outNormal   = vec4(nor, 0.0);
+outFlux     = vec4(flux, 1.0);
+
+
+
+  Position.xyz：世界坐标，w=1 作为有效标记
+  Normal.xyz：世界法线
+  Flux.rgb：经光源调制的反射通量
+
+
+Part 2：主渲染消费 RSM（阴影 + 间接光）
+
+文件：shaders/sdf_practice.frag
+
+Part 2 整体流程（数据与控制流）
+
+
+  相机射线与命中：由屏幕 uv 与相机基向量求 rd，用 Ray Marching 得到命中距离 d、交点 p=ro+rd*d 与法线 n，并根据 getMaterial(p) 取 albedo。
+  投影到光相机：将世界点 p 投影到光源正交平面，得到 baseUV（光空间中的中心采样坐标）。
+  阴影可见性：
+    
+      若 u.rsmParams.w&gt;0.5，用 RSM Position 做“类深度”PCF 比较得到 shadow∈[0,1]；否则退回 SDF 软阴影。
+      将 shadow 经强度和最暗值混合（防止全黑）。
+    
+  
+  直接光：用 shadow 调制主光漫反射与高光累加到 finalColor。
+  间接光（可选）：若 u.rsmParams.w&gt;0.5 &amp;&amp; u.rsmParams.z&gt;0.5，在 baseUV 周围半径/样本数受 rsmParams.xy 控制的邻域上采样 RSM（三缓冲），按 Lambert BRDF 聚合 VPL 贡献并归一化，按 shadow 自适应强度加入间接光。
+  其他光照与反射：填充光、边缘光、环境反射等艺术项叠加。
+  雾与色调：按距离做雾化与微弱色调混合，输出。
+
+
+简化伪代码：
+hit = rayMarch(ro, rd);
+if (!hit) return sky;
+p = ro + rd * d; n = getNormal(p); albedo = material(p);
+baseUV = projectToLight(p);
+shadow = (useRSM) ? rsmShadow(p, n) : softShadow(...);
+color += directLight(p, n, albedo) * shadow;
+if (useRSM &amp;&amp; useIndirect) color += rsmIndirect(p, n, albedo, baseUV);
+color = addFillRimEnv(color, ...);
+color = applyFogTone(color, d);
+
+
+A. 阴影可见性：基于 RSM Position 的“类深度”比较
+
+函数：rsmShadow(p, n)（节选）
+vec3 rel = p - u.lightOrigin.xyz;
+vec2 base = vec2(dot(rel, u.lightRight.xyz)/u.lightOrthoHalfSize.x,
+                 dot(rel, u.lightUp.xyz)/u.lightOrthoHalfSize.y);
+vec2 uv = base * 0.5 + 0.5;
+vec3 Ld = normalize(u.lightDir.xyz);
+float tSurface = dot(rel, Ld);
+// PCF 样本中，从 rsmPositionTex 读出 VPL 的世界坐标
+vec3 vplPos = texture(rsmPositionTex, uv + duv).xyz;
+float tRsm = dot(vplPos - u.lightOrigin.xyz, Ld);
+float bias = 0.02 + 0.10 * (1.0 - max(dot(n, Ld), 0.0));
+float visible = (tRsm + bias &lt; tSurface) ? 0.0 : 1.0;
+
+
+
+  将世界点 p 投影到光相机平面，得到 RSM 纹理坐标 uv。
+  以光方向 Ld 定义“深度”标量：$t=\langle x-\mathbf{o}_L,\,\mathbf{L}_d\rangle$。
+  用 Position 缓冲的世界坐标反推 RSM 像素的“深度” $t_{RSM}$ 与当前表面“深度” $t_{surface}$ 比较。
+  斜率偏置 bias 随 $1-\mathbf{n}\cdot\mathbf{L}_d$ 增大，缓解自阴影。
+  使用 8 点 PCF 平均可见性，半径受 u.rsmParams.x 与纹理分辨率缩放。
+
+
+数学上，单样本可见性为：
+\(V = \mathbb{I}\big[t_{RSM} + b &lt; t_{surface}\big]\)
+多样本 PCF 取均值：$\bar V = \frac{1}{N}\sum_i V_i$。
+
+可见性作为直接光的阴影因子：
+finalColor += (diff * albedo + spec * lightColor) * lightColor * shadow * u.lightDir.w;
+
+其中 shadow 由 RSM/PCF 得到（或回退为 SDF 软阴影）。
+
+如何将一个3D空间中的点 p 投影到光源视角?
+
+这个投影过程的核心目标是：找出三维空间中的点 p 会出现在光源“摄像机”所渲染的二维纹理（即RSM纹理）的哪个位置上。
+
+// Project point to light ortho plane
+vec3 rel = p - u.lightOrigin.xyz;
+vec2 base = vec2(dot(rel, u.lightRight.xyz) / max(u.lightOrthoHalfSize.x, 1e-4),
+                 dot(rel, u.lightUp.xyz)    / max(u.lightOrthoHalfSize.y, 1e-4));
+vec2 uv = base * 0.5 + 0.5;
+
+
+这个过程可以分解为以下四个步骤：
+
+
+
+a. 转换到光源的局部坐标系（平移）
+
+vec3 rel = p - u.lightOrigin.xyz;
+
+
+
+  p: 这是我们要投影的那个点的世界坐标（World Space a_position）。
+  u.lightOrigin.xyz: 这是光源“摄像机”在世界空间中的位置。
+  rel (relative a_position): 通过用点的坐标减去光源的原点坐标，我们得到了一个从光源指向点 p 的向量。这等效于将整个坐标系进行平移，使得光源位于原点(0, 0, 0)。现在，rel 就代表了点 p 在以光源为中心的新坐标系中的位置。
+
+
+b. 投影到光源的视图平面（投影）
+
+vec2 base = vec2(dot(rel, u.lightRight.xyz),
+                 dot(rel, u.lightUp.xyz));
+
+
+(为了清晰，暂时忽略后面的除法)
+
+这一步是整个投影过程的核心。光源拥有自己的一套坐标基向量，类似于主摄像机有 cu (右), cv (上), cw (前)。这里的 u.lightRight 和 u.lightUp 就扮演了光源摄像机的“右”和“上”的角色。
+
+
+  u.lightRight.xyz: 一个单位向量，代表光源视图的水平方向（X轴）。
+  u.lightUp.xyz: 一个单位向量，代表光源视图的垂直方向（Y轴）。
+  dot(a, b) (点积): 当向量 b 是一个单位向量时，dot(a, b) 的几何意义是计算向量 a 在向量 b 方向上的投影长度。
+
+
+所以：
+
+
+  dot(rel, u.lightRight.xyz) 计算出点 p (相对于光源) 在光源 “右” 方向上的距离。这就是点 p 在光源视图中的 X坐标。
+  dot(rel, u.lightUp.xyz) 计算出点 p (相对于光源) 在光源 “上” 方向上的距离。这就是点 p 在光源视图中的 Y坐标。
+
+
+执行完这一步后，base 这个 vec2 变量就存储了点 p 在光源二维视图平面上的坐标（以世界单位计）。
+
+c. 规范化坐标（正交投影）
+
+vec2 base = vec2(...,
+                 ... / max(u.lightOrthoHalfSize.y, 1e-4));
+
+
+这个Shader使用的是正交投影(Orthographic Projection)，这意味着光源的视锥体是一个长方体，而不是像透视投影那样的角锥体。
+
+
+  u.lightOrthoHalfSize: 这个变量定义了光源视锥体（那个长方体）尺寸的一半。u.lightOrthoHalfSize.x 是宽度的一半，u.lightOrthoHalfSize.y 是高度的一半。
+
+
+通过将上一步得到的坐标除以 lightOrthoHalfSize，我们将坐标从世界单位转换为了规范化设备坐标 (Normalized Device Coordinates, NDC)。
+
+
+  如果一个点正好在光源视锥体的右边缘，它的X坐标就等于 lightOrthoHalfSize.x，相除后得到 1.0。
+  如果一个点正好在左边缘，它的X坐标是 -lightOrthoHalfSize.x，相除后得到 -1.0。
+  Y坐标同理。
+
+
+经过这步计算后，base 变量的 x 和 y 分量都被映射到了 [-1.0, 1.0] 的范围内。任何在这个范围之外的点都意味着它在光源的视锥体之外。
+
+d. 转换为UV纹理坐标
+
+vec2 uv = base * 0.5 + 0.5;
+
+
+最后一步是将 [-1.0, 1.0] 的NDC坐标转换为 [0.0, 1.0] 的UV纹理坐标，以便能正确地采样RSM纹理。这是一个标准的线性变换：
+
+
+  当值为 -1.0 时: -1.0 * 0.5 + 0.5 = 0.0
+  当值为 0.0 时: 0.0 * 0.5 + 0.5 = 0.5
+  当值为 1.0 时: 1.0 * 0.5 + 0.5 = 1.0
+
+
+计算完成后，uv 变量就包含了点 p 在光源渲染的RSM纹理上对应的二维坐标。有了这个坐标，我们就可以去 rsmPositionTex, rsmNormalTex, 和 rsmFluxTex 中采样，获取那个位置的深度、法线和光通量信息，用于阴影计算和间接光照。
+
+整个过程可以看作是一次完整的 “世界空间 -&gt; 光源视图空间 -&gt; 光源裁剪空间 -&gt; 纹理空间” 的变换，这与我们常规渲染管线中的顶点变换过程非常相似，只是这里是在片元着色器中手动完成的，并且使用的是正交投影而非透视投影。
+
+B.RSM Shadow
+RSM阴影的计算原理本质上与传统的阴影贴图 (Shadow Mapping) 技术非常相似。其核心思想是：
+
+
+  深度测试：从当前着色点 p 的角度，看它离光源有多远。
+  查询记录：查询“阴影贴图”（在这里是RSM的位置纹理），看看在同一个方向上，离光源最近的物体有多远。
+  比较：如果当前点 p 的距离比记录的最近距离要远，那么它就被挡住了，处于阴影中。否则，它就是可见的，被照亮。
+
+
+这个Shader通过一种名为 PCF (Percentage-Closer Filtering) 的柔化技术实现了这个过程，使得阴影边缘更加柔和自然。
+
+RSM阴影的计算流程如下：
+
+
+  将当前着色点 p 投影到光源的UV空间。
+  计算点 p 相对于光源的深度 tSurface。
+  在 p 对应的UV坐标周围进行多次（8次）采样。
+  在每次采样中：
+a. 从RSM位置纹理中读取遮挡物的世界坐标 vplPos。
+b. 计算遮挡物的深度 tRsm。
+c. 将 tSurface 与 tRsm + bias 进行比较，判断是否可见。
+  将8次采样的可见性结果求平均，得到一个 0.0 (全黑) 到 1.0 (全亮) 之间的值，作为最终的阴影系数。
+
+
+下面是 rsmShadow 函数的详细步骤分解：
+
+
+
+a. 投影到光源空间
+
+// Project point to light ortho plane
+vec3 rel = p - u.lightOrigin.xyz;
+vec2 base = vec2(dot(rel, u.lightRight.xyz) / max(u.lightOrthoHalfSize.x, 1e-4),
+                 dot(rel, u.lightUp.xyz)    / max(u.lightOrthoHalfSize.y, 1e-4));
+vec2 uv = base * 0.5 + 0.5;
+
+
+这一步我们已经知道了，它的作用是计算出当前着色点 p 在光源的RSM纹理上对应的UV坐标。
+
+b. 计算当前点的“光源深度”
+
+// Light forward = from light to scene
+vec3 Ld = normalize(u.lightDir.xyz);
+float tSurface = dot(rel, Ld);
+
+
+
+  Ld: 这是光源的“前向”向量，即光线照射的方向。
+  tSurface: 这是本步骤的关键。我们通过计算 rel (从光源指向点p的向量) 在光源方向 Ld 上的投影，得到了点 p 沿着光照方向，相对于光源原点的距离。你可以把它理解为点 p 在光源坐标系下的“深度值”。这个值将作为我们后续比较的基准。
+
+
+c. 柔化阴影采样 (PCF)
+
+传统的阴影贴图只采样一次，会导致阴影边缘出现锯齿。为了得到柔和的阴影，这里在 uv 坐标周围的一个小区域内进行了多次采样。
+
+vec2 texel = 1.0 / max(u.rsmResolution.xy, vec2(1.0));
+float radius = max(u.rsmParams.x, 0.5);
+vec2 offs[8] = vec2[8](...); // 8个预设的采样偏移方向
+float sum = 0.0;
+
+for (int i = 0; i &lt; 8; ++i) {
+    // ... 循环内部 ...
+}
+
+return sum / 8.0;
+
+
+
+  offs: 定义了8个围绕中心点的采样方向。
+  radius: 控制采样范围的大小，值越大，阴影边缘越模糊。
+  texel: 单个纹素（像素）的大小，用于将radius从像素单位转换成UV单位。
+  循环：代码将进行8次采样，每次都在 uv 的基础上加上一点偏移 duv。
+  sum / 8.0: 最后，将8次采样的结果取平均值。如果8次采样都表明点是亮的，结果是 8/8 = 1.0 (全亮)；如果4次亮4次暗，结果是 4/8 = 0.5 (半透明阴影)。这就是柔和边缘的来源。
+
+
+d. 循环内部的核心——深度比较
+
+现在我们来看 for 循环内部每一轮发生了什么，这是阴影测试的核心。
+
+// 1. 获取采样点的UV坐标
+vec2 duv = offs[i] * radius * texel;
+vec2 sampleUV = clamp(uv + duv, 0.0, 1.0);
+
+// 2. 从RSM位置纹理中读取遮挡物的世界坐标
+vec3 vplPos = texture(rsmPositionTex, sampleUV).xyz;
+
+// 3. 计算遮挡物的“光源深度”
+float tRsm = dot(vplPos - u.lightOrigin.xyz, Ld);
+
+// 4. 加上偏移(Bias)后进行比较
+float bias = 0.02 + 0.10 * slope; // (稍后解释)
+float visible = (tRsm + bias &lt; tSurface) ? 0.0 : 1.0; // 核心比较
+
+// 5. 累加结果
+sum += visible;
+
+
+
+  获取采样UV：计算出当前这第 i 次采样的实际UV坐标。
+  读取遮挡物位置：使用这个 sampleUV 从 rsmPositionTex 纹理中采样。这个纹理存储的是从光源视角看过去，场景中每个点最近的那个物体的世界坐标。我们把这个坐标称为 vplPos (虚拟点光源位置)。
+  计算遮挡物深度：用与步骤2完全相同的方法，计算出 vplPos 的光源深度 tRsm。tRsm 代表了在当前采样方向上，离光源最近的那个物体表面的深度。
+  深度比较：
+    
+      tRsm + bias &lt; tSurface: 这就是最终的判断。
+      如果 tSurface (当前点的深度) 大于 tRsm (遮挡物的深度)，意味着当前点 p 在遮挡物的后面，因此它在阴影中。visible 被设为 0.0。
+      否则，当前点 p 没有被遮挡，是可见的。visible 被设为 1.0。
+    
+  
+
+
+e. 解决“阴影粉刺” (Shadow Acne) 的偏移(Bias)
+
+// Receiver-plane depth bias to reduce self-shadowing on curved surfaces
+float slope = 1.0 - max(dot(n, Ld), 0.0);
+float bias = 0.02 + 0.10 * slope;
+
+
+由于浮点数精度限制和纹理采样的离散性，一个物体表面上的点在进行深度比较时，可能会因为微小的误差而判断自己被自己遮挡了，从而在被光照亮的表面上出现许多错误的黑色斑点，这种现象被称为“阴影粉刺”或“自遮挡”。
+
+为了解决这个问题，我们在比较时给从纹理中读出的深度 tRsm 加上一个很小的正值 bias。这相当于在计算时，将遮挡物稍微往“远离”光源的方向推了一点点，从而确保物体不会错误地遮挡自己。
+
+我们还使用了更高级的斜率缩放偏移 (Slope-Scale Bias)：
+
+
+  dot(n, Ld) 计算表面法线 n 和光照方向 Ld 的夹角。
+  当表面几乎平行于光线时 (即光线以很刁钻的角度掠过表面)，dot(n, Ld) 接近0，slope 接近1，bias会变得更大。这是因为这种表面的深度变化最快，最容易产生阴影粉刺，所以需要更大的偏移量。
+  当表面正对光源时，dot(n, Ld) 接近1，slope 接近0，bias 就很小。
+
+
+B. 一次反弹间接光：在 RSM 上的邻域采样
+
+函数：getLight(...) 的 RSM 采样分支（节选）
+vec2 baseUV = base * 0.5 + 0.5; // p 投影到光相机平面的中心 uv
+for (int i = 0; i &lt; N; ++i) {
+    vec2 duv = (offs[i] + jitter * 0.05) * radius / u.rsmResolution.xy;
+    vec2 uv = clamp(baseUV + duv, 0.0, 1.0);
+    vec3 vplPos = texture(rsmPositionTex, uv).xyz;
+    vec3 vplNor = normalize(texture(rsmNormalTex, uv).xyz);
+    vec3 flux   = texture(rsmFluxTex, uv).xyz;
+    if (length(vplPos) &lt; 0.1) continue; // 无效 VPL
+    vec3 wi = normalize(vplPos - p);
+    float cos1 = max(dot(n, wi), 0.0);       // 接收面余弦
+    float cos2 = max(dot(vplNor, -wi), 0.0); // 发光面余弦
+    float dist = length(vplPos - p);
+    float distWeight = 1.0 / (1.0 + dist * dist);
+    float w = cos1 * cos2 * distWeight;
+    vec3 brdf = albedo / 3.14159; // Lambert
+    bounce += brdf * flux * w;
+}
+finalColor += indirectStrength * bounce / totalWeight;
+
+
+
+  每个 RSM 像素视作 VPL，其通量 flux 已含一次反射。
+  经典近似：
+\(L_i(\mathbf{x}\to\mathbf{v}) \approx \sum_{j\in\mathcal{N}} \frac{\rho(\mathbf{x})}{\pi}\,\Phi_j\,\frac{\max(0,\mathbf{n}_x\cdot\mathbf{w}_j)\max(0,\mathbf{n}_j\cdot(-\mathbf{w}_j))}{1+\|\mathbf{x}-\mathbf{x}_j\|^2}\)
+其中 $\mathbf{w}_j$ 指向 VPL 的方向，分母用 $1+\mathrm{dist}^2$ 做能量衰减与数值稳定。
+  通过 offs[32] + jitter 做抖动与分布采样；radius 与 samples 由 u.rsmParams 控制。
+  indirectStrength = mix(0.8, 0.3, shadow)：在阴影区给更多间接光，避免过曝。
+
+
+a. 将当前着色点投影到RSM空间
+
+为了在RSM贴图中找到附近的VPLs，我们首先需要知道当前着色点 p 对应于RSM贴图的哪个位置。这一步在之前的步骤中已经做了详细介绍，这里不做赘述。
+
+vec3 rel = p - u.lightOrigin.xyz;
+vec2 base = vec2(dot(rel, u.lightRight.xyz) / max(u.lightOrthoHalfSize.x, 1e-4),
+                 dot(rel, u.lightUp.xyz)    / max(u.lightOrthoHalfSize.y, 1e-4));
+vec2 baseUV = base * 0.5 + 0.5;
+
+
+
+  u.lightOrigin, u.lightRight, u.lightUp 定义了光源摄像机的坐标系。
+  rel 计算出点 p 相对于光源摄像机原点的位置向量。
+  dot(...) 将该向量投影到光源摄像机的右方向（X轴）和上方向（Y轴）上，并除以光源视锥体的一半大小 lightOrthoHalfSize，将其归一化到 [-1, 1] 的范围。
+  base * 0.5 + 0.5 将 [-1, 1] 的坐标转换为 [0, 1] 的UV坐标，这个 baseUV 就是点 p 在RSM贴图上的中心采样点。
+
+
+b. 在RSM中采样周围的虚拟点光源（VPLs）
+我们不能只采样一个VPL，那样会导致结果充满噪点。因此，我们在 baseUV 周围的一个区域内进行多次采样，收集多个VPLs的光照贡献。
+
+int N = min(samples, 32);
+float totalWeight = 0.0;
+vec3 bounce = vec3(0.0);
+
+for (int i = 0; i &lt; N; ++i) {
+    // ... 计算采样UV ...
+    vec2 duv = (offs[i] + jitter * 0.05) * radius / max(u.rsmResolution.xy, vec2(1.0));
+    vec2 uv = clamp(baseUV + duv, 0.0, 1.0);
+    
+    // ... 从RSM贴图中读取VPL信息 ...
+    vec3 vplPos = texture(rsmPositionTex, uv).xyz;
+    vec3 vplNor = normalize(texture(rsmNormalTex, uv).xyz);
+    vec3 flux   = texture(rsmFluxTex, uv).xyz;
+    
+    // ... 计算该VPL的光照贡献 ...
+}
+
+
+
+  代码使用了一个预定义的 offs 数组和一个随机jitter来确定采样点，形成一个漂亮的采样模式，这比纯随机采样效果更好。radius 控制采样范围的大小。
+  在循环中，通过 texture(...) 函数从三张RSM贴图中读取每个采样VPL的世界位置、法线和辐射通量。
+
+
+c. 计算单个VPL的光照贡献（核心物理模型）
+
+这部分是整个算法的核心，它模拟了光从VPL传播到着色点p的过程。这本质上是在求解渲染方程（Rendering Equation）的一个简化形式。
+
+渲染方程的简化形式为：
+$L_{indirect}(p) \approx \sum_{i=1}^{N} \text{BRDF}(p) \cdot \Phi_i \cdot G(p, p_i)$
+
+其中：
+
+
+  $L_{indirect}(p)$ 是点 p 接收到的间接光。
+  $\text{BRDF}(p)$ 是点 p 表面的双向反射分布函数，描述了光线如何被反射。
+  $\Phi_i$ 是第 $i$ 个VPL的辐射通量（flux）。
+  $G(p, p_i)$ 是几何项，描述了点 p 和VPL $p_i$ 之间的几何关系（距离、角度等）。
+
+
+让我们看看代码如何实现每一项：
+
+
+  
+    BRDF (双向反射分布函数)
+
+    vec3 brdf = albedo / 3.14159; // Lambert BRDF
+    
+
+    这里使用了最简单的兰伯特（Lambertian）漫反射模型。对于理想的漫反射表面，其BRDF为 $\frac{albedo}{\pi}$，其中 albedo 是表面的基础色。
+  
+  
+    几何项 $G(p, p_i)$
+
+    几何项包含了两点之间的可见性、距离衰减以及两个表面的相对角度。
+
+    vec3 wi = vplPos - p;
+float dist = length(wi);
+wi = normalize(wi); // 从p指向VPL的方向向量
+
+float cos1 = max(dot(n, wi), 0.0);
+float cos2 = max(dot(vplNor, -wi), 0.0);
+
+float distWeight = 1.0 / (1.0 + dist * dist);
+float sampleWeight = cos1 * cos2 * distWeight;
+    
+
+    
+      cos1 = max(dot(n, wi), 0.0): 这是在接收点 p 的朗伯余弦定律，即 $n_p \cdot \omega_i$。它表示从VPL射来的光线与表面p的法线之间的夹角。夹角越大，接收到的能量越少。
+      cos2 = max(dot(vplNor, -wi), 0.0): 这是在VPL发射点的朗伯余弦定律，即 $n_{vpl} \cdot (-\omega_i)$。它表示VPL表面法线与光线射出方向之间的夹角。
+      distWeight = 1.0 / (1.0 + dist * dist): 这是光的距离平方反比衰减。标准的物理公式是 $\frac{1}{dist^2}$。代码中写作 1.0 / (1.0 + dist * dist) 是一种常见的改进，可以避免当dist趋近于0时值趋于无穷大，使衰减更平滑。
+    
+
+    所以，sampleWeight 完整地表达了上述几何项：
+$G(p, p_i) = \frac{\max(0, n_p \cdot \omega_i) \cdot \max(0, n_{vpl} \cdot -\omega_i)}{1.0 + d^2}$
+其中 $d$ 是 dist，$\omega_i$ 是 wi。
+  
+  
+    累加贡献
+
+    bounce += brdf * flux * sampleWeight;
+totalWeight += sampleWeight;
+    
+
+    我们将每个VPL计算出的光照贡献 brdf * flux * sampleWeight 累加到 bounce 变量中。
+  
+
+
+d. 归一化并应用
+
+if (totalWeight &gt; 0.0) {
+    float indirectStrength = mix(0.8, 0.3, shadow); // More indirect in shadows
+    finalColor += indirectStrength * bounce / totalWeight;
+}
+
+
+
+  bounce / totalWeight: 对累加的结果进行归一化，这是一种蒙特卡洛积分的近似，可以得到更稳定的平均光照贡献。
+  indirectStrength = mix(0.8, 0.3, shadow): 这是一个非常巧妙的艺术处理。shadow 值越接近0（表示点p在阴影中），indirectStrength 就越高（接近0.8）；反之，在被直接照亮的区域，indirectStrength 就越低。这模拟了人眼在暗处对间接光更敏感的现象，也让场景的暗部细节更丰富。
+  最后，将计算出的间接光照 bounce 添加到最终颜色 finalColor 中。
+
+
+3. 直接光与其他补充项
+
+
+  直接光：经典漫反射 + 高光（简化 GGX），被 shadow 调制。
+  填充光、边缘光、环境反射：在 RSM 框架外的艺术项，帮助构图与层次。
+  雾与色调：后期做轻微混色，提升舒适度。
+
+
+参数调优与性能权衡
+
+
+  Ray Marching：
+    
+      降低 MAX_STEPS 或提高步长下限可提速但会漏检细节。
+      SURF_DIST 越小法线越稳定但成本增加。
+    
+  
+  阴影：
+    
+      PCF 样本数（此处 8）与半径 rsmParams.x 控制过渡平滑与接缝；半径应与分辨率成比例。
+      斜率偏置：bias = base + k * (1 - n·L)，减少自阴影条纹。
+    
+  
+  间接光：
+    
+      采样数 rsmParams.y 与半径 rsmParams.x：半径太小会噪点，太大则漂白；采样数增加能抑噪但开销线性上升。
+      抖动 jitter + 帧间累计（若可用）能显著降噪。
+    
+  
+  能量标定：
+    
+      flux 的经验增益（×2.0）应结合实际观感校准；可与 u.lightDir.w、lightColors[0].a 协同调节。
+    
+  
+
+
+常见问题与排查
+
+
+  看起来一片黑/一片白：
+    
+      检查 lightDir 正负与两 pass 是否一致；光相机平面方向是否与 lightRight/lightUp 正交。
+      lightOrthoHalfSize 是否覆盖了场景主体。
+    
+  
+  严重自阴影/条纹：
+    
+      增大 bias 基础值与斜率项系数；缩小 PCF 半径尝试。
+    
+  
+  间接光溢出/漏光：
+    
+      限制采样 cos1/cos2 下限（代码已用 0.05 做早停），加入距离权重与法线一致性筛选。
+      距离下限（如 dist &lt; 0.05 跳过）避免自照明。
+    
+  
+  RSM 调试：
+    
+      打开 debugParams.x 在主渲染中可视化 flux/normal/position 的混合视图，便于判定 RSM 是否正确渲染与对齐。
+    
+  
+  Gamma/色彩偏差：
+    
+      交换链（sRGB）+ 纹理（sRGB）时避免额外 Gamma；本项目在主渲染中移除了手动 Gamma，保留轻微色调混合。
+    
+  
+
+
+进一步优化方向
+
+  分层/瓦片化：屏幕空间分块共享 RSM 采样，提升缓存命中率。
+  重要性采样：按 Flux 与法线对齐度分布采样，减少无效 VPL。 ✅ 2025-09-01
+
+
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/3D%20SDF" class="category">3D SDF</a>
+                            
+                                <span class="date">· 2025-08-25</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822133530.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html"><h1 class="title_post">1.预备知识和基于3D SDF的康奈尔盒子</h1></a>
+                        <a href="/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html" class="txt_post">
+                            基础知识
+留个坑。
+
+算法步骤
+
+阶段一：准备与射线生成 (Preparation &amp; Ray Generation)
+
+
+  设置摄像机 (Camera Setup)：
+    
+      在3D世界中定义摄像机的位置 (ro)、观察目标 (ta) 和姿态。
+      基于这些信息，构建一个从“相机空间”到“世界空间”的变换矩阵，用于正确地投射射线。
+    
+  
+  生成主射线 (Primary Ray Generation)：
+    
+      遍历屏幕上的每一个像素。
+      将每个像素的2D屏幕坐标（如 (800, 600)）转换为归一化的3D观察坐标（这是实现透视投影的关键）。
+      最终，为每个像素生成一条独一无二的、从摄像机位置 ro 出发，射入3D场景的射线方向 rd。
+    
+  
+
+
+阶段二：场景求交 (Scene Intersection via Ray Marching)
+
+
+  光线步进循环 (Ray Marching Loop)：
+    
+      让射线从起点开始，在场景中步进。此过程通常使用一种名为球面追踪 (Sphere Tracing)（也被称为光线步进 (Ray Marching)） 的高效算法。
+      在每一步，调用全局的场景SDF函数 map()，计算射线当前末端位置到场景中所有物体的最短距离 d。
+      这个距离 d 保证了我们可以沿着射线方向安全前进 d 的距离，而不会穿过任何物体表面。
+      循环往复地让射线前进 d 的距离，直到 d 的值小于一个极小的阈值（例如 0.0001），这标志着射线已经命中了某个物体的表面。
+    
+  
+  记录交点信息 (Intersection Data)：
+    
+      一旦命中，记录下关键信息：
+        
+          交点坐标 pos: ro + total_distance * rd。
+          物体材质ID m: 用于区分不同物体（例如，地面、球体、盒子等）。
+        
+      
+    
+  
+
+
+阶段三：表面着色 (Surface Shading)
+
+
+  获取表面基础属性 (Acquire Surface Properties)：
+    
+      计算法线 nor: 通过在交点 pos 附近极小范围内多次采样SDF，估算出表面的梯度，从而得到该点的法线向量。这是所有光照计算的基础。
+      计算反射向量 ref: 根据视线方向 rd 和法线 nor，计算出完美的镜面反射方向，用于模拟环境反射。
+    
+  
+  确定基础材质与颜色 (Determine Base Material &amp; Color)：
+    
+      根据之前记录的材质ID m，为交点赋予基础颜色（Albedo）。
+      这是一个分支判断点：如果是地面 (m &lt; 1.5)，则通过 checkersGradBox 函数计算程序化的棋盘格纹理；如果是其他物体，则根据ID赋予不同的纯色。
+    
+  
+  计算环境光遮蔽 (Ambient Occlusion)：
+    
+      在法线方向上进行数次短距离步进，检查周围的几何体密度，计算AO系数值。这个值会使角落和缝隙等难以被环境光照亮的区域变暗，极大地增强立体感。
+    
+  
+  累加多光源光照 (Accumulate Lighting from Multiple Sources)：
+    
+      主光源 (Key Light): 模拟太阳等强光源。其贡献主要包括漫反射（Diffuse）和高光（Specular）两部分。高光部分使用Blinn-Phong模型计算，并且整个光照贡献会乘以 calcSoftshadow 函数返回的软阴影系数。
+      天空光 (Sky Light): 模拟来自天空的环境光。通过检查反射向量 ref 的方向来确定光照强度，并再次调用 calcSoftshadow 函数沿着 ref 方向进行检测，实现反射遮挡，防止物体“穿透”其他物体反射天空。
+      补光 (Fill Light): 一个强度较弱的辅助光源，用于提亮场景的暗部，使其不至于死黑。
+      边缘光 (Rim Light): 根据视线和法线的夹角（菲涅尔效应的近似）在物体边缘添加一道高光，用于将物体轮廓与背景分离开。
+    
+  
+
+
+阶段四：后期处理与输出 (Post-Processing &amp; Final Output)
+
+
+  添加雾效 (Fog)：
+    
+      根据交点与摄像机的距离 t，将计算出的最终光照颜色与一个全局的“雾色”进行混合。距离越远，物体颜色越接近雾色，营造出深远的大气感。
+    
+  
+  最终颜色校正与输出 (Final Correction &amp; Output)：
+    
+      对计算出的颜色进行伽马校正 (Gamma Correction)，使其在显示器上看起来更自然。
+      将最终的颜色值输出到当前像素。
+    
+  
+
+
+箱子场景算法
+
+
+                    +-----------------------------+
+                    |        main() 函数开始      |
+                    +-------------+---------------+
+                                  |
+            +---------------------v---------------------+
+            | 1. 设置相机，并将像素位置转换为光线方向 |
+            +---------------------+---------------------+
+                                  |
+                    +-------------v-------------+
+                    | 2. rayMarch()             |
+                    |    光线步进，寻找与物体的 |
+                    |    交点距离 d             |
+                    +-------------+-------------+
+                                  |
+                  +---------------v---------------+
+                  |  光线是否击中物体 (d &lt; MAX_DIST)? |
+                  +---------------+---------------+
+                                  |
+            +---------------------+---------------------+
+            | 是                                        | 否 (未击中)
++-----------v-----------+                     +-----------v-----------+
+| 3. 计算交点 p 和法线 n |                     |  使用默认背景色       |
++-----------+-----------+                     +-----------+-----------+
+            |                                             |
++-----------v-----------+                                 |
+| 4. 获取材质和基础色    |                                 |
+|    (albedo)           |                                 |
++-----------+-----------+                                 |
+            |                                             |
++-----------v-----------+                                 |
+| 5. getLight()         |                                 |
+|    计算光照、阴影、高光|                                 |
++-----------+-----------+                                 |
+            |                                             |
++-----------v-----------+                     +-----------v-----------+
+| 6. 添加雾效和后期调色  | &lt;-------------------+
++-----------+-----------+
+            |
++-----------v-----------+
+| 7. 输出最终像素颜色    |
++-----------------------+
+
+
+
+  初始化：设置坐标与相机
+    
+      屏幕坐标转换：在 main 函数中，首先将输入的二维纹理坐标（范围 [0, 1]）转换为以屏幕中心为原点的标准化坐标（范围 [-1, 1]），并根据屏幕的宽高比进行校正，防止图像拉伸。
+      定义虚拟相机：设置一个虚拟相机的位置（ro，光线起点）和它看向的目标点。
+      计算光线方向：根据相机的位置和当前像素在屏幕上的位置，计算出一条从相机出发、穿过该像素的光线方向向量（rd）。
+    
+  
+  光线步进：寻找与场景的交点
+    
+      调用核心的 rayMarch 函数，沿着上一步计算出的光线方向（rd）从相机位置（ro）开始前进。
+      核心思想：在每一步，通过调用 sceneSDF 函数计算当前位置到场景中所有物体表面的最短距离 dS。这个距离就是本次可以安全前进的最大步长。
+      循环前进：不断地沿着光线方向前进 dS 的距离，直到光线与某个物体的表面足够近（小于阈值 SURF_DIST）或者超出了最大渲染距离（MAX_DIST）。
+      函数最终返回光线从相机出发到击中物体的总距离 d。
+    
+  
+  表面着色：计算交点颜色
+    
+      如果光线成功击中物体（d &lt; MAX_DIST），则开始计算该点的颜色。
+      计算交点信息：根据行进距离 d 计算出光线与场景的精确三维交点坐标 p，并调用 getNormal 函数计算该点的表面法线向量 n。
+      判断材质：调用 getMaterial 函数判断交点 p 属于哪个物体（球体还是墙壁）。
+      获取基础色（Albedo）：
+        
+          如果击中的是球体，则调用 getGradientColor 计算出复杂的、带有动画效果的渐变色。
+          如果击中的是墙壁，则赋予一个简单的、带有微小变化的蓝色。
+        
+      
+      进行光照计算：调用 getLight 函数，这是最关键的着色步骤。它综合了多种光照效果：
+        
+          环境光：提供一个基础的整体亮度。
+          主光源：计算来自主方向光的漫反射（物体颜色）和高光（镜面反射）。
+            
+              高光计算时使用Phone模型，计算反射方向。
+              这是一个单pass的流程（没有使用shadowMap）==，阴影的计算依赖于反射方向。==
+              软阴影：在计算主光源时，会从交点 p 向光源方向再次进行一次简化的光线步进（softShadow 函数），以判断该点是否处于阴影中，并计算出阴影的柔和程度。
+            
+          
+          辅助光：添加填充光（照亮暗部）和边缘光（勾勒轮廓），使光照效果更丰富。
+        
+      
+      添加雾效：根据交点与相机的距离 d，将颜色与背景色进行混合，模拟出远景模糊的雾化效果，增加场景的深度感。
+    
+  
+  后期处理与输出
+    
+      在得到基础光照颜色后，进行最后的画面调整。
+      Gamma校正：调整颜色亮度，使其在显示器上看起来更自然。
+      色彩调整：为整个画面叠加一层微妙的蓝色调，以统一风格。
+      最终输出：将计算完成的最终颜色赋值给 outColor，作为当前像素的显示颜色。
+    
+  
+
+
+菲涅尔效应
+对于大多数电介质（非金属，如水、玻璃、塑料等），观察角度越接近于平行于表面（即掠射角），表面的反射能力就越强。这是让材质看起来更真实、更有质感的关键因素之一。
+// 菲涅尔效应：视角与法线夹角越大，反射越强（常见于水面、玻璃等）
+float fresnel = 1.0;
+if (matId == 1) { // 只对球体应用
+    fresnel = pow(1.0 - max(0.0, dot(viewDir, n)), 2.0);
+}
+
+这段代码通过计算视角和法线夹角的余弦，实现了一个简单的函数：夹角越大（越接近掠射角），fresnel 的值就越接近1.0（反射越强）。
+pow(1.0 - dot(V, N), power) 的形式是一种广为人知的、计算成本极低的“边缘光”或“伪菲涅尔”效果的实现方式。
+
+PBR
+从“基于物理的渲染 (PBR)”的角度来讲，上述方式不是标准的，但接近。
+在现代PBR工作流中，行业标准是使用 ==Schlick 近似法 (Schlick’s Approximation) ==来模拟菲涅尔效应，其公式为：
+
+\[F(\theta) = F_0 + (1-F_0)(1-\cos\theta)^5\]
+
+
+  
+    基础反射率 ($F_0$): Schlick 模型包含一个 $F_0$ 项，代表垂直入射时的基础反射率（比如水在垂直看时约有2%的反射率）。而代码中的公式相当于假设 $F_0$=0，即垂直看时完全没有反射，这在物理上是不准确的。
+  
+  
+    幂次 (Power): Schlick 模型标准使用 5 次幂，这个数字能更好地拟合真实世界物质的反射曲线。代码中使用了 2 次幂，这会使菲涅尔效应的过渡区域更宽、更柔和，是一种艺术上的选择，而非物理上的拟合。
+  
+
+
+主光源
+
+
+主光源，或称为关键光，是场景中最主要、最强的光源，它决定了物体大部分的明暗关系和阴影的朝向。在这段代码中，主光源的计算包含了三个主要部分：漫反射（Diffuse Reflection）、高光反射（Specular Reflection） 和 软阴影（Soft Shadow）。
+
+// --- 准备工作 ---
+vec3 l = normalize(-u.lightDir.xyz); // 主光源方向
+vec3 r = reflect(-l, n); // 反射光方向
+
+// ...
+
+// 1. 主光源 (Key Light)
+if (u.enableLights.x == 1) {
+    // --- 漫反射计算 ---
+    float ndotl = max(0.0, dot(n, l));
+    float diff = ndotl; 
+
+    // --- 高光计算 (模拟GGX) ---
+    float rough = clamp(1.0 - u.shadowParams.w, 0.05, 0.95);
+    float specPower = mix(16.0, 64.0, u.shadowParams.w);
+    float spec = pow(max(0.0, dot(viewDir, r)), specPower) * (1.0 - rough);
+
+    // --- 阴影计算 ---
+    float shadow = softShadow(p + n * 0.07, l, 0.07, 6.0, 6.0 * u.shadowParams.x);
+    shadow = mix(0.3, 1.0, shadow * u.shadowParams.y);
+
+    // --- 最终组合 ---
+    vec3 lightColor = u.lightColors[0].rgb * u.lightColors[0].a;
+    finalColor += (diff * albedo + spec * lightColor) * lightColor * shadow * u.lightDir.w;
+}
+
+
+
+
+第一步：向量定义
+
+  vec3 n: 法线向量 (Normal)，垂直于物体表面。
+  vec3 viewDir: 视角向量 (View Direction)。
+  vec3 l = normalize(-u.lightDir.xyz);: 光源向量 (Light Direction)。u.lightDir 定义的是光照射来的方向（例如从上到下），我们需要的是从表面指向光源的向量，所以要对其进行取反 - 并单位化 normalize。
+  vec3 r = reflect(-l, n);: 反射向量 (Reflection Vector)。计算的是光源向量 l 相对于法线 n 的完美镜面反射方向（用于计算Phone模型高光和软阴影）。
+
+
+第二步：漫反射 (Diffuse) 计算
+漫反射模拟的是光线被粗糙表面向各个方向均匀散射的效果。它决定了物体不受高光影响的基础明暗。
+漫反射不考虑出射方向，==强度由入射方向和法向决定==。
+
+float ndotl = max(0.0, dot(n, l));
+float diff = ndotl;
+
+
+
+  dot(n, l): 计算法线向量 n 和光源向量 l 的点积。
+    
+      当光线垂直照射到表面时 (n 和 l 方向相同)，点积为 1，表面最亮。
+      当光线平行于表面照射时 (n 和 l 互相垂直)，点积为 0，表面不受光。
+      当光线从表面背面照射时，点积为负数。
+    
+  
+  max(0.0, ...): 使用 max 函数确保点积结果不会是负数，因为背面的光线不应该对正面产生照明效果。
+  float diff = ndotl;: 将这个 ndotl 的结果作为漫反射强度 diff。这种光照模型被称为 Lambertian 反射，是最简单和常见的漫反射模型。
+
+
+最终，漫反射对颜色的贡献是 diff * albedo，即漫反射强度乘以物体基础色。
+
+第三步：高光 (Specular) 计算
+高光模拟的是光滑表面（如金属、塑料）对光源的镜面反射。
+==高光强度由和出射方向决定（或Blinn-Phone中使用半程向量和法向）。==
+
+float rough = clamp(1.0 - u.shadowParams.w, 0.05, 0.95);
+float specPower = mix(16.0, 64.0, u.shadowParams.w);
+float spec = pow(max(0.0, dot(viewDir, r)), specPower) * (1.0 - rough);
+
+
+这段代码实现了一个简化的 Blinn-Phong 高光模型，并加入了一些模拟PBR（基于物理的渲染）中金属度/粗糙度的概念。
+
+
+  dot(viewDir, r): 计算视角向量 viewDir 和反射向量 r 的点积。
+    
+      如果视线方向 viewDir 与完美反射方向 r 完全重合，点积为 1，此时看到的高光最强。
+      视线与反射方向偏离得越远，点积越小，高光越弱。
+    
+  
+  max(0.0, ...): 同样是防止结果为负。
+  pow(..., specPower): 这是高光计算的核心。将点积结果进行 specPower (高光指数) 次幂。
+    
+      specPower 的值越大，高光点越小、越锐利，模拟的表面也越光滑。
+      specPower 的值越小，高光点越大、越模糊，模拟的表面也越粗糙。
+    
+  
+  u.shadowParams.w: 这个uniform变量在这里被巧妙地用作金属度 (metalness) 或光滑度 (smoothness) 的控制器。
+    
+      当它为 0 时, specPower 为 16 (高光模糊)，当它为 1 时, specPower 为 64 (高光锐利)。mix 函数在其间进行线性插值。
+    
+  
+  * (1.0 - rough): 用一个 rough (粗糙度) 变量来进一步控制高光强度，这借鉴了PBR的思想。rough 越高，高光越弱。
+
+
+最终，高光的颜色贡献是 spec * lightColor，即高光强度乘以光源颜色。
+
+第四步：软阴影 (Soft Shadow) 计算
+为了判断表面上的点 p 是否处于阴影中，代码从点 p 出发，沿着光源方向 l 进行了一次光线步进（Ray Marching）。
+
+float shadow = softShadow(p + n * 0.07, l, 0.07, 6.0, 6.0 * u.shadowParams.x);
+shadow = mix(0.3, 1.0, shadow * u.shadowParams.y);
+
+
+
+  softShadow(...): 这个函数返回一个 [0.0, 1.0] 之间的值。1.0 表示完全没有遮挡（在光下），0.0 表示完全被遮挡（在阴影中）。其内部通过多次步进检查光路上是否有物体，并根据遮挡物与当前点的距离来计算出柔和的阴影过渡，而不是硬邦邦的边缘。
+    
+      p + n * 0.07: 将阴影光线的起始点沿着法线方向稍微移开一点，这是一种常见的避免“自遮挡”问题的技术。
+    
+  
+  mix(0.3, 1.0, ...): 对 softShadow 返回的原始阴影值进行调整。
+    
+      shadow * u.shadowParams.y: 使用 u.shadowParams.y 来控制阴影的整体强度。
+      mix(...): 重新映射阴影的范围。即使在最暗的阴影处（shadow 值为0），最终的 shadow 值也是 0.3，而不是全黑的 0.0。这==模拟了现实世界中来自环境的反光==，使得阴影区域不是死黑一片，保留了细节。
+    
+  
+
+
+软阴影计算算法
+该算法基于SDF光线步进（SDF Ray Marching）的一种非常经典且高效的方法，其核心思想由图形学大神 Inigo Quilez 提出。它不像传统阴影那样只判断“是”或“否”（完全遮挡或完全无遮挡），而是计算一个0.0到1.0之间的遮挡系数，从而模拟出柔和的半影（Penumbra）区域。
+
+ softShadow 函数：
+
+// ro: 光线起点 (物体表面上的点)
+// rd: 光线方向 (从该点射向光源的方向)
+// mint, maxt: 步进的最小和最大距离
+// k:  一个关键参数，用于控制阴影的柔和度
+float softShadow(vec3 ro, vec3 rd, float mint, float maxt, float k) {
+    float res = 1.0; // 结果初始化为1.0，代表完全光亮
+    float t = mint;  // t 是当前沿着光线方向步进的距离
+    
+    // 循环步进，从表面点向光源前进
+    for (int i = 0; i &lt; 64; i++) {
+        // 计算当前点(ro + rd * t)到场景中最近物体的距离h
+        float h = sceneSDF(ro + rd * t); 
+        
+        // h极小，说明光线已经击中了某个物体，返回0.0（完全阴影）
+        if (h &lt; 0.0008) return 0.0; 
+        
+        // --- 核心公式 ---
+        res = min(res, k * h / t); 
+        
+        // 更新步进距离t。步长是自适应的，但被clamp函数限制了范围
+        t += clamp(h, 0.002, 0.05); 
+        
+        // 如果结果已足够精确或超出了最大距离，则停止
+        if (res &lt; 0.004 || t &gt; maxt)
+            break;
+    }
+    // 将结果限制在[0, 1]范围内并返回
+    return clamp(res, 0.0, 1.0);
+}
+
+
+核心公式：res = min(res, k * h / t)
+
+  h: 当前光线上的点到最近遮挡物的距离。h 越小，意味着光线离遮挡物越近。
+  t: 光线从物体表面出发已经行进的距离。t 越小，意味着遮挡物离被着色的表面点越近。
+  h / t: 这个比率可以被理解为遮挡物相对于当前表面点的“视角大小”的近似。
+    
+      光线到遮挡物越近，阴影越明显(很好理解)，和h有正比关系。
+      遮挡物到着色面越近，阴影过渡更硬，受到h的影响更大，1/t可以描述这种关系。
+    
+  
+  k: 这是一个硬度/柔和度系数。它像一个放大器，用来调整 h/t 的影响范围。k 值越大，k * h / t 的结果就越大，这意味着 res 更容易保持在较高的值（更亮），从而产生更大、更模糊、更柔和的阴影。反之，k 值越小，阴影就越小、越清晰、越硬。
+  min(res, ...): 在整个光线步进过程中，我们取所有计算出的遮挡值的最小值。这意味着阴影的暗度是由光线路径上最危险（离遮挡物最近）的那一刻决定的。
+    设置步长带来的影响
+    最开始的渲染结果如下：
+
+  
+  可以看到，阴影非常柔和/模糊：这是因为算法丢失了所有的细节。由于无法精确地找到物体的边缘，阴影的边界变得极不确定，只能形成一团模糊的、平均化的结果。
+  并且阴影的过渡部分非常不自然，这种瑕疵是严重欠采样的典型表现。算法得到的数据是粗糙且不连续的。
+
+
+==当缩小步长：==
+
+这一次阴影清晰、自然：由于采样精度足够高，算法能够准确地“感知”到遮挡物的边缘在哪里。因此，生成的阴影轮廓分明，半影的过渡也平滑且符合物理规律。
+
+第五步：最终组合
+
+最后，将漫反射、高光和阴影组合在一起，计算出主光源对最终颜色的总贡献。
+
+vec3 lightColor = u.lightColors[0].rgb * u.lightColors[0].a;
+finalColor += (diff * albedo + spec * lightColor) * lightColor * shadow * u.lightDir.w;
+
+
+
+  (diff * albedo + spec * lightColor): 这是光照的核心部分。将漫反射贡献（光与物体表面颜色互动）和高光贡献（光被直接反射）相加。
+  * lightColor: 乘以光源的颜色。
+  * shadow: 乘以阴影值。如果 shadow 值为 1，颜色不变；如果为 0.3，则颜色衰减为原来的30%。
+  * u.lightDir.w: 乘以光源的强度。
+  finalColor += ...: 将计算出的主光源贡献累加到最终颜色 finalColor上。
+
+
+填充光 (Fill Light)？
+
+
+首先，我们理解一下“填充光”在光照设计中的作用。在一个==经典的三点照明（Three-Point Lighting）系统==中，有三个主要光源：
+
+
+  主光源 (Key Light)：最强的光，决定物体的基本形态和阴影(看上一节)。
+  填充光 (Fill Light)：较弱的光，从主光源的另一侧照射物体，目的在于“填充”和柔化主光源制造出的浓重阴影，降低场景的对比度，让暗部的细节能够显现出来。
+  边缘光 (Rim Light)：从物体背后打来的光，用于勾勒物体的轮廓，使其从背景中分离出来。
+
+
+因此，填充光的特点是：强度较弱、通常不产生高光、并且不投射自己独立的阴影。
+
+计算方法解析
+填充光的实现特点
+
+通过分析代码，我们可以总结出这个填充光的几个鲜明特点：
+
+
+  仅有漫反射：它只计算了漫反射（diffuse），完全没有计算高光（specular）。这非常符合填充光的定位——只为照亮暗部，不制造新的亮点。
+  不投射阴影：代码中没有为填充光调用 softShadow 函数。这也是一种常见且必要的优化，因为计算多光源的阴影成本非常高，而且通常只有主光源的阴影对场景的视觉贡献是必要的。
+  强度较弱且固定：它的强度被一个固定的 0.6 系数削弱，明确了其作为次级光源的地位。
+
+
+边缘光
+
+
+边缘光，有时也叫“背光”（Backlight），是三点照明系统中的第三个光源，如上图所示。
+
+  目的：它的主要作用不是照亮物体本身，而是勾勒出物体的轮廓。通过在物体的边缘形成一道亮边，可以将物体与深色的背景清晰地分离开来，极大地增强了场景的深度感和立体感。
+  位置：通常放置在物体的斜后方，正对着相机。
+
+
+计算方法解析
+
+边缘光的计算利用了一个非常巧妙且高效的技巧，它甚至不需要一个实际的光源位置。它基于视角和表面法线之间的关系来模拟这个效果。
+
+我们来看 getLight 函数中对应的代码块：
+
+// 3. 边缘光 (Rim Light)，用于勾勒物体轮廓
+if (u.enableLights.z == 1) {
+    float rim = 1.0 - max(0.0, dot(viewDir, n));
+    rim = pow(rim, 3.0);
+    finalColor += rim * u.lightColors[2].rgb * u.lightColors[2].a * 0.8;
+}
+
+
+这个计算过程可以分解为以下几个步骤：
+
+步骤 1: 计算基础边缘强度
+
+float rim = 1.0 - max(0.0, dot(viewDir, n));
+
+
+
+  dot(viewDir, n): 我们再次见到了这个点积运算。它计算的是视角方向 viewDir 和表面法线 n 之间夹角的余弦值。
+    
+      当你的视线正对着一个表面时（例如球体的正中心），viewDir 和 n 方向几乎重合，点积结果接近 1.0。
+      当你的视线与表面近乎平行时（也就是你正在看物体的边缘/轮廓），viewDir 和 n 几乎互相垂直，点积结果接近 0.0。
+    
+  
+  1.0 - ...: 通过用 1.0 减去点积的结果，这个操作巧妙地将数值“反转”了：
+    
+      在物体中心，1.0 - 1.0 = 0.0。边缘光强度为0。
+      在物体边缘，1.0 - 0.0 = 1.0。边缘光强度为1。
+    
+  
+
+
+这行代码实现的效果是：一个物体越是靠近其视觉上的轮廓，rim 的值就越大。这正是边缘光所需要的！这个技巧与我们之前讨论的菲涅尔效应的计算几乎完全一样，它们都依赖于视角和法线的关系。
+
+步骤 2: 调整边缘光的衰减
+
+rim = pow(rim, 3.0);
+
+
+
+  上一步计算出的 rim 值是从边缘（1.0）到中心（0.0）线性变化的。直接使用这个值会导致边缘光范围太宽，过渡不够锐利。
+  pow(rim, 3.0): 通过对 rim 值进行幂运算（这里是3次方），可以收紧这个亮边的范围。因为 [0, 1] 之间的数字，其幂次越高，值就越小。例如，0.5^3 = 0.125。
+  这个操作使得只有 rim 值非常接近 1.0 的区域（也就是最边缘的区域）才能保持较高的亮度，而稍微离开边缘一点，亮度就会迅速衰减下去。这就形成了一道更窄、更集中的亮边，效果更佳。
+
+
+步骤 3: 组合最终颜色
+
+finalColor += rim * u.lightColors[2].rgb * u.lightColors[2].a * 0.8;
+
+
+
+  rim * ...: 将计算出的边缘光强度 rim 乘以指定的边缘光颜色 u.lightColors[2].rgb 和强度 u.lightColors[2].a。
+  * 0.8: 额外再乘以一个 0.8 的系数，稍微降低一点边缘光的整体亮度。
+  finalColor += ...: 和填充光一样，将边缘光的颜色贡献累加到最终颜色上。
+
+
+边缘光的特点
+
+
+  虚拟光源：它不依赖于一个明确的光源方向向量（如 fillDir 或 l），而是完全通过几何关系（视角和法线）来模拟，非常高效。
+  依赖视角：效果是完全相对于观察者的。当你转动视角时，边缘光会一直出现在物体的轮廓上。
+  高度可控：通过调整 pow 函数的指数，可以非常方便地控制亮边的宽度和锐利程度。指数越高，亮边越窄。
+  纯粹的附加效果：和填充光一样，它没有高光，也不投射阴影，纯粹是为了增强视觉表现力而添加的颜色。
+
+
+环境光计算
+
+
+
+这里采用了一种非常简化的模型：当的眼睛看向物体表面时，==如果视线被反射向了“天空”==，就会在物体表面看到一抹来自天空的蓝色反光。这个反光在物体的边缘处以及正对着天空的表面上会最强。
+步骤：
+
+  根据视线方向和法线方向计算视线反射方向。vec3 envReflect = reflect(-viewDir, n);
+  计算反射向量有多大程度指向天空，结合用菲涅尔效应计算最终的反射光。
+```
+// 1. 计算反射方向指向天空的程度
+float envAmount = max(0.0, envReflect.y) * fresnel;
+
+
+// 2. 添加环境光颜色
+finalColor += envAmount * vec3(0.3, 0.5, 0.8) * 0.4;
+
+[[图形学八股总结#2. 基于图像的照明 (IBL)]]
+这种方式是“基于图像的照明”方法的一种简化，采用==程序化的模拟生成简化天空==（一个半球），只模拟了天空的镜面反射和菲涅尔效应。
+
+
+## 思考一：shapMap和直接软阴影计算的区别
+
+### `softShadow` (基于光线步进)
+
+* **原理**：这是一种 “屏幕空间”方法。对于屏幕上每一个被渲染的像素点，它都会从这个点向光源方向发射一条“阴影光线”，并进行多次步进（Ray Marching）。通过在步进过程中检测离场景的最近距离，来判断这条路径上是否有遮挡物，并根据遮挡的紧密程度计算出阴影的柔和度。
+
+* **特点**：
+    * **逐像素计算**：每个需要计算阴影的像素都要执行一个循环（在你的代码里是64次），计算成本非常高。
+    * **高质量**：可以产生==非常精确、物理正确的柔和阴影==，阴影的柔和度会根据遮挡物和接收物之间的距离自然变化。
+    * **无额外内存**：不需要额外的显存来存储纹理。
+    * **与SDF渲染原生集成**：这是在SDF光线步进渲染器中实现阴影的最自然、最直接的方法。
+
+### Shadow Map (基于光栅化)
+
+* **原理**：这是一种“两遍渲染（Two-Pass）”的技术。
+    1.  **第一遍 (深度图渲染)**：将相机移动到光源的位置，并朝光源的方向渲染整个场景。但这次渲染不输出颜色，只输出每个像素的**深度信息**（即距离光源的远近），并将这些信息存储在一张纹理中，这张纹理就是**Shadow Map**。
+    2.  **第二遍 (最终场景渲染)**：从主相机的位置正常渲染场景。对于每个像素，将其坐标转换到光源的视角下，并查询第一遍生成的Shadow Map。通过比较当前像素的深度和Shadow Map中记录的深度，就可以判断出该像素是否在阴影中。
+
+* **特点**：
+* 
+    * **速度快**：整个过程主要依赖于硬件高度优化的光栅化管线，渲染深度图通常非常快。最终着色时，只是多了一次纹理采样，计算成本远低于光线步进。
+    * **硬阴影**：基础的Shadow Map只能产生边缘锐利的**硬阴影**。要实现软阴影，需要额外的技术，如 **PCF** (Percentage-Closer Filtering) 或 **VSM** (Variance Shadow Maps)，这会增加一些计算成本，但通常仍比光线步进快。
+    * **依赖分辨率**：阴影的质量受Shadow Map纹理分辨率的限制，分辨率太低会导致阴影边缘出现锯齿（Aliasing）。
+    * **常见问题**：有可能会产生一些瑕疵，如“Shadow Acne”（阴影痤疮）和“Peter Panning”（物体悬浮）。
+
+## 思考二：菲涅尔效应和边缘光
+在上述介绍的光照计算方法中，菲涅尔效应系数的计算和边缘光的计算存在类似的地方：
+
+// 边缘光
+float rim = 1.0 - max(0.0, dot(viewDir, n));
+
+// 菲涅尔
+fresnel = pow(1.0 - max(0.0, dot(viewDir, n)), 2.0);
+
+但实际上，**这种方式只是对场景的一种简化**，边缘光可以认为是一种艺术效果，是为了更好的模拟物理场景，**只是这种物理场景的模拟方式恰好和菲涅尔系数的计算方法类似**。
+
+在该方法中，菲涅尔系数只被用于环境光的衰减,**严格意义上来说，这里并不能被称作菲涅尔系数。**
+
+### PBR中的菲涅尔效应
+
+在基于物理的渲染（PBR）中，菲涅尔效应是其核心原则之一，它不再是一个可选的“艺术效果”，而是**精确描述光与物质相互作用、保证能量守恒的关键物理规律**。
+
+它的核心作用是：**根据视角，动态地决定进入材质的光线能量中有多少被镜面反射（Specular），有多少被折射并形成漫反射（Diffuse）。**
+
+-----
+
+#### 1\. 核心公式：Schlick近似法(前面提到过)
+
+在PBR中，精确计算菲涅尔方程非常复杂且耗时。因此，业界广泛采用由Christophe Schlick提出的近似公式：
+
+$$F(\theta) = F_0 + (1 - F_0) (1 - \cos\theta)^5$$
+
+我们来分解这个公式的每一个部分：
+
+  * $F(\theta)$: **最终的菲涅尔反射率**。这是一个介于0和1之间的值（或RGB向量），代表在当前角度下，光线被镜面反射的比例。
+  * $F_0$: **基础反射率（Base Reflectivity）**。这是菲涅尔效应的**关键输入参数**，代表当视线**垂直于**表面时（即 $\theta = 0$）的反射率。这个值是**材质的固有属性**。
+  * $\\cos\\theta$: 视角与法线（或半角向量）夹角的余弦值。在PBR中，通常使用**半角向量 (h)** 和 **视角向量 (v)** 的点积来计算，即 $\cos\theta = \text{dot}(h, v)$。
+  * $(1 - \\cos\\theta)^5$: 这部分描述了反射率随角度变化的曲线。当视角从垂直（$\cos\theta \approx 1$）变为掠射角（$\\cos\\theta \\approx 0$）时，这一项的值从0迅速增长到1，使得最终的反射率 $F(\\theta)$ 趋近于1（即100%反射）。
+
+$F\_0$ 的值取决于材质是**电介质（Dielectric，非金属）还是导体（Conductor，金属）**：
+
+  * **非金属 (Dielectrics)**：
+      * $F_0$ 通常是一个**很低且没有色彩的灰度值**。
+      * 大部分常见非金属的 $F\_0$ 值都非常接近，范围约在 **0.02 到 0.05** 之间。
+      * 因此，在PBR工作流中，非金属的 $F_0$ 经常被硬编码为一个**平均值 `vec3(0.04)`**。这个值是通过折射率（IOR）计算得出的：$F_0 = (\frac{IOR - 1}{IOR + 1})^2$。对于IOR为1.5的普通非金属，其$F_0$约等于0.04。
+
+  * **金属 (Metals)**：
+
+      * $F_0$ 通常是一个**很高且带有色彩的RGB值**。
+      * 金属会吸收所有折射光，因此它们的漫反射颜色为黑色。我们看到的金属颜色，实际上就是它们**有色的镜面反射**。
+      * 在PBR的金属/粗糙度（Metallic/Roughness）**工作流中，金属的 $F_0$ 值通常就是它的**反照率（Albedo）贴图提供的颜色。
+
+在着色器代码中，我们可以这样动态计算 $F\_0$：
+
+```glsl
+vec3 F0 = vec3(0.04); // 非金属的默认F0
+F0 = mix(F0, albedo.rgb, metallic); // 如果是金属(metallic=1)，则用albedo颜色作为F0
+
+
+
+
+2. PBR中的应用：能量守恒的“分配器”
+
+现在我们知道了如何计算菲涅尔反射率 $F$，那么它在整个PBR光照模型中是如何使用的呢？
+
+PBR将物体表面的光照分为两个部分：漫反射（Diffuse）和镜面反射（Specular）。渲染方程的简化形式（也称为反射方程）的BRDF（双向反射分布函数）部分可以概括为：
+
+\[f_{r} = k_d \cdot f_{\text{diffuse}} + k_s \cdot f_{\text{specular}}\]
+
+这里的 $k_d$ 和 $k_s$ 分别是漫反射和镜面反射所占的能量比例。为了保证能量守恒（反射出去的光不能比入射的光更多），==这两个比例之和必须小于等于1。==
+
+菲涅尔项 $F$ 在这里就扮演了镜面反射比例 $k_s$ 的角色！
+
+
+  
+    首先，我们使用Schlick近似法计算出当前角度的菲涅尔反射率 $F$。
+
+    // H: 半角向量, V: 视角向量, F0: 基础反射率
+vec3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
+    
+  
+  
+    这个 $F$ 值直接告诉我们：有多少比例的入射光能量被用于镜面反射。
+\(k_s = F\)
+  
+  
+    根据能量守恒，剩下的能量则被用于折射和漫反射。所以漫反射的能量比例就是：
+\(k_d = 1 - k_s = vec3(1.0) - F\)
+  
+  
+    最终，我们将这两个部分组合起来，得到总的光照贡献：
+
+    // NDF, G, F 是Cook-Torrance BRDF的三大核心部分
+vec3 specular_part = NDF * G * F / (4.0 * dot(N, V) * dot(N, L) + 0.001);
+
+// 计算漫反射能量比例 kD
+vec3 kD = vec3(1.0) - F;
+
+// 如果是金属，没有漫反射
+kD *= (1.0 - metallic); 
+
+vec3 diffuse_part = kD * albedo / PI;
+
+// 最终颜色是漫反射和镜面反射的总和
+vec3 finalColor = (diffuse_part + specular_part) * lightColor * dot(N, L);
+    
+  
+
+
+3.补充Cook-Torrence BRDF的其他项
+对于PBR中的Cook-Torrance BRDF镜面反射部分，其核心思想是基于微表面理论（Microfacet Theory）。该理论假设，从宏观上看是粗糙的表面，在微观尺度上是由大量朝向各异的、平整的微小镜面（microfacet）组成的。表面的“粗糙度”（Roughness）参数，就决定了这些微小镜面的朝向混乱程度。
+
+NDF 和 G 这两项就是用来从统计学上描述这些微表面的行为的。
+
+
+
+1. NDF - 法线分布函数 (Normal Distribution Function)
+
+核心作用：描述微表面的法线朝向集中度。
+
+简单来说，NDF回答了这样一个问题：“在所有微表面中，究竟有多少比例的微表面其法线正好对齐在了某个特定方向上？”
+
+在Cook-Torrance模型中，我们最关心的方向是半程向量 (Halfway Vector, H)，即光线方向 L 和视线方向 V 的角平分线方向 (H = normalize(L + V))。因为只有当微表面的法线 m 正好等于 H 时，光线才能被完美地反射到观察者眼中。
+
+
+  如果表面非常光滑 (Roughness → 0)：绝大多数微表面的法线都与宏观表面法线 N 一致。NDF函数会输出一个非常大（集中）的值当 H 接近 N 时，而在其他方向迅速衰减为0。这会形成一个非常小而亮的镜面高光。
+  如果表面非常粗糙 (Roughness → 1)：微表面的法线朝向非常混乱。NDF函数在一个很宽的角度范围内都会有返回值，当 H 偏离 N 较远时，函数值衰减得也更慢。这会形成一个范围很广且更模糊的高光。
+
+
+常用计算模型：Trowbridge-Reitz GGX
+
+这是目前实时渲染中最流行和效果最自然的模型。它的公式如下：
+
+\[NDF_{GGX}(N, H, \alpha) = \frac{\alpha^2}{\pi((N \cdot H)^2(\alpha^2 - 1) + 1)^2}\]
+
+
+  $N$: 宏观表面的法线。
+  $H$: 半程向量。
+  $\alpha$: 代表表面粗糙度的参数，通常由 roughness 参数计算而来：$\alpha = \text{roughness} \times \text{roughness}$。
+
+
+在Shader中实现：
+
+// NDF (Trowbridge-Reitz GGX)
+float DistributionGGX(vec3 N, vec3 H, float roughness) {
+    float a = roughness * roughness;
+    float a2 = a * a;
+    float NdotH = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH * NdotH;
+
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom = PI * denom * denom;
+
+    return a2 / denom;
+}
+
+
+
+
+2. G - 几何函数 (Geometry Function)
+
+核心作用：描述微表面的自遮挡属性。
+
+几何函数模拟了微表面之间的相互遮挡和阴影。即使某个微表面的法线正好对齐了半程向量 H，它也可能因为以下两种原因而无法贡献光照：
+
+
+  遮蔽 (Masking)：从观察者视线方向 V 看去，这个微表面被其他微表面挡住了。
+  阴影 (Shadowing)：从光源方向 L 看去，这个微表面处于其他微表面投下的阴影中。
+
+
+
+  当视线或光线接近掠射角（grazing angles，即与表面近乎平行）时，这种遮挡效应会变得非常明显，导致镜面反射急剧减弱。
+  G 函数的取值范围是 [0, 1]，0代表完全遮挡，1代表完全无遮挡。
+
+
+常用计算模型：Schlick-GGX (Smith’s Method的近似)
+
+为了高效计算，通常使用Schlick对Smith’s Method的近似模型。它将几何函数分为视线和光源两个方向的项，然后相乘：
+
+\[G(N, V, L, k) = G_1(N, V, k) \cdot G_1(N, L, k)\]
+
+其中 $G_1$ 的计算公式为：
+
+\[G_1(v, k) = \frac{N \cdot v}{(N \cdot v)(1 - k) + k}\]
+
+
+  $v$: 代表视线向量 V 或光源向量 L。
+  $k$: 是一个基于粗糙度 $\alpha$ 计算的参数。对于直接光照，通常使用：$k = \frac{(\alpha + 1)^2}{8}$。
+
+
+在Shader中实现：
+
+// Geometry Function (Schlick-GGX)
+float GeometrySchlickGGX(float NdotV, float roughness) {
+    // k for direct lighting
+    float r = roughness + 1.0;
+    float k = (r * r) / 8.0;
+
+    float num = NdotV;
+    float den = NdotV * (1.0 - k) + k;
+
+    return num / den;
+}
+
+// Smith's Method
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float ggx_V = GeometrySchlickGGX(NdotV, roughness);
+    float ggx_L = GeometrySchlickGGX(NdotL, roughness);
+
+    return ggx_V * ggx_L;
+}
+
+
+
+  NDF (法线分布)：决定了高光的形状、大小和锐利度。粗糙度越高，高光越弥散。
+  G (几何遮挡)：决定了高光的能量损失。在掠射角时，它会衰减高光的强度，以模拟微观层面的自遮挡，这是保证PBR能量守恒的重要一环。
+
+
+箱子场景软阴影bug
+
+观察到SDF软阴影在阴影过渡区域存在不自然的过渡区域，例如墙壁上本来的阴影和球体阴影之前的过渡。该现象可以通过减少ray march的步长解决，当ray march的步长过大时，采样率低，无法得到精确的物理近似。
+
+
+
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/3D%20SDF" class="category">3D SDF</a>
+                            
+                                <span class="date">· 2025-08-12</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/EasyVulkan/ResourceManagerMemoryLeak.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/LOGO.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/EasyVulkan/ResourceManagerMemoryLeak.html"><h1 class="title_post">EasyVulkan资源管理中的内存泄漏问题</h1></a>
+                        <a href="/EasyVulkan/ResourceManagerMemoryLeak.html" class="txt_post">
+                            
+  近期的某项目中需要在每一帧动态创建新的资源。然而程序执行时内存占用逐渐增加，怀疑出现了内存泄漏问题。因此重新回顾了EasyVulkan的ResourceManager逻辑并进行了优化。
+
+
+内存泄漏问题
+之前的资源创建方式：
+ShaderModuleBuilder&amp; ResourceManager::createShaderModule() {
+    return *new ShaderModuleBuilder(m_device,m_context);
+}
+
+这种方式会导致严重的内存泄漏问题：
+
+  new ComputePipelineBuilder(…) 在自由存储区（堆）上创建了一个对象，并返回指向该对象的指针。
+  操作符解引用该指针，得到对象本身。
+  函数返回这个堆上对象的引用。
+
+
+问题分析
+
+ComputePipelineBuilder&amp; builder = resourceManager.createComputePipeline();
+// ... 使用 builder ...
+
+// 更差的情况，创建了一个副本
+ComputePipelineBuilder builder = resourceManager.createComputePipeline();
+
+在这两种情况下，都丢失了 new 返回的原始指针。因为没有指针，永远无法调用 delete 来释放这块在堆上分配的内存。每次调用 createComputePipeline() 都会导致一块无法回收的内存，程序运行时间越长，消耗的内存就越多，最终可能导致程序崩溃。
+
+结论：绝对不要返回一个由 new 在函数内部创建的对象的引用。
+
+解决方法
+ComputePipelineBuilder ResourceManager::createComputePipeline() {
+    // 1. 在函数内部创建一个 ComputePipelineBuilder 临时对象
+    // 2. 将这个临时对象作为返回值返回
+    return ComputePipelineBuilder(m_device, m_context);
+}
+
+这是现代 C++ 中实现工厂函数（Factory Function的正确、安全且高效的方式。
+
+  ComputePipelineBuilder(m_device, m_context) 在函数内创建了一个临时对象。
+  函数签名表明它将按值返回一个 ComputePipelineBuilder 对象。
+
+
+返回对象的成本：
+
+  C++中的RVO机制（返回值优化 Return Value Optimization）：编译器会识别出这种情况，并避免创建中间的临时对象。它会直接在调用方的内存空间（即接收返回值的那个对象的内存位置）上构造这个对象。这样一来，就完全跳过了任何拷贝或移动操作。从效果上看，几乎和返回引用一样快：
+    // 由于 RVO，ComputePipelineBuilder 对象会直接在 `builder` 的内存上构造
+// 没有临时对象，没有拷贝，没有移动
+ComputePipelineBuilder builder = resourceManager.createComputePipeline();
+    
+  
+  移动语义 (Move Semantics): 即使在少数 RVO 无法生效的情况下（例如，函数内有多个返回路径），C++11 的移动语义也会介入。如果 ComputePipelineBuilder 有移动构造函数，那么返回时会调用移动构造函数而非拷贝构造函数。移动通常非常廉价，它只是“窃取”临时对象的内部资源（如指针、句柄），而不需要深拷贝数据。
+
+
+安全性与所有权
+这种方式非常安全。调用者会得到一个全新的、自己拥有的对象。当这个对象离开其作用域时（例如函数结束、{} 块结束），它的析构函数会被自动调用，符合 RAII (Resource Acquisition Is Initialization) 原则。
+
+VMA资源对象管理
+任何通过 VMA Create 函数创建的资源，都必须通过与之对应的 VMA Destroy 函数来清理。
+
+
+
+vmaCreateImage
+
+当调用 vmaCreateImage() 时，VMA实现如下操作：
+
+  分配内存 (Allocate Memory)：VMA 从它管理的内存池中找到一块合适的 VkDeviceMemory，并处理所有复杂的内存类型选择和对齐问题。这个内存块由一个 VmaAllocation 对象来代表。
+  创建映像 (Create Image)：VMA 调用标准的 Vulkan 函数 vkCreateImage() 来创建 VkImage 句柄。
+  绑定内存 (Bind Memory)：VMA 调用 vkBindImageMemory() 将前面分配的内存绑定到新创建的映像上。
+
+
+vmaCreateImage 将这三个步骤封装成了一个原子操作，极大地简化了开发。
+
+因此，当需要销毁这个映像时，也必须执行相反的、对应的操作：解绑内存、销毁映像、释放内存。这正是 vmaDestroyImage() 函数的作用。
+
+vmaDestroyImage(allocator, image, allocation) 会完成：
+
+  销毁映像句柄 (内部调用 vkDestroyImage())。
+  释放内存块 VmaAllocation，将其归还给 VMA 的内存池，以便后续的分配可以重新使用它。
+
+
+
+
+如果不使用 VMA
+如果用标准 Vulkan 函数来清理：
+
+  
+    只调用 vkDestroyImage(device, image, nullptr)：
+
+    
+      成功销毁了 VkImage 句柄本身。
+      但是，VMA 分配给它的那块 VkDeviceMemory (VmaAllocation) 完全没有被释放。VMA 仍然认为这块内存正在被一个（现在已经不存在的）映像使用。
+      结果：严重的内存泄漏。 VMA 的可用内存池会随着程序运行越来越小，最终可能导致内存耗尽。
+    
+  
+  
+    只调用 vmaFreeMemory(allocator, allocation)：
+
+    
+      成功地将 VmaAllocation 归还给了 VMA 的内存池。
+      但是，VkImage 句柄 没有被销毁。
+      结果：严重的 Vulkan 资源泄漏。 Vulkan 驱动仍然保留着这个映像句柄的相关资源。Vulkan 的验证层（Validation Layers）会立即报错，提示有一个未被销毁的 VkImage 对象。
+    
+  
+
+
+结论：只有 vmaDestroyImage() 能够同时、正确地清理映像句柄和它所占用的内存。
+
+
+正确的生命周期管理
+#include &lt;vma/vk_mem_alloc.h&gt;
+
+// ... 假设已有 VmaAllocator allocator 和 VkDevice device ...
+
+VkImage image;
+VmaAllocation allocation;
+
+// 1. 创建 Image
+VkImageCreateInfo imageInfo = { ... };
+VmaAllocationCreateInfo allocInfo = { };
+allocInfo.usage = VMA_MEMORY_USAGE_AUTO; // 让VMA自动选择内存类型
+
+VkResult result = vmaCreateImage(
+    allocator,
+    &amp;imageInfo,
+    &amp;allocInfo,
+    &amp;image,       // 输出 VkImage 句柄
+    &amp;allocation,  // 输出 VmaAllocation 句柄
+    nullptr       // 可选的 VmaAllocationInfo
+);
+
+if (result == VK_SUCCESS) {
+    // ... 使用 image ...
+}
+
+
+// 2. 清理 Image (例如在程序退出或资源不再需要时)
+// 必须同时传入 image 和 allocation 句柄
+if (image != VK_NULL_HANDLE &amp;&amp; allocation != VK_NULL_HANDLE) {
+    vmaDestroyImage(allocator, image, allocation);
+}
+
+
+
+
+VMA 的通用配对规则
+
+这个原则适用于 VMA 管理的所有主要资源类型：
+
+
+  vmaCreateImage()  -&gt; vmaDestroyImage()
+  vmaCreateBuffer()  -&gt; vmaDestroyBuffer()
+  vmaAllocateMemory() (如果只分配内存) -&gt; vmaFreeMemory()
+  vmaCreatePool() -&gt; vmaDestroyPool()
+  vmaCreateAllocator() -&gt; vmaDestroyAllocator()
+
+
+始终确保资源创建和销毁调用是成对出现的，这样才能保证Vulkan 应用程序没有资源泄漏。
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/EasyVulkan" class="category">EasyVulkan</a>
+                            
+                                <span class="date">· 2025-07-07</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/EasyVulkan/VulkanDebug.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250513124719.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/EasyVulkan/VulkanDebug.html"><h1 class="title_post">VK_EXT_debug_utils扩展的技术应用与分析</h1></a>
+                        <a href="/EasyVulkan/VulkanDebug.html" class="txt_post">
+                            VK_EXT_debug_utils 扩展详解
+
+Vulkan™ 是一款为高性能图形与计算设计的底层API，它为开发者提供了对硬件的显式控制能力。然而，这种控制的精细度也相应地增加了应用程序的调试复杂性。标准的Vulkan验证层（Validation Layers）能够报告API使用错误，但其输出信息有时较为抽象，可能导致开发者难以快速定位问题的具体根源。
+
+本文旨在详细介绍 VK_EXT_debug_utils 扩展，并阐述其在提升Vulkan应用程序调试效率方面的重要作用。
+
+Vulkan 验证层信息的局限性
+
+在开发Vulkan应用程序时，开发者会看到类似以下的验证层输出信息：
+
+
+VUID-vkCmdBeginRenderPass-initialLayout-00897(ERROR / SPEC): msgNum: -1777306431 - [AppName: EasyVulkan Application] Validation Error: [ VUID-vkCmdBeginRenderPass-initialLayout-00897 ] Object 0: handle = 0x72303f0000000052, type = VK\_OBJECT\_TYPE\_IMAGE; Object 1: handle = 0xcad092000000000d, type = VK\_OBJECT\_TYPE\_RENDER\_PASS; Object 2: handle = 0x4256c1000000005d, type = VK\_OBJECT\_TYPE\_FRAMEBUFFER; Object 3: handle = 0x2a7f70000000053, type = VK\_OBJECT\_TYPE\_IMAGE\_VIEW; | MessageID = 0x961074c1 | ...
+
+
+
+尽管此信息准确地指出了错误类型（例如，RenderPass 的 initialLayout 与 Framebuffer 中 ImageView 的实际用途不匹配），但其中涉及的Vulkan对象仅通过其十六进制句柄（handle）来标识。在包含大量对象的复杂项目中，仅凭句柄值很难将错误与具体的代码逻辑或资源关联起来，这无疑增加了定位问题所需的时间和精力。
+
+利用 VK_EXT_debug_utils 提升调试信息的可读性
+
+VK_EXT_debug_utils 扩展提供了一套机制来解决上述问题。该扩展允许开发者为Vulkan对象（如 VkImage, VkBuffer, VkQueue, VkCommandBuffer）以及命令缓冲区中的特定区域附加用户定义的名称（name）和标签（tag）。
+
+启用该扩展并为对象分配名称后，验证层的错误报告会包含这些附加信息，示例如下：
+
+
+Object 0: handle = 0x72303f0000000052, name = fs-downsampled-image-pass2-0, type = VK\_OBJECT\_TYPE\_IMAGE; ...
+
+
+
+通过 “fs-downsampled-image-pass2-0” 这样的自定义名称，开发者可以更直观地识别出产生问题的具体资源，从而显著缩短调试周期。
+
+VK_EXT_debug_utils 的核心功能
+
+该扩展主要提供以下几项功能：
+
+1. 调试信使（Debug Messenger）
+
+通过 vkCreateDebugUtilsMessengerEXT 函数可以创建一个回调机制，用于接收来自验证层或其他来源的调试消息。开发者能够自定义回调函数来处理这些消息，例如将其输出至控制台、写入日志文件，或在特定严重性级别下触发断点。
+
+2. 对象命名（Object Naming）
+
+vkSetDebugUtilsObjectNameEXT 函数允许为任意Vulkan对象关联一个人类可读的字符串名称。这些名称会在验证层消息和各类图形调试工具（如 RenderDoc、NVIDIA Nsight）中显示，有效提高了对象的可识别性。
+
+3. 对象标记（Object Tagging）
+
+通过 vkSetDebugUtilsObjectTagEXT 函数，可以为Vulkan对象附加一小块二进制数据作为标记。此功能可用于存储自定义的元数据，但与对象命名相比，其应用场景相对较少。
+
+4. 命令缓冲区标签（Command Buffer Labels）
+
+vkCmdBeginDebugUtilsLabelEXT 和 vkCmdEndDebugUtilsLabelEXT 函数用于在命令缓冲区中标记一个命令区域（region）。这有助于在图形调试器中对渲染帧的各个阶段进行逻辑分组和可视化，从而简化对复杂命令序列的分析。vkCmdInsertDebugUtilsLabelEXT 则用于插入单个标记点。
+
+在项目中使用 VK_EXT_debug_utils 的标准流程
+
+集成该扩展通常遵循以下步骤：
+
+
+  
+    检查扩展支持：
+在创建 VkInstance 前，查询物理设备以确认其是否支持 VK_EXT_DEBUG_UTILS_EXTENSION_NAME 扩展。
+  
+  
+    启用扩展：
+在填充 VkInstanceCreateInfo 结构体时，将 VK_EXT_DEBUG_UTILS_EXTENSION_NAME 添加到 ppEnabledExtensionNames 数组中。
+  
+  加载扩展函数指针：
+Vulkan扩展中的函数需要通过 vkGetInstanceProcAddr (实例级函数) 或 vkGetDeviceProcAddr (设备级函数) 动态加载。
+    // 实例级函数
+PFN_vkCreateDebugUtilsMessengerEXT  pfnVkCreateDebugUtilsMessengerEXT = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+PFN_vkDestroyDebugUtilsMessengerEXT pfnVkDestroyDebugUtilsMessengerEXT = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+
+// 设备级函数
+PFN_vkSetDebugUtilsObjectNameEXT    pfnVkSetDebugUtilsObjectNameEXT = (PFN_vkSetDebugUtilsObjectNameEXT)vkGetDeviceProcAddr(device, "vkSetDebugUtilsObjectNameEXT");
+PFN_vkCmdBeginDebugUtilsLabelEXT    pfnVkCmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT)vkGetDeviceProcAddr(device, "vkCmdBeginDebugUtilsLabelEXT");
+// ... 加载其他所需函数
+    
+    通常建议将这些函数指针存储在统一的结构体或类中，以便于在程序各处调用。
+  
+  创建 Debug Messenger (推荐)：
+    
+      定义一个符合 PFN_vkDebugUtilsMessengerCallbackEXT 签名的回调函数。
+          VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+      VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+      VkDebugUtilsMessageTypeFlagsEXT messageType,
+      const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+      void* pUserData) {
+
+      std::cerr &lt;&lt; "Validation layer: " &lt;&lt; pCallbackData-&gt;pMessage &lt;&lt; std::endl;
+      if (pCallbackData-&gt;objectCount &gt; 0) {
+          for (uint32_t i = 0; i &lt; pCallbackData-&gt;objectCount; ++i) {
+              std::cerr &lt;&lt; "  Object " &lt;&lt; i &lt;&lt; ": handle = " &lt;&lt; pCallbackData-&gt;pObjects[i].objectHandle;
+              if (pCallbackData-&gt;pObjects[i].pObjectName) {
+                  std::cerr &lt;&lt; ", name = " &lt;&lt; pCallbackData-&gt;pObjects[i].pObjectName;
+              }
+              std::cerr &lt;&lt; ", type = " &lt;&lt; pCallbackData-&gt;pObjects[i].objectType; // 示例: 打印对象类型
+              std::cerr &lt;&lt; std::endl;
+          }
+      }
+      // 回调函数必须返回 VK_FALSE
+      return VK_FALSE;
+  }
+        
+      
+      填充 VkDebugUtilsMessengerCreateInfoEXT 结构体，指定感兴趣的消息严重性和类型。
+          VkDebugUtilsMessengerCreateInfoEXT createInfo{};
+  createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+  createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+                               VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT    |
+                               VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+                               VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+  createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT    |
+                           VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                           VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+  createInfo.pfnUserCallback = debugCallback;
+  createInfo.pUserData = nullptr; // 可选，传递用户自定义数据
+        
+      
+      调用 pfnVkCreateDebugUtilsMessengerEXT 创建信使实例，并在程序退出前使用 pfnVkDestroyDebugUtilsMessengerEXT 销毁它。
+    
+  
+  为对象命名：
+在创建Vulkan对象后，使用 pfnVkSetDebugUtilsObjectNameEXT 为其指定名称。
+    // 假设 myImage 是一个 VkImage 句柄
+// device 是 VkDevice 句柄
+// pfnVkSetDebugUtilsObjectNameEXT 是已加载的函数指针
+
+VkDebugUtilsObjectNameInfoEXT nameInfo{};
+nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+nameInfo.objectType = VK_OBJECT_TYPE_IMAGE;
+nameInfo.objectHandle = (uint64_t)myImage; // 句柄必须转换为 uint64_t
+nameInfo.pObjectName = "SceneAlbedoTexture";
+
+if (pfnVkSetDebugUtilsObjectNameEXT != nullptr) {
+    pfnVkSetDebugUtilsObjectNameEXT(device, &amp;nameInfo);
+}
+    
+    一种有效的实践是封装一个辅助函数，在创建Vulkan对象的函数中自动调用命名函数，以确保所有关键资源都被命名。
+  
+  在命令缓冲区中使用标签：
+    // 假设 cmdBuffer 是一个 VkCommandBuffer
+// pfnVkCmdBeginDebugUtilsLabelEXT 和 pfnVkCmdEndDebugUtilsLabelEXT 是已加载的函数指针
+
+if (pfnVkCmdBeginDebugUtilsLabelEXT != nullptr) {
+    VkDebugUtilsLabelEXT labelInfo{};
+    labelInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
+    labelInfo.pLabelName = "Shadow Pass";
+    // 颜色为可选字段，可被调试器用于可视化
+    labelInfo.color[0] = 0.5f;
+    labelInfo.color[1] = 0.5f;
+    labelInfo.color[2] = 0.5f;
+    labelInfo.color[3] = 1.0f;
+    pfnVkCmdBeginDebugUtilsLabelEXT(cmdBuffer, &amp;labelInfo);
+}
+
+// ... 记录用于渲染阴影的命令 ...
+
+if (pfnVkCmdEndDebugUtilsLabelEXT != nullptr) {
+    pfnVkCmdEndDebugUtilsLabelEXT(cmdBuffer);
+}
+    
+  
+
+
+EasyVulkan 框架中的封装与应用
+
+EasyVulkan 框架在 VulkanDebug 命名空间内对 VK_EXT_debug_utils 的功能进行了封装，以简化其使用。
+
+初始化 Debug Messenger
+
+// 在创建 VkInstance 时启用扩展与验证层
+std::vector&lt;const char*&gt; instanceExtensions = {VK_EXT_DEBUG_UTILS_EXTENSION_NAME};
+std::vector&lt;const char*&gt; validationLayers = {"VK_LAYER_KHRONOS_validation"};
+
+if (ev::VulkanDebug::checkValidationLayerSupport(validationLayers)) {
+    // 填充 VkDebugUtilsMessengerCreateInfoEXT 结构体
+    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
+    ev::VulkanDebug::populateDebugMessengerCreateInfo(debugCreateInfo);
+    
+    // 创建 Debug Messenger 实例
+    VkDebugUtilsMessengerEXT debugMessenger;
+    ev::VulkanDebug::createDebugUtilsMessengerEXT(
+        instance, &amp;debugCreateInfo, nullptr, &amp;debugMessenger);
+}
+
+
+上述代码封装了验证层支持检查、createInfo 结构体填充以及信使创建的逻辑，隐藏了动态加载函数指针的细节。
+
+为Vulkan对象命名
+
+EasyVulkan 提供了统一的接口为不同类型的Vulkan对象命名：
+
+// 为缓冲区命名
+VkBuffer vertexBuffer = ...; // 已创建的顶点缓冲区
+ev::VulkanDebug::setDebugObjectName(
+    device, 
+    VK_OBJECT_TYPE_BUFFER, 
+    (uint64_t)vertexBuffer, 
+    "MainVertexBuffer"
+);
+
+// 为图像命名
+VkImage textureImage = ...; // 已创建的纹理图像
+ev::VulkanDebug::setDebugObjectName(
+    device, 
+    VK_OBJECT_TYPE_IMAGE, 
+    (uint64_t)textureImage, 
+    "DiffuseTexture"
+);
+
+// 为管线命名
+VkPipeline graphicsPipeline = ...; // 已创建的图形管线
+ev::VulkanDebug::setDebugObjectName(
+    device, 
+    VK_OBJECT_TYPE_PIPELINE, 
+    (uint64_t)graphicsPipeline, 
+    "MainRenderPipeline"
+);
+
+
+这种方式使得在验证层报告中可以直接看到如 “MainVertexBuffer” 这样的名称，而不是十六进制句柄。
+
+使用命令缓冲区调试标签
+
+EasyVulkan 同样简化了在命令缓冲区中插入调试标签的过程：
+
+// 开始一个调试区域
+float shadowPassColor[4] = {0.8f, 0.0f, 0.0f, 1.0f}; // 红色
+ev::VulkanDebug::beginDebugLabel(
+    device, 
+    commandBuffer, 
+    "Shadow Map Pass", 
+    shadowPassColor
+);
+
+// ... 记录阴影贴图渲染相关命令 ...
+vkCmdBeginRenderPass(...);
+// ...
+vkCmdEndRenderPass(...);
+
+// 结束调试区域
+ev::VulkanDebug::endDebugLabel(device, commandBuffer);
+
+// 插入一个独立的调试标记
+float markerColor[4] = {1.0f, 1.0f, 0.0f, 1.0f}; // 黄色
+ev::VulkanDebug::insertDebugLabel(
+    device, 
+    commandBuffer, 
+    "Key Draw Call Marker", 
+    markerColor
+);
+
+
+这些标签在 RenderDoc 等图形调试工具中会被可视化为带有颜色和名称的区域，有助于分析和理解复杂帧的结构。
+
+应用案例：调试多通道渲染管线
+
+在一个包含多个渲染通道的后处理管线中，可按如下方式使用EasyVulkan的调试功能：
+
+// 为所有离屏渲染目标图像命名
+for (size_t i = 0; i &lt; offscreenImages.size(); i++) {
+    std::string imageName = "offscreen-rt-" + std::to_string(i);
+    ev::VulkanDebug::setDebugObjectName(
+        device,
+        VK_OBJECT_TYPE_IMAGE,
+        (uint64_t)offscreenImages[i],
+        imageName.c_str()
+    );
+}
+
+// 在命令记录期间为每个渲染阶段添加标签
+float gbufferColor[4] = {0.0f, 0.5f, 0.9f, 1.0f}; // 蓝色
+ev::VulkanDebug::beginDebugLabel(device, cmd, "G-Buffer Pass", gbufferColor);
+// ... G-Buffer 渲染命令 ...
+ev::VulkanDebug::endDebugLabel(device, cmd);
+
+float shadowColor[4] = {0.1f, 0.1f, 0.1f, 1.0f}; // 灰色
+ev::VulkanDebug::beginDebugLabel(device, cmd, "Shadow Pass", shadowColor);
+// ... 阴影渲染命令 ...
+ev::VulkanDebug::endDebugLabel(device, cmd);
+
+float lightingColor[4] = {1.0f, 0.8f, 0.0f, 1.0f}; // 金色
+ev::VulkanDebug::beginDebugLabel(device, cmd, "Lighting Pass", lightingColor);
+// ... 光照计算命令 ...
+ev::VulkanDebug::endDebugLabel(device, cmd);
+
+float postFxColor[4] = {0.8f, 0.4f, 0.9f, 1.0f}; // 紫色
+ev::VulkanDebug::beginDebugLabel(device, cmd, "Post-Processing", postFxColor);
+// ... 后处理命令 ...
+ev::VulkanDebug::endDebugLabel(device, cmd);
+
+
+通过这种方式，在图形调试器中审查渲染帧时，各个渲染阶段将以不同的颜色块清晰地区分，极大地提高了分析效率。
+
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/EasyVulkan" class="category">EasyVulkan</a>
+                            
+                                <span class="date">· 2025-05-11</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
         <li class="paginated-item">
                 <div id="article_content">
                     <div class="thumbnail_zone">
@@ -982,6 +3367,59 @@ void main() {
 
 先将颜色从sRGB空间转换到线性空间，颜色输出时，硬件再将颜色从线性空间转换到正确的sRGB空间。
 
+4.3 方案三：直接使用 sRGB 纹理格式（推荐给采样类纹理）
+
+当纹理来源于 LDR 图片（PNG/JPEG 等，天然是 sRGB 编码）且仅用于“采样”时，最简洁和不易出错的方式是直接使用 sRGB 纹理格式，例如 VK_FORMAT_R8G8B8A8_SRGB 或 VK_FORMAT_B8G8R8A8_SRGB。
+
+
+  工作机制：对 sRGB 格式的图像视图进行采样时，GPU 会在采样阶段自动执行 sRGB → Linear 解码，然后再做过滤与着色计算。
+  结果：着色器里拿到的就是线性空间值，无需手动 sRGBToLinear，也避免了重复 Gamma 造成的过亮。
+
+
+示例代码（省略错误检查）：
+
+// 1) 创建图像时使用 SRGB 格式（仅用于采样/渲染，不作为 storage image）
+VkImageCreateInfo imageInfo{};
+imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+imageInfo.imageType = VK_IMAGE_TYPE_2D;
+imageInfo.format   = VK_FORMAT_R8G8B8A8_SRGB;  // 关键：SRGB 格式
+imageInfo.extent   = {static_cast&lt;uint32_t&gt;(width), static_cast&lt;uint32_t&gt;(height), 1};
+imageInfo.mipLevels = mipLevels;
+imageInfo.arrayLayers = 1;
+imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+imageInfo.tiling  = VK_IMAGE_TILING_OPTIMAL;
+imageInfo.usage   = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+
+// 2) 视图格式保持 SRGB（采样时自动解码）
+VkImageViewCreateInfo viewInfo{};
+viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+viewInfo.image = textureImage;
+viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+viewInfo.format = VK_FORMAT_R8G8B8A8_SRGB;     // 关键：SRGB 视图
+viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+viewInfo.subresourceRange.baseMipLevel = 0;
+viewInfo.subresourceRange.levelCount   = mipLevels;
+viewInfo.subresourceRange.baseArrayLayer = 0;
+viewInfo.subresourceRange.layerCount     = 1;
+
+// 3) 着色器中无需手动转换
+// vec4 color = texture(sampler2D, uv); // 这里拿到的已是线性空间
+
+
+注意事项：
+
+  不要将 sRGB 格式的图像用作 storage image（大多数设备不支持 VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT）。
+  纹理数据上传时，保持 8-bit 整数数据（如 stbi_load 的 stbi_uc*），SRGB 解码由采样器负责，不要在 CPU 端先做 Gamma。
+  若需要生成 mipmap，mip 也应基于 sRGB 视图生成（驱动会在采样域做正确的线性化后再过滤）。
+
+
+4.4 方案选择建议（针对本文场景）
+
+  原始贴图/材质：优先使用 sRGB 纹理（方案三），着色器保持线性运算；最终输出依赖交换链色彩空间。
+  计算管线产物（storage image 写入）：保持线性格式（UNORM 或 SFLOAT），在图形管线中以线性格式采样；不要把线性数据当 sRGB 采样。
+  如果整个链路中既有“sRGB 来源贴图”也有“线性计算产物”，请分别以合适格式管理，不要混用一个图像在 sRGB/UNORM 视图间交替用于不同语义的数据。
+
+
 五、延伸知识：常见色彩空间与应用
 
 Vulkan 色彩空间对应关系
@@ -1033,6 +3471,73 @@ Vulkan 色彩空间对应关系
       VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT
     
   
+
+
+5.1 纹理格式基础知识（UNORM / SRGB / SFLOAT）
+
+
+  
+    
+      分类
+      典型格式
+      取值域
+      采样行为
+      可否作 storage image
+      常见用途
+    
+  
+  
+    
+      UNORM（线性）
+      R8G8B8A8_UNORM
+      0..1（量化到 8-bit）
+      直接按线性值采样/过滤
+      通常支持
+      线性中间结果、G-Buffer、计算管线输出
+    
+    
+      SRGB（非线性编码）
+      R8G8B8A8_SRGB/B8G8R8A8_SRGB
+      0..1（sRGB 编码）
+      采样时自动 sRGB→Linear
+      一般不支持
+      来自 PNG/JPEG 的 LDR 贴图、UI 纹理
+    
+    
+      浮点（线性）
+      R16G16B16A16_SFLOAT/R32G32B32A32_SFLOAT
+      宽动态范围
+      线性采样/高精度
+      通常支持
+      HDR、物理光照、计算精度要求高的通道
+    
+  
+
+
+关键要点：
+
+  sRGB 只在“采样”/“颜色附件写回”路径定义了编码转换语义；
+    
+      采样：sRGB → Linear 自动执行；
+      颜色附件写回：实现可将线性写入值转换为 sRGB 存储格式；
+      storage image：通常未定义/不支持。
+    
+  
+  同一物理图像若想创建不同格式的视图，必须在 VkImageCreateInfo::flags 中设置 VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT，且格式需属于同一兼容类。但请谨慎：
+    
+      用 sRGB 视图读取“线性数据”会被错误地当作 sRGB 再解码，导致画面偏暗。
+      只有当底层数据确实是 sRGB 编码时，才应使用 sRGB 视图进行采样。
+    
+  
+
+
+5.2 实战配置与排错清单
+
+  来自磁盘的 LDR 贴图：图像/视图用 *_SRGB，采样拿到线性；不要再手动 sRGBToLinear。
+  中间缓冲/计算结果：使用 UNORM 或 SFLOAT，线性采样；如要节省带宽可选 R11G11B10_UFLOAT_PACK32 等。
+  交换链：常见为 format=*_SRGB 且 colorSpace=VK_COLOR_SPACE_SRGB_NONLINEAR_KHR，负责最终 Linear → sRGB。
+  校验格式能力：用 vkGetPhysicalDeviceFormatProperties 检查 FORMAT_FEATURE_SAMPLED_IMAGE_BIT、COLOR_ATTACHMENT_BIT、STORAGE_IMAGE_BIT 是否满足需求。
+  避免重复 Gamma：出现“偏亮/偏暗”优先检查：贴图格式、图像视图格式、是否手动 Gamma、交换链色彩空间是否与期望匹配。
 
 
 六、EasyVulkan中的色彩空间
@@ -4086,7 +6591,7 @@ if (vkCreateDevice(physicalDevice, &amp;deviceCreateInfo, nullptr, &amp;device) 
             └── 队列族 1
                 └── 队列 0
 
-上面展示了如何指定队列族和队列数量来创建逻辑设备，下面展示如何从逻辑设备获取队列：
+上面展示了如何指定队列族和队列数量来创建逻辑设备，下面介绍如何从逻辑设备获取队列：
 // 从逻辑设备获取队列
 VkQueue graphicsQueue;
 vkGetDeviceQueue(logicalDevice,  // 逻辑设备句柄
@@ -5569,6 +8074,61 @@ Asynchronous compute
             'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E4%BA%A4%E6%8D%A2%E9%93%BE%E7%9A%84%E5%A4%9A%E9%87%8D%E7%BC%93%E5%86%B2%E6%9C%BA%E5%88%B6.html",
             'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250228142753.png",
             'date'     : "2025-02-27"
+        });
+    
+
+        posts.push({
+            'title'    : "VK_EXT_debug_utils扩展的技术应用与分析",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, Debug",
+            'url'      : "/EasyVulkan/VulkanDebug.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250513124719.png",
+            'date'     : "2025-05-11"
+        });
+    
+
+        posts.push({
+            'title'    : "EasyVulkan资源管理中的内存泄漏问题",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, ResourceManager",
+            'url'      : "/EasyVulkan/ResourceManagerMemoryLeak.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/LOGO.png",
+            'date'     : "2025-07-07"
+        });
+    
+
+        posts.push({
+            'title'    : "1.预备知识和基于3D SDF的康奈尔盒子",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, Ray Marching, Shadow",
+            'url'      : "/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822133530.png",
+            'date'     : "2025-08-12"
+        });
+    
+
+        posts.push({
+            'title'    : "2.RSM阴影和一次间接光照",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, RSM, Shadow, Ray Marching, Indirect lighting",
+            'url'      : "/3D%20SDF/2.RSM%E9%98%B4%E5%BD%B1%E5%92%8C%E4%B8%80%E6%AC%A1%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250902115532.png",
+            'date'     : "2025-08-25"
+        });
+    
+
+        posts.push({
+            'title'    : "3.优化VPLs采样",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, RSM, Ray Marching, Indirect lighting",
+            'url'      : "/3D%20SDF/3.%E4%BC%98%E5%8C%96VPL%E9%87%87%E6%A0%B7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250902104454.png",
+            'date'     : "2025-08-25"
         });
     
 

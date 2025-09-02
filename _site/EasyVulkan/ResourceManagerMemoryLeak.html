@@ -7,25 +7,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>
     
-        Vulkan初始化
+        EasyVulkan资源管理中的内存泄漏问题
     
 </title>
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Vulkan初始化 | Calendar’s Blog</title>
+<title>EasyVulkan资源管理中的内存泄漏问题 | Calendar’s Blog</title>
 <meta name="generator" content="Jekyll v4.3.4">
-<meta property="og:title" content="Vulkan初始化">
+<meta property="og:title" content="EasyVulkan资源管理中的内存泄漏问题">
 <meta property="og:locale" content="en_US">
-<meta name="description" content="最开始接触Vulkan时，通常会被其复杂的概念和庞大的API所吓到。无法理解window、instance、surface等概念的关系，不能区分物理设备和逻辑设备的区别。本文将介绍Vulkan的初始化过程，并解释各个概念之间的关系。最后，本文将介绍EasyVulkan项目的VulkanDevice和VulkanContext对这些概念的封装。">
-<meta property="og:description" content="最开始接触Vulkan时，通常会被其复杂的概念和庞大的API所吓到。无法理解window、instance、surface等概念的关系，不能区分物理设备和逻辑设备的区别。本文将介绍Vulkan的初始化过程，并解释各个概念之间的关系。最后，本文将介绍EasyVulkan项目的VulkanDevice和VulkanContext对这些概念的封装。">
-<link rel="canonical" href="http://localhost:4000/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html">
-<meta property="og:url" content="http://localhost:4000/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html">
+<meta name="description" content="近期的某项目中需要在每一帧动态创建新的资源。然而程序执行时内存占用逐渐增加，怀疑出现了内存泄漏问题。因此重新回顾了EasyVulkan的ResourceManager逻辑并进行了优化。">
+<meta property="og:description" content="近期的某项目中需要在每一帧动态创建新的资源。然而程序执行时内存占用逐渐增加，怀疑出现了内存泄漏问题。因此重新回顾了EasyVulkan的ResourceManager逻辑并进行了优化。">
+<link rel="canonical" href="http://localhost:4000/EasyVulkan/ResourceManagerMemoryLeak.html">
+<meta property="og:url" content="http://localhost:4000/EasyVulkan/ResourceManagerMemoryLeak.html">
 <meta property="og:site_name" content="Calendar’s Blog">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2025-01-24T00:00:00+08:00">
+<meta property="article:published_time" content="2025-07-07T00:00:00+08:00">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="Vulkan初始化">
+<meta property="twitter:title" content="EasyVulkan资源管理中的内存泄漏问题">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-01-24T00:00:00+08:00","datePublished":"2025-01-24T00:00:00+08:00","description":"最开始接触Vulkan时，通常会被其复杂的概念和庞大的API所吓到。无法理解window、instance、surface等概念的关系，不能区分物理设备和逻辑设备的区别。本文将介绍Vulkan的初始化过程，并解释各个概念之间的关系。最后，本文将介绍EasyVulkan项目的VulkanDevice和VulkanContext对这些概念的封装。","headline":"Vulkan初始化","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html"},"url":"http://localhost:4000/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-07-07T00:00:00+08:00","datePublished":"2025-07-07T00:00:00+08:00","description":"近期的某项目中需要在每一帧动态创建新的资源。然而程序执行时内存占用逐渐增加，怀疑出现了内存泄漏问题。因此重新回顾了EasyVulkan的ResourceManager逻辑并进行了优化。","headline":"EasyVulkan资源管理中的内存泄漏问题","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/EasyVulkan/ResourceManagerMemoryLeak.html"},"url":"http://localhost:4000/EasyVulkan/ResourceManagerMemoryLeak.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -102,7 +102,7 @@
             
                 <style>
                         .thumbnail {
-                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250124230354.png");
+                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/LOGO.png");
                         }
                     
                 </style>
@@ -498,7 +498,7 @@
                 &gt;
             
                 
-                    Vulkan初始化
+                    EasyVulkan资源管理中的内存泄漏问题
                 
             </p>
 </div>
@@ -507,7 +507,7 @@
     <div class="thumbnail">
         <div class="transbox">
             
-                <span class="post-title">Vulkan初始化</span>
+                <span class="post-title">EasyVulkan资源管理中的内存泄漏问题</span>
             
             <div class="post-info">
                 
@@ -519,7 +519,7 @@
                 <span class="info-box">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"></path></svg>
                     <span>
-                            2025-01-24
+                            2025-07-07
                         
                     </span>
                 </span>
@@ -542,780 +542,186 @@
             Vulkan
         </span><span class="tag theme-1" contentid="EasyVulkan">
             EasyVulkan
+        </span><span class="tag theme-2" contentid="ResourceManager">
+            ResourceManager
         </span>
 </div>
 <main>
     <blockquote>
-  <p>最开始接触Vulkan时，通常会被其复杂的概念和庞大的API所吓到。无法理解window、instance、surface等概念的关系，不能区分物理设备和逻辑设备的区别。本文将介绍Vulkan的初始化过程，并解释各个概念之间的关系。最后，本文将介绍EasyVulkan项目的VulkanDevice和VulkanContext对这些概念的封装。</p>
+  <p>近期的某项目中需要在每一帧动态创建新的资源。然而程序执行时内存占用逐渐增加，怀疑出现了内存泄漏问题。因此重新回顾了EasyVulkan的ResourceManager逻辑并进行了优化。</p>
 </blockquote>
 
-<h1 id="整体流程">整体流程</h1>
+<h1 id="内存泄漏问题">内存泄漏问题</h1>
+<p>之前的资源创建方式：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ShaderModuleBuilder&amp; ResourceManager::createShaderModule() {
+    return *new ShaderModuleBuilder(m_device,m_context);
+}
+</code></pre></div></div>
+<p>这种方式会导致严重的内存泄漏问题：</p>
+<ul>
+  <li>new ComputePipelineBuilder(…) 在自由存储区（堆）上创建了一个对象，并返回指向该对象的指针。</li>
+  <li>操作符解引用该指针，得到对象本身。</li>
+  <li>函数返回这个<strong>堆上</strong>对象的引用。</li>
+</ul>
+
+<h2 id="问题分析">问题分析</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ComputePipelineBuilder&amp; builder = resourceManager.createComputePipeline();
+// ... 使用 builder ...
+
+// 更差的情况，创建了一个副本
+ComputePipelineBuilder builder = resourceManager.createComputePipeline();
+</code></pre></div></div>
+<p>在这两种情况下，<strong>都丢失了 new 返回的原始指针</strong>。因为没有指针，<strong>永远无法调用 delete 来释放这块在堆上分配的内存</strong>。每次调用 createComputePipeline() 都会导致一块无法回收的内存，程序运行时间越长，消耗的内存就越多，最终可能导致程序崩溃。</p>
+
+<p><strong>结论：绝对不要返回一个由 new 在函数内部创建的对象的引用。</strong></p>
+
+<h2 id="解决方法">解决方法</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ComputePipelineBuilder ResourceManager::createComputePipeline() {
+    // 1. 在函数内部创建一个 ComputePipelineBuilder 临时对象
+    // 2. 将这个临时对象作为返回值返回
+    return ComputePipelineBuilder(m_device, m_context);
+}
+</code></pre></div></div>
+<p>这是现代 C++ 中实现<strong>工厂函数（Factory Function</strong>的正确、安全且高效的方式。</p>
+<ul>
+  <li>ComputePipelineBuilder(m_device, m_context) 在函数内创建了一个临时对象。</li>
+  <li>函数签名表明它将按值返回一个 ComputePipelineBuilder 对象。</li>
+</ul>
+
+<p>返回对象的成本：</p>
+<ul>
+  <li>C++中的RVO机制（返回值优化 Return Value Optimization）：<strong>编译器会识别出这种情况</strong>，并避免创建中间的临时对象。它会<strong>直接在调用方的内存空间</strong>（即接收返回值的那个对象的内存位置）上构造这个对象。这样一来，就完全跳过了任何拷贝或移动操作。从效果上看，几乎和返回引用一样快：
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>// 由于 RVO，ComputePipelineBuilder 对象会直接在 `builder` 的内存上构造
+// 没有临时对象，没有拷贝，没有移动
+ComputePipelineBuilder builder = resourceManager.createComputePipeline();
+</code></pre></div>    </div>
+  </li>
+  <li>移动语义 (Move Semantics): 即使在少数 RVO 无法生效的情况下（例如，函数内有多个返回路径），C++11 的移动语义也会介入。<strong>如果 ComputePipelineBuilder 有移动构造函数</strong>，那么返回时会调用移动构造函数而非拷贝构造函数。移动通常非常廉价，它只是“窃取”临时对象的内部资源（如指针、句柄），而不需要深拷贝数据。</li>
+</ul>
+
+<h3 id="安全性与所有权">安全性与所有权</h3>
+<p>这种方式非常安全。<strong>调用者会得到一个全新的、自己拥有的对象</strong>。当这个对象离开其作用域时（例如函数结束、{} 块结束），<strong>它的析构函数会被自动调用</strong>，符合 RAII (Resource Acquisition Is Initialization) 原则。</p>
+
+<h1 id="vma资源对象管理">VMA资源对象管理</h1>
+<p>任何通过 VMA Create 函数创建的资源，都必须通过与之对应的 VMA Destroy 函数来清理。</p>
+
+<hr>
+
+<h2 id="vmacreateimage">vmaCreateImage</h2>
+
+<p>当调用 <code class="language-plaintext highlighter-rouge">vmaCreateImage()</code> 时，VMA实现如下操作：</p>
 <ol>
-  <li>创建 Window</li>
-  <li>创建 Instance
-    <ol>
-      <li>检查和启用必要的validation layers（如果在debug模式下）</li>
-      <li>设置必要的instance extensions，特别是GLFW要求的extensions</li>
-    </ol>
-  </li>
-  <li>创建 Window Surface</li>
-  <li>获取物理设备
-    <ol>
-      <li>检查物理设备是否支持所需的features和extensions</li>
-      <li>检查物理设备是否适合（比如是否为独立显卡、是否支持所需的图形特性等）</li>
-    </ol>
-  </li>
-  <li>获取队列族索引</li>
-  <li>创建逻辑设备
-    <ol>
-      <li>创建队列创建信息</li>
-      <li>启用必要的device extensions（比如VK_KHR_swapchain）</li>
-      <li>指定设备features</li>
-    </ol>
-  </li>
-  <li>创建命令池</li>
+  <li>
+<strong>分配内存 (Allocate Memory)</strong>：VMA 从它管理的内存池中找到一块合适的 <code class="language-plaintext highlighter-rouge">VkDeviceMemory</code>，并处理所有复杂的内存类型选择和对齐问题。这个内存块由一个 <code class="language-plaintext highlighter-rouge">VmaAllocation</code> 对象来代表。</li>
+  <li>
+<strong>创建映像 (Create Image)</strong>：VMA 调用标准的 Vulkan 函数 <code class="language-plaintext highlighter-rouge">vkCreateImage()</code> 来创建 <code class="language-plaintext highlighter-rouge">VkImage</code> 句柄。</li>
+  <li>
+<strong>绑定内存 (Bind Memory)</strong>：VMA 调用 <code class="language-plaintext highlighter-rouge">vkBindImageMemory()</code> 将前面分配的内存绑定到新创建的映像上。</li>
 </ol>
 
-<h1 id="1创建window">1.创建Window</h1>
-<p>使用 GLFW 创建窗口，这是显示 Vulkan 渲染结果的基础：</p>
+<p><code class="language-plaintext highlighter-rouge">vmaCreateImage</code> 将这三个步骤封装成了一个原子操作，极大地简化了开发。</p>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">glfwInit</span><span class="p">();</span>
-<span class="n">glfwWindowHint</span><span class="p">(</span><span class="n">GLFW_CLIENT_API</span><span class="p">,</span> <span class="n">GLFW_NO_API</span><span class="p">);</span>  <span class="c1">// 不创建 OpenGL 上下文</span>
-<span class="n">glfwWindowHint</span><span class="p">(</span><span class="n">GLFW_RESIZABLE</span><span class="p">,</span> <span class="n">GLFW_FALSE</span><span class="p">);</span>    <span class="c1">// 暂时禁用窗口大小调整</span>
+<p>因此，当需要销毁这个映像时，也必须执行相反的、对应的操作：解绑内存、销毁映像、释放内存。这正是 <code class="language-plaintext highlighter-rouge">vmaDestroyImage()</code> 函数的作用。</p>
 
-<span class="n">window</span> <span class="o">=</span> <span class="n">glfwCreateWindow</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="p">,</span> <span class="s">"Vulkan"</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
-</code></pre></div></div>
-<p>由于历史原因，GLFW 最初是为 OpenGL 设计的窗口管理库，默认情况下，当你创建 GLFW 窗口时，它会自动创建一个 OpenGL 上下文。因此需要指定<code class="language-plaintext highlighter-rouge">GLFW_CLIENT_API</code>为<code class="language-plaintext highlighter-rouge">GLFW_NO_API</code>，只创建窗口，而不创建 OpenGL 上下文。</p>
+<p><code class="language-plaintext highlighter-rouge">vmaDestroyImage(allocator, image, allocation)</code> 会完成：</p>
+<ol>
+  <li>
+<strong>销毁映像句柄</strong> (内部调用 <code class="language-plaintext highlighter-rouge">vkDestroyImage()</code>)。</li>
+  <li>
+<strong>释放内存块 <code class="language-plaintext highlighter-rouge">VmaAllocation</code></strong>，将其归还给 VMA 的内存池，以便后续的分配可以重新使用它。</li>
+</ol>
 
-<h1 id="2创建-instance">2.创建 Instance</h1>
+<hr>
 
-<p>Instance 是应用程序与 Vulkan 库之间的连接：</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">VkApplicationInfo</span> <span class="n">appInfo</span><span class="p">{};</span>
-<span class="n">appInfo</span><span class="p">.</span><span class="n">sType</span> <span class="o">=</span> <span class="n">VK_STRUCTURE_TYPE_APPLICATION_INFO</span><span class="p">;</span>
-<span class="n">appInfo</span><span class="p">.</span><span class="n">pApplicationName</span> <span class="o">=</span> <span class="s">"Vulkan App"</span><span class="p">;</span>
-<span class="n">appInfo</span><span class="p">.</span><span class="n">applicationVersion</span> <span class="o">=</span> <span class="n">VK_MAKE_VERSION</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-<span class="n">appInfo</span><span class="p">.</span><span class="n">pEngineName</span> <span class="o">=</span> <span class="s">"No Engine"</span><span class="p">;</span>
-<span class="n">appInfo</span><span class="p">.</span><span class="n">engineVersion</span> <span class="o">=</span> <span class="n">VK_MAKE_VERSION</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-<span class="n">appInfo</span><span class="p">.</span><span class="n">apiVersion</span> <span class="o">=</span> <span class="n">VK_API_VERSION_1_0</span><span class="p">;</span>
-
-<span class="n">VkInstanceCreateInfo</span> <span class="n">createInfo</span><span class="p">{};</span>
-<span class="n">createInfo</span><span class="p">.</span><span class="n">sType</span> <span class="o">=</span> <span class="n">VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO</span><span class="p">;</span>
-<span class="n">createInfo</span><span class="p">.</span><span class="n">pApplicationInfo</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">appInfo</span><span class="p">;</span>
-
-<span class="c1">// 获取 GLFW 需要的 extension</span>
-<span class="kt">uint32_t</span> <span class="n">glfwExtensionCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">glfwExtensions</span> <span class="o">=</span> <span class="n">glfwGetRequiredInstanceExtensions</span><span class="p">(</span><span class="o">&amp;</span><span class="n">glfwExtensionCount</span><span class="p">);</span>
-<span class="n">createInfo</span><span class="p">.</span><span class="n">enabledExtensionCount</span> <span class="o">=</span> <span class="n">glfwExtensionCount</span><span class="p">;</span>
-<span class="n">createInfo</span><span class="p">.</span><span class="n">ppEnabledExtensionNames</span> <span class="o">=</span> <span class="n">glfwExtensions</span><span class="p">;</span>
-
-<span class="n">vkCreateInstance</span><span class="p">(</span><span class="o">&amp;</span><span class="n">createInfo</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">instance</span><span class="p">);</span>
-</code></pre></div></div>
-<p>Instance 代表了一个 Vulkan 应用程序的实例，它主要负责：</p>
-
+<h2 id="如果不使用-vma">如果不使用 VMA</h2>
+<p>如果用标准 Vulkan 函数来清理：</p>
 <ul>
-  <li>告诉 Vulkan 驱动程序我们要使用哪些全局扩展（比如与窗口系统的集成）</li>
-  <li>告诉驱动程序我们的应用程序信息（名称、版本等）</li>
-  <li>设置调试回调</li>
-  <li>枚举系统中可用的物理设备（GPU）</li>
-</ul>
+  <li>
+    <p><strong>只调用 <code class="language-plaintext highlighter-rouge">vkDestroyImage(device, image, nullptr)</code>：</strong></p>
 
-<p><strong>Instance的创建过程恰恰说明了他的角色</strong>：</p>
-<pre><code class="language-C++">VkInstanceCreateInfo createInfo{};
-createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-
-// 告诉 Vulkan 我们的应用程序信息
-createInfo.pApplicationInfo = &amp;appInfo;
-
-// 告诉 Vulkan 我们需要哪些扩展
-createInfo.enabledExtensionCount = glfwExtensionCount;
-createInfo.ppEnabledExtensionNames = glfwExtensions;
-
-// 告诉 Vulkan 我们需要哪些验证层（用于调试）
-createInfo.enabledLayerCount = validationLayers.size();
-createInfo.ppEnabledLayerNames = validationLayers.data();
-</code></pre>
-
-<p>可以把 Instance 想象成一个”门户”或”接待员”：</p>
-<pre><code class="language-C++">// 没有 Instance 之前，我们无法调用大多数 Vulkan 函数
-// 创建 Instance 后，我们可以做这些事：
-vkEnumeratePhysicalDevices(instance, ...);  // 查询 GPU
-vkCreateDebugUtilsMessengerEXT(instance, ...);  // 设置调试
-// 等等
-</code></pre>
-
-<p>Instance可以被理解为一个“配置中心”，我们可以通过他告诉Vulkan：</p>
-<ul>
-  <li>这是我的应用程序</li>
-  <li>这是我需要的功能</li>
-  <li>这是我的调试需求</li>
-</ul>
-
-<h1 id="3-创建-window-surface">3. 创建 Window Surface</h1>
-
-<p>Window Surface 提供了 Vulkan 与窗口系统的连接：</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">VkSurfaceKHR</span> <span class="n">surface</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">glfwCreateWindowSurface</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">surface</span><span class="p">)</span> <span class="o">!=</span> <span class="n">VK_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"failed to create window surface!"</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>Vulkan 是与平台无关的图形 API，不直接处理窗口系统。Window Surface 是 <code class="language-plaintext highlighter-rouge">Vulkan</code> 和<code class="language-plaintext highlighter-rouge">窗口系统</code>之间的桥梁,它提供了一个可以渲染到的目标平面.</p>
-<h2 id="工作流程">工作流程</h2>
-<blockquote>
-  <p>Vulkan 渲染流程 → Swapchain → Surface → 窗口系统 → 显示到屏幕</p>
-</blockquote>
-
-<pre><code class="language-C++">// 1. 创建 Surface
-VkSurfaceKHR surface;
-glfwCreateWindowSurface(instance, window, nullptr, &amp;surface);
-
-// 2. Surface 用于创建 Swapchain
-VkSwapchainCreateInfoKHR createInfo{};
-createInfo.surface = surface;  // Surface 告诉 Swapchain 渲染目标在哪里
-
-// 3. 渲染时
-vkAcquireNextImageKHR(...);    // 从 Swapchain 获取下一个可用的图像
-// 渲染到图像
-vkQueuePresentKHR(...);        // 通过 Surface 将渲染结果显示到窗口
-</code></pre>
-
-<h2 id="surface的作用">Surface的作用</h2>
-<ul>
-  <li>提供图像呈现能力
     <ul>
-      <li>决定支持的图像格式</li>
-      <li>决定支持的呈现模式</li>
+      <li>成功销毁了 <code class="language-plaintext highlighter-rouge">VkImage</code> 句柄本身。</li>
+      <li>但是，VMA 分配给它的那块 <code class="language-plaintext highlighter-rouge">VkDeviceMemory</code> (<code class="language-plaintext highlighter-rouge">VmaAllocation</code>) <strong>完全没有被释放</strong>。VMA 仍然认为这块内存正在被一个（现在已经不存在的）映像使用。</li>
+      <li>
+<strong>结果：严重的内存泄漏。</strong> VMA 的可用内存池会随着程序运行越来越小，最终可能导致内存耗尽。</li>
     </ul>
   </li>
-  <li>处理平台差异
+  <li>
+    <p><strong>只调用 <code class="language-plaintext highlighter-rouge">vmaFreeMemory(allocator, allocation)</code>：</strong></p>
+
     <ul>
-      <li>Windows：使用 Win32 窗口系统</li>
-      <li>Linux：使用 X11 或 Wayland</li>
-      <li>macOS：使用 Metal 层</li>
+      <li>成功地将 <code class="language-plaintext highlighter-rouge">VmaAllocation</code> 归还给了 VMA 的内存池。</li>
+      <li>但是，<code class="language-plaintext highlighter-rouge">VkImage</code> 句柄 <strong>没有被销毁</strong>。</li>
+      <li>
+<strong>结果：严重的 Vulkan 资源泄漏。</strong> Vulkan 驱动仍然保留着这个映像句柄的相关资源。Vulkan 的验证层（Validation Layers）会立即报错，提示有一个未被销毁的 <code class="language-plaintext highlighter-rouge">VkImage</code> 对象。</li>
     </ul>
   </li>
 </ul>
 
-<p>可以把 Surface 想象成一个”画布”：</p>
-<ul>
-  <li>Vulkan 是画家（渲染器）</li>
-  <li>Window 是画框（显示窗口）</li>
-  <li>Surface 是画布，它把画家的作品（渲染结果）放在画框中展示</li>
-</ul>
+<p><strong>结论：只有 <code class="language-plaintext highlighter-rouge">vmaDestroyImage()</code> 能够同时、正确地清理映像句柄和它所占用的内存。</strong></p>
 
-<div style="text-align: center;">
+<hr>
+<h2 id="正确的生命周期管理">正确的生命周期管理</h2>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;vma/vk_mem_alloc.h&gt;</span><span class="cp">
+</span>
+<span class="c1">// ... 假设已有 VmaAllocator allocator 和 VkDevice device ...</span>
 
-<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250124230354.png" alt="image description" style="max-width: 100%; height: auto;" loading="lazy">
+<span class="n">VkImage</span> <span class="n">image</span><span class="p">;</span>
+<span class="n">VmaAllocation</span> <span class="n">allocation</span><span class="p">;</span>
 
-<p style="text-align: center;">图 1：Surface 的作用。</p>
+<span class="c1">// 1. 创建 Image</span>
+<span class="n">VkImageCreateInfo</span> <span class="n">imageInfo</span> <span class="o">=</span> <span class="p">{</span> <span class="p">...</span> <span class="p">};</span>
+<span class="n">VmaAllocationCreateInfo</span> <span class="n">allocInfo</span> <span class="o">=</span> <span class="p">{</span> <span class="p">};</span>
+<span class="n">allocInfo</span><span class="p">.</span><span class="n">usage</span> <span class="o">=</span> <span class="n">VMA_MEMORY_USAGE_AUTO</span><span class="p">;</span> <span class="c1">// 让VMA自动选择内存类型</span>
 
-</div>
+<span class="n">VkResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">vmaCreateImage</span><span class="p">(</span>
+    <span class="n">allocator</span><span class="p">,</span>
+    <span class="o">&amp;</span><span class="n">imageInfo</span><span class="p">,</span>
+    <span class="o">&amp;</span><span class="n">allocInfo</span><span class="p">,</span>
+    <span class="o">&amp;</span><span class="n">image</span><span class="p">,</span>       <span class="c1">// 输出 VkImage 句柄</span>
+    <span class="o">&amp;</span><span class="n">allocation</span><span class="p">,</span>  <span class="c1">// 输出 VmaAllocation 句柄</span>
+    <span class="nb">nullptr</span>       <span class="c1">// 可选的 VmaAllocationInfo</span>
+<span class="p">);</span>
 
-<h1 id="4-获取物理设备">4. 获取物理设备</h1>
+<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">==</span> <span class="n">VK_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// ... 使用 image ...</span>
+<span class="p">}</span>
 
-<p>选择合适的物理设备（显卡）：</p>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint32_t</span> <span class="n">deviceCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">vkEnumeratePhysicalDevices</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceCount</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VkPhysicalDevice</span><span class="o">&gt;</span> <span class="n">devices</span><span class="p">(</span><span class="n">deviceCount</span><span class="p">);</span>
-<span class="n">vkEnumeratePhysicalDevices</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceCount</span><span class="p">,</span> <span class="n">devices</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
-
-<span class="c1">// 选择第一个适合的设备</span>
-<span class="n">VkPhysicalDevice</span> <span class="n">physicalDevice</span> <span class="o">=</span> <span class="n">VK_NULL_HANDLE</span><span class="p">;</span>
-<span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">device</span> <span class="o">:</span> <span class="n">devices</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">isDeviceSuitable</span><span class="p">(</span><span class="n">device</span><span class="p">))</span> <span class="p">{</span>
-        <span class="n">physicalDevice</span> <span class="o">=</span> <span class="n">device</span><span class="p">;</span>
-        <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="c1">// 2. 清理 Image (例如在程序退出或资源不再需要时)</span>
+<span class="c1">// 必须同时传入 image 和 allocation 句柄</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">image</span> <span class="o">!=</span> <span class="n">VK_NULL_HANDLE</span> <span class="o">&amp;&amp;</span> <span class="n">allocation</span> <span class="o">!=</span> <span class="n">VK_NULL_HANDLE</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">vmaDestroyImage</span><span class="p">(</span><span class="n">allocator</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">allocation</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p><code class="language-plaintext highlighter-rouge">isDeviceSuitable</code> 函数通常会检查以下几个关键方面来确定物理设备是否满足应用需求：</p>
-<ol>
-  <li>
-<strong>基本设备信息检查</strong>
-    <div class="language-cpp highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">isDeviceSuitable</span><span class="p">(</span><span class="n">VkPhysicalDevice</span> <span class="n">device</span><span class="p">)</span> <span class="p">{</span>
- <span class="c1">// 获取设备基本属性</span>
- <span class="n">VkPhysicalDeviceProperties</span> <span class="n">deviceProperties</span><span class="p">;</span>
- <span class="n">vkGetPhysicalDeviceProperties</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceProperties</span><span class="p">);</span>
-    
- <span class="c1">// 获取设备特性</span>
- <span class="n">VkPhysicalDeviceFeatures</span> <span class="n">deviceFeatures</span><span class="p">;</span>
- <span class="n">vkGetPhysicalDeviceFeatures</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceFeatures</span><span class="p">);</span>
+<hr>
 
- <span class="c1">// 检查是否为独立显卡</span>
- <span class="kt">bool</span> <span class="n">isDiscreteGPU</span> <span class="o">=</span> <span class="n">deviceProperties</span><span class="p">.</span><span class="n">deviceType</span> <span class="o">==</span> <span class="n">VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-<strong>队列族支持检查</strong>
-    <div class="language-cpp highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">checkQueueFamilySupport</span><span class="p">(</span><span class="n">VkPhysicalDevice</span> <span class="n">device</span><span class="p">)</span> <span class="p">{</span>
- <span class="n">QueueFamilyIndices</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">findQueueFamilies</span><span class="p">(</span><span class="n">device</span><span class="p">);</span>
-    
- <span class="c1">// 检查是否支持所需的所有队列族</span>
- <span class="c1">// - 图形队列族</span>
- <span class="c1">// - 计算队列族</span>
- <span class="c1">// - 显示队列族</span>
- <span class="k">return</span> <span class="n">indices</span><span class="p">.</span><span class="n">isComplete</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-<strong>设备扩展支持检查</strong>
-    <div class="language-cpp highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">checkDeviceExtensionSupport</span><span class="p">(</span><span class="n">VkPhysicalDevice</span> <span class="n">device</span><span class="p">)</span> <span class="p">{</span>
- <span class="c1">// 获取设备支持的扩展</span>
- <span class="kt">uint32_t</span> <span class="n">extensionCount</span><span class="p">;</span>
- <span class="n">vkEnumerateDeviceExtensionProperties</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">extensionCount</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
- <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VkExtensionProperties</span><span class="o">&gt;</span> <span class="n">availableExtensions</span><span class="p">(</span><span class="n">extensionCount</span><span class="p">);</span>
- <span class="n">vkEnumerateDeviceExtensionProperties</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">extensionCount</span><span class="p">,</span> <span class="n">availableExtensions</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+<h3 id="vma-的通用配对规则">VMA 的通用配对规则</h3>
 
- <span class="c1">// 检查必要的扩展是否被支持</span>
- <span class="c1">// 比如 VK_KHR_swapchain</span>
- <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">requiredExtensions</span> <span class="o">=</span> <span class="p">{</span>
-     <span class="n">VK_KHR_SWAPCHAIN_EXTENSION_NAME</span>
- <span class="p">};</span>
-    
- <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">extension</span> <span class="o">:</span> <span class="n">availableExtensions</span><span class="p">)</span> <span class="p">{</span>
-     <span class="n">requiredExtensions</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">extension</span><span class="p">.</span><span class="n">extensionName</span><span class="p">);</span>
- <span class="p">}</span>
-
- <span class="k">return</span> <span class="n">requiredExtensions</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-<strong>Swapchain 适配性检查</strong>
-    <div class="language-cpp highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">checkSwapChainAdequate</span><span class="p">(</span><span class="n">VkPhysicalDevice</span> <span class="n">device</span><span class="p">)</span> <span class="p">{</span>
- <span class="c1">// 检查 surface 格式</span>
- <span class="kt">uint32_t</span> <span class="n">formatCount</span><span class="p">;</span>
- <span class="n">vkGetPhysicalDeviceSurfaceFormatsKHR</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">surface</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">formatCount</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
-    
- <span class="c1">// 检查显示模式</span>
- <span class="kt">uint32_t</span> <span class="n">presentModeCount</span><span class="p">;</span>
- <span class="n">vkGetPhysicalDeviceSurfacePresentModesKHR</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">surface</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">presentModeCount</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
-    
- <span class="k">return</span> <span class="n">formatCount</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">presentModeCount</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-<strong>内存属性检查</strong>
-    <div class="language-cpp highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">checkMemoryProperties</span><span class="p">(</span><span class="n">VkPhysicalDevice</span> <span class="n">device</span><span class="p">)</span> <span class="p">{</span>
- <span class="n">VkPhysicalDeviceMemoryProperties</span> <span class="n">memProperties</span><span class="p">;</span>
- <span class="n">vkGetPhysicalDeviceMemoryProperties</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">memProperties</span><span class="p">);</span>
-    
- <span class="c1">// 检查是否有足够的显存</span>
- <span class="c1">// 检查是否支持所需的内存类型</span>
- <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 根据具体需求判断</span>
-<span class="p">}</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-<strong>综合评分系统（可选）</strong>
-    <div class="language-cpp highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">rateDeviceSuitability</span><span class="p">(</span><span class="n">VkPhysicalDevice</span> <span class="n">device</span><span class="p">)</span> <span class="p">{</span>
- <span class="kt">int</span> <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    
- <span class="c1">// 基础分：独立显卡加分</span>
- <span class="n">VkPhysicalDeviceProperties</span> <span class="n">deviceProperties</span><span class="p">;</span>
- <span class="n">vkGetPhysicalDeviceProperties</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceProperties</span><span class="p">);</span>
-    
- <span class="k">if</span> <span class="p">(</span><span class="n">deviceProperties</span><span class="p">.</span><span class="n">deviceType</span> <span class="o">==</span> <span class="n">VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU</span><span class="p">)</span> <span class="p">{</span>
-     <span class="n">score</span> <span class="o">+=</span> <span class="mi">1000</span><span class="p">;</span>
- <span class="p">}</span>
-    
- <span class="c1">// 性能分：根据最大纹理大小加分</span>
- <span class="n">score</span> <span class="o">+=</span> <span class="n">deviceProperties</span><span class="p">.</span><span class="n">limits</span><span class="p">.</span><span class="n">maxImageDimension2D</span><span class="p">;</span>
-    
- <span class="c1">// 特性分：支持几何着色器加分</span>
- <span class="n">VkPhysicalDeviceFeatures</span> <span class="n">deviceFeatures</span><span class="p">;</span>
- <span class="n">vkGetPhysicalDeviceFeatures</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceFeatures</span><span class="p">);</span>
- <span class="k">if</span> <span class="p">(</span><span class="n">deviceFeatures</span><span class="p">.</span><span class="n">geometryShader</span><span class="p">)</span> <span class="p">{</span>
-     <span class="n">score</span> <span class="o">+=</span> <span class="mi">100</span><span class="p">;</span>
- <span class="p">}</span>
-    
- <span class="k">return</span> <span class="n">score</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>    </div>
-  </li>
-</ol>
-
-<p>最终的设备选择函数如下：</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">isDeviceSuitable</span><span class="p">(</span><span class="n">VkPhysicalDevice</span> <span class="n">device</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">bool</span> <span class="n">extensionsSupported</span> <span class="o">=</span> <span class="n">checkDeviceExtensionSupport</span><span class="p">(</span><span class="n">device</span><span class="p">);</span>
-    <span class="kt">bool</span> <span class="n">swapChainAdequate</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-    
-    <span class="k">if</span> <span class="p">(</span><span class="n">extensionsSupported</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">swapChainAdequate</span> <span class="o">=</span> <span class="n">checkSwapChainAdequate</span><span class="p">(</span><span class="n">device</span><span class="p">);</span>
-    <span class="p">}</span>
-    
-    <span class="k">return</span> <span class="n">checkQueueFamilySupport</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="o">&amp;&amp;</span> 
-           <span class="n">extensionsSupported</span> <span class="o">&amp;&amp;</span> 
-           <span class="n">swapChainAdequate</span> <span class="o">&amp;&amp;</span>
-           <span class="n">checkMemoryProperties</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
-           <span class="n">rateDeviceSuitability</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">minRequiredScore</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<h2 id="5-获取队列族索引">5. 获取队列族索引</h2>
-
-<p>查找支持所需操作的队列族：</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">QueueFamilyIndices</span> <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span> <span class="n">graphicsAndComputeFamily</span><span class="p">;</span> <span class="c1">// 图形和计算共用一个队列族</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span> <span class="n">presentFamily</span><span class="p">;</span>
-    
-    <span class="kt">bool</span> <span class="n">isComplete</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">graphicsAndComputeFamily</span><span class="p">.</span><span class="n">has_value</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">presentFamily</span><span class="p">.</span><span class="n">has_value</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="n">QueueFamilyIndices</span> <span class="nf">findQueueFamilies</span><span class="p">(</span><span class="n">VkPhysicalDevice</span> <span class="n">device</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">QueueFamilyIndices</span> <span class="n">indices</span><span class="p">;</span>
-    <span class="kt">uint32_t</span> <span class="n">queueFamilyCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">vkGetPhysicalDeviceQueueFamilyProperties</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">queueFamilyCount</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VkQueueFamilyProperties</span><span class="o">&gt;</span> <span class="n">queueFamilies</span><span class="p">(</span><span class="n">queueFamilyCount</span><span class="p">);</span>
-    <span class="n">vkGetPhysicalDeviceQueueFamilyProperties</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">queueFamilyCount</span><span class="p">,</span> <span class="n">queueFamilies</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
-    
-    <span class="c1">// 查找支持图形和计算的队列族</span>
-    <span class="c1">// 查找支持显示的队列族</span>
-    <span class="c1">// ... 具体实现略</span>
-    
-    <span class="k">return</span> <span class="n">indices</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<h2 id="队列族">队列族</h2>
-<p>队列族是一组具有相同功能的队列（Queue），可以理解为是物理设备的一部分，每个队列族支持特定类型的操作，比如：</p>
+<p>这个原则适用于 VMA 管理的所有主要资源类型：</p>
 
 <ul>
-  <li>图形操作（绘制命令）</li>
-  <li>计算操作（计算着色器）</li>
-  <li>传输操作（内存复制）</li>
-  <li>显示操作（显示到屏幕）</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>物理设备（GPU）
-├── 队列族 0（支持图形+计算+传输）
-│   ├── 队列 0
-│   └── 队列 1
-├── 队列族 1（仅支持传输）
-│   └── 队列 0
-└── 队列族 2（支持显示）
-    └── 队列 0
-</code></pre></div></div>
-
-<p>可以查询每个队列族的队列数量、支持的特性，比如：</p>
-
-<pre><code class="language-C++">// 获取队列族属性
-uint32_t queueFamilyCount = 0;
-vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &amp;queueFamilyCount, nullptr);
-std::vector&lt;VkQueueFamilyProperties&gt; queueFamilies(queueFamilyCount);
-vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &amp;queueFamilyCount, queueFamilies.data());
-// 遍历每个队列族，查看其中的队列数量
-for (uint32_t i = 0; i &lt; queueFamilyCount; i++) {
-    const auto&amp; queueFamily = queueFamilies[i];
-    
-    // queueCount 就是该队列族中的队列数量
-    uint32_t numQueues = queueFamily.queueCount;
-    
-    // 打印队列族信息
-    std::cout &lt;&lt; "Queue Family " &lt;&lt; i &lt;&lt; ":\n";
-    std::cout &lt;&lt; "  Number of queues: " &lt;&lt; numQueues &lt;&lt; "\n";
-    std::cout &lt;&lt; "  Supports graphics: " &lt;&lt; (queueFamily.queueFlags &amp; VK_QUEUE_GRAPHICS_BIT ? "yes" : "no") &lt;&lt; "\n";
-    std::cout &lt;&lt; "  Supports compute: " &lt;&lt; (queueFamily.queueFlags &amp; VK_QUEUE_COMPUTE_BIT ? "yes" : "no") &lt;&lt; "\n";
-    std::cout &lt;&lt; "  Supports transfer: " &lt;&lt; (queueFamily.queueFlags &amp; VK_QUEUE_TRANSFER_BIT ? "yes" : "no") &lt;&lt; "\n";
-}
-</code></pre>
-
-<h2 id="队列族作用">队列族作用</h2>
-<p>在创建逻辑设备时需要制定使用的队列族，比如：</p>
-<pre><code class="language-C++">// 创建队列信息
-float queuePriority = 1.0f;
-VkDeviceQueueCreateInfo queueCreateInfo{};
-queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-queueCreateInfo.queueFamilyIndex = graphicsFamily;  // 指定队列族索引
-queueCreateInfo.queueCount = 1;                     // 使用的队列数量
-queueCreateInfo.pQueuePriorities = &amp;queuePriority;  // 队列优先级
-</code></pre>
-
-<h3 id="不同队列族">不同队列族</h3>
-<ul>
-  <li>不同队列族的命令可以并行执行</li>
-  <li>专用队列族（如只支持传输的队列族）通常性能更好</li>
-  <li>需要在不同队列族之间同步操作时会有性能开销</li>
-</ul>
-
-<h3 id="相同队列族的不同队列">相同队列族的不同队列</h3>
-<p>可以使用同一个队列族的两个队列提交命令：</p>
-<pre><code class="language-C++">// 获取同一队列族的两个队列
-VkQueue queue1, queue2;
-vkGetDeviceQueue(device, graphicsFamilyIndex, 0, &amp;queue1);
-vkGetDeviceQueue(device, graphicsFamilyIndex, 1, &amp;queue2);
-
-// 这两个队列可以并行执行命令
-vkQueueSubmit(queue1, 1, &amp;submitInfo1, fence1);  // 在队列1提交命令
-vkQueueSubmit(queue2, 1, &amp;submitInfo2, fence2);  // 在队列2提交命令
-
-// 这两个提交会并行执行，不需要等待队列1完成
-</code></pre>
-
-<ul>
-  <li>同一队列族的所有队列具有相同的能力（比如都支持图形操作）</li>
-  <li>每个队列都有<strong>自己独立的命令流</strong>
+  <li>
+<code class="language-plaintext highlighter-rouge">vmaCreateImage()</code>  -&gt; <code class="language-plaintext highlighter-rouge">vmaDestroyImage()</code>
 </li>
-  <li>每个队列都可以独立提交命令缓冲区</li>
-  <li>队列之间的执行是异步的(<strong>并行执行</strong>，没有先后顺序），除非使用同步原语（使用同步原语，可以实现队列2等待队列1完成）</li>
-</ul>
-
-<h3 id="队列优先级和同步">队列优先级和同步</h3>
-<pre><code class="language-C++">// 创建队列时可以指定不同的优先级
-float priorities[] = { 1.0f, 0.5f };  // 两个队列，不同优先级
-VkDeviceQueueCreateInfo queueCreateInfo{};
-queueCreateInfo.queueCount = 2;
-queueCreateInfo.pQueuePriorities = priorities;
-</code></pre>
-<pre><code class="language-C++">// 如果需要队列间同步，可以使用信号量
-VkSubmitInfo submitInfo{};
-submitInfo.waitSemaphoreCount = 1;
-submitInfo.pWaitSemaphores = &amp;waitSemaphore;    // 等待其他队列的信号量
-submitInfo.signalSemaphoreCount = 1;
-submitInfo.pSignalSemaphores = &amp;signalSemaphore; // 发出完成信号
-</code></pre>
-
-<h3 id="并行渲染举例">并行渲染举例</h3>
-<pre><code class="language-C++">// 场景1：并行渲染多个对象
-void renderScene() {
-    // 队列1渲染地形
-    vkQueueSubmit(queue1, 1, &amp;terrainSubmitInfo, terrainFence);
-    
-    // 同时，队列2渲染角色
-    vkQueueSubmit(queue2, 1, &amp;characterSubmitInfo, characterFence);
-    
-    // 两个渲染任务并行执行
-}
-
-// 场景2：一个队列处理主要渲染，另一个处理后期效果
-void render() {
-    // 队列1执行主要渲染
-    vkQueueSubmit(queue1, 1, &amp;mainRenderSubmitInfo, mainRenderFence);
-    
-    // 设置依赖关系
-    waitSemaphores = mainRenderComplete;
-    
-    // 队列2执行后期处理
-    vkQueueSubmit(queue2, 1, &amp;postProcessSubmitInfo, postProcessFence);
-}
-</code></pre>
-
-<h1 id="6-创建逻辑设备">6. 创建逻辑设备</h1>
-<h2 id="创建队列创建信息">创建队列创建信息</h2>
-<p>如前文所说，逻辑设备的创建需要指定使用的队列族。为每个唯一的队列族创建创建信息结构体：</p>
-
-<pre><code class="language-C++">std::vector&lt;VkDeviceQueueCreateInfo&gt; queueCreateInfos;
-std::set&lt;uint32_t&gt; uniqueQueueFamilies = {
-    indices.graphicsAndComputeFamily.value(),
-    indices.presentFamily.value()
-};
-
-float queuePriority = 1.0f;
-for (uint32_t queueFamily : uniqueQueueFamilies) {
-    VkDeviceQueueCreateInfo queueCreateInfo{};
-    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfo.queueFamilyIndex = queueFamily;   // 指定队列族索引
-    queueCreateInfo.queueCount = 1;                    // 使用的队列数量
-    queueCreateInfo.pQueuePriorities = &amp;queuePriority;  // 队列优先级
-    queueCreateInfos.push_back(queueCreateInfo);
-}
-</code></pre>
-<h2 id="创建逻辑设备">创建逻辑设备</h2>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">VkDeviceCreateInfo</span> <span class="n">deviceCreateInfo</span><span class="p">{};</span>
-<span class="n">deviceCreateInfo</span><span class="p">.</span><span class="n">sType</span> <span class="o">=</span> <span class="n">VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO</span><span class="p">;</span>
-<span class="n">deviceCreateInfo</span><span class="p">.</span><span class="n">queueCreateInfoCount</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">queueCreateInfos</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
-<span class="n">deviceCreateInfo</span><span class="p">.</span><span class="n">pQueueCreateInfos</span> <span class="o">=</span> <span class="n">queueCreateInfos</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>  <span class="c1">// 指定队列创建信息</span>
-
-<span class="n">VkPhysicalDeviceFeatures</span> <span class="n">deviceFeatures</span><span class="p">{};</span>
-<span class="n">deviceCreateInfo</span><span class="p">.</span><span class="n">pEnabledFeatures</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">deviceFeatures</span><span class="p">;</span>  <span class="c1">// 指定设备特性</span>
-
-<span class="n">VkDevice</span> <span class="n">device</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">vkCreateDevice</span><span class="p">(</span><span class="n">physicalDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceCreateInfo</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">device</span><span class="p">)</span> <span class="o">!=</span> <span class="n">VK_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"failed to create logical device!"</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>如前面提到的，队列族是物理设备的一部分，逻辑设备创建时需要指定使用的队列族和队列的数量，因此可以将逻辑设备理解为建立在队列族上对物理设备的抽象。<br>
-即：</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>物理设备（GPU）
-    └── 逻辑设备（对GPU的抽象接口）
-            ├── 队列族 0
-            │   ├── 队列 0
-            │   └── 队列 1
-            └── 队列族 1
-                └── 队列 0
-</code></pre></div></div>
-<p>上面展示了如何指定队列族和队列数量来创建逻辑设备，下面介绍如何从逻辑设备获取队列：</p>
-<pre><code class="language-C++">// 从逻辑设备获取队列
-VkQueue graphicsQueue;
-vkGetDeviceQueue(logicalDevice,  // 逻辑设备句柄
-                 graphicsFamilyIndex,  // 队列族索引
-                 0,  // 队列索引
-                 &amp;graphicsQueue);  // 获取到的队列
-</code></pre>
-
-<h2 id="逻辑设备的功能">逻辑设备的功能</h2>
-<ul>
-  <li>创建和管理各种 Vulkan 资源（缓冲区、图像等）</li>
-  <li>提供队列访问接口</li>
-  <li>启用设备特性和扩展</li>
-  <li>控制设备内存分配<br>
-例如：</li>
-</ul>
-
-<pre><code class="language-C++">// 使用逻辑设备创建资源
-VkBuffer buffer;
-vkCreateBuffer(logicalDevice, &amp;bufferInfo, nullptr, &amp;buffer);
-// 使用逻辑设备分配内存
-VkDeviceMemory memory;
-vkAllocateMemory(logicalDevice, &amp;allocInfo, nullptr, &amp;memory);
-</code></pre>
-
-<h2 id="不同的逻辑设备">不同的逻辑设备</h2>
-<ul>
-  <li>一个应用程序可以创建多个逻辑设备</li>
-  <li>每个逻辑设备<strong>都有自己的队列和资源</strong>
+  <li>
+<code class="language-plaintext highlighter-rouge">vmaCreateBuffer()</code>  -&gt; <code class="language-plaintext highlighter-rouge">vmaDestroyBuffer()</code>
 </li>
-  <li>不同逻辑设备间的资源<strong>不能直接共享</strong>
+  <li>
+<code class="language-plaintext highlighter-rouge">vmaAllocateMemory()</code> (如果只分配内存) -&gt; <code class="language-plaintext highlighter-rouge">vmaFreeMemory()</code>
 </li>
-  <li>逻辑设备销毁时，其创建的所有资源也会被销毁</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">vmaCreatePool()</code> -&gt; <code class="language-plaintext highlighter-rouge">vmaDestroyPool()</code>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">vmaCreateAllocator()</code> -&gt; <code class="language-plaintext highlighter-rouge">vmaDestroyAllocator()</code>
+</li>
 </ul>
 
-<h1 id="7-创建命令池">7. 创建命令池</h1>
-
-<p>创建用于管理命令缓冲区的命令池：</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">VkCommandPoolCreateInfo</span> <span class="n">poolInfo</span><span class="p">{};</span>
-<span class="n">poolInfo</span><span class="p">.</span><span class="n">sType</span> <span class="o">=</span> <span class="n">VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO</span><span class="p">;</span>
-<span class="n">poolInfo</span><span class="p">.</span><span class="n">queueFamilyIndex</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">graphicsAndComputeFamily</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>  <span class="c1">// 指定队列族索引</span>
-<span class="n">poolInfo</span><span class="p">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT</span><span class="p">;</span> <span class="c1">// 允许单独重置命令缓冲区</span>
-
-<span class="n">VkCommandPool</span> <span class="n">commandPool</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">vkCreateCommandPool</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">poolInfo</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">commandPool</span><span class="p">)</span> <span class="o">!=</span> <span class="n">VK_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"failed to create command pool!"</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<h2 id="命令池的作用">命令池的作用</h2>
-<ul>
-  <li>命令池用于管理命令缓冲区的内存</li>
-  <li>每个命令池只能分配给特定的队列族使用</li>
-  <li>从同一个命令池分配的命令缓冲区只能提交到同一队列族的队列中(因为第二点指定了队列族的类型)</li>
-</ul>
-
-<h2 id="命令池标志">命令池标志</h2>
-<pre><code class="language-C++">// 常用的命令池标志
-VK_COMMAND_POOL_CREATE_TRANSIENT_BIT  // 提示命令缓冲区会频繁重录制，可以优化内存分配
-VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT  // 允许单独重置命令缓冲区，而不是只能重置整个池
-VK_COMMAND_POOL_CREATE_PROTECTED_BIT  // 创建受保护的命令缓冲区
-</code></pre>
-
-<h2 id="分配命令缓冲">分配命令缓冲</h2>
-<pre><code class="language-C++">VkCommandBufferAllocateInfo allocInfo{};
-allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-allocInfo.commandPool = commandPool;  // 指定命令池
-allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;  // 主要或次要命令缓冲区
-allocInfo.commandBufferCount = 1;  // 分配数量
-
-VkCommandBuffer commandBuffer;
-vkAllocateCommandBuffers(device, &amp;allocInfo, &amp;commandBuffer);
-</code></pre>
-
-<h1 id="命令池command-pool和命令缓冲区command-buffer">命令池（Command Pool）和命令缓冲区（Command Buffer）</h1>
-<ul>
-  <li>命令池是内存池</li>
-  <li>命令缓冲区是从这个内存池分配的内存块</li>
-  <li>所有命令缓冲区共享命令池的属性（如队列族绑定）</li>
-  <li>命令池管理着所有命令缓冲区的生命周期
-    <h2 id="内存管理关系">内存管理关系</h2>
-  </li>
-</ul>
-
-<pre><code class="language-C++">// 命令池负责管理命令缓冲区的内存分配
-VkCommandPool commandPool;
-std::vector&lt;VkCommandBuffer&gt; commandBuffers;
-
-// 从命令池分配命令缓冲区
-VkCommandBufferAllocateInfo allocInfo{};
-allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-allocInfo.commandPool = commandPool;              // 指定从哪个命令池分配
-allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-allocInfo.commandBufferCount = 1;                 // 分配数量
-
-vkAllocateCommandBuffers(device, &amp;allocInfo, &amp;commandBuffer);
-</code></pre>
-
-<h2 id="生命周期关系">生命周期关系</h2>
-<ul>
-  <li>命令池控制着其分配的所有命令缓冲区的生命周期</li>
-  <li>销毁命令池时会自动销毁其分配的所有命令缓冲区
-    <pre><code class="language-C++">void cleanup() {
-  // 不需要单独释放命令缓冲区
-  vkDestroyCommandPool(device, commandPool, nullptr); // 会自动释放所有命令缓冲区
-}
-</code></pre>
-    <h2 id="重置关系">重置关系</h2>
-  </li>
-</ul>
-
-<pre><code class="language-C++">// 重置整个命令池（影响所有命令缓冲区）
-vkResetCommandPool(device, commandPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
-
-// 如果命令池创建时指定了 VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT
-// 则可以单独重置命令缓冲区
-vkResetCommandBuffer(commandBuffer, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT);
-</code></pre>
-
-<h2 id="队列族关系">队列族关系</h2>
-
-<pre><code class="language-C++">// 命令池绑定到特定队列族
-VkCommandPoolCreateInfo poolInfo{};
-poolInfo.queueFamilyIndex = graphicsQueueFamily;  // 指定队列族
-
-// 从该命令池分配的命令缓冲区只能提交到同一队列族的队列
-VkSubmitInfo submitInfo{};
-submitInfo.commandBufferCount = 1;
-submitInfo.pCommandBuffers = &amp;commandBuffer;
-vkQueueSubmit(graphicsQueue, 1, &amp;submitInfo, fence);  // 队列必须属于同一队列族
-</code></pre>
-
-<h1 id="实例扩展和设备扩展">实例扩展和设备扩展</h1>
-<h2 id="实例扩展instance-extensions">实例扩展（Instance Extensions）：</h2>
-<p><strong>作用范围</strong>：作用于整个 Vulkan 实例（VkInstance），影响全局功能<br>
-<strong>主要用途</strong>：</p>
-<ol>
-  <li>提供跨平台功能，如窗口系统集成（WSI）</li>
-  <li>添加调试和验证层支持</li>
-  <li>提供实例级别的新功能</li>
-</ol>
-
-<p><strong>加载时机</strong>：在创建 VkInstance 时通过 vkCreateInstance 启用</p>
-
-<p><strong>常见的实例扩展：</strong><br>
-VK_KHR_surface</p>
-<ul>
-  <li>最基础的窗口系统接口扩展</li>
-  <li>定义了创建和管理平台无关的窗口表面的基础功能</li>
-  <li>几乎所有需要显示的应用都会用到</li>
-</ul>
-
-<p>平台特定的 surface 扩展：</p>
-<ul>
-  <li>VK_KHR_win32_surface (Windows)</li>
-  <li>VK_KHR_xlib_surface (X11/Linux)</li>
-  <li>VK_KHR_wayland_surface (Wayland/Linux)</li>
-  <li>VK_KHR_android_surface (Android)</li>
-  <li>VK_MVK_macos_surface (macOS)</li>
-</ul>
-
-<p>VK_EXT_debug_utils</p>
-<ul>
-  <li>提供调试功能</li>
-  <li>允许为 Vulkan 对象添加标签和名称</li>
-  <li>支持调试信息的回调</li>
-</ul>
-
-<p>VK_KHR_get_physical_device_properties2</p>
-<ul>
-  <li>获取物理设备的额外属性信息</li>
-  <li>常用于查询新功能的支持情况
-    <h2 id="设备扩展device-extensions">设备扩展（Device Extensions）：</h2>
-    <p><strong>作用范围</strong>：作用于特定的物理设备（VkPhysicalDevice）和逻辑设备（VkDevice）<br>
-<strong>主要用途</strong>：</p>
-    <ol>
-      <li>提供特定硬件功能支持</li>
-      <li>启用设备特定的渲染特性</li>
-      <li>添加新的设备级API功能</li>
-    </ol>
-  </li>
-</ul>
-
-<p><strong>加载时机</strong>：在创建 VkDevice 时通过 vkCreateDevice 启用</p>
-
-<p><strong>常见的设备扩展：</strong><br>
-VK_KHR_swapchain</p>
-<ul>
-  <li>最基础的显示相关扩展</li>
-  <li>用于创建和管理交换链</li>
-  <li>实现帧缓冲和显示同步</li>
-</ul>
-
-<p>VK_KHR_maintenance1/2/3</p>
-<ul>
-  <li>提供各种 API 改进和补充功能</li>
-  <li>修复早期版本的一些限制和问题</li>
-</ul>
-
-<p>VK_KHR_dynamic_rendering</p>
-<ul>
-  <li>简化渲染流程</li>
-  <li>无需创建 render pass 对象</li>
-  <li>更灵活的渲染配置</li>
-</ul>
-
-<p>VK_KHR_multiview</p>
-<ul>
-  <li>支持单次渲染传递到多个视图</li>
-  <li>用于 VR 等立体渲染场景</li>
-</ul>
-
-<p>VK_KHR_shader_*系列：</p>
-<pre><code class="language-C++">VK_KHR_shader_float16_int8  // 支持16位浮点和8位整数
-VK_KHR_shader_non_semantic_info  // 着色器附加信息
-VK_KHR_shader_draw_parameters  // 绘制参数访问
-</code></pre>
-
-<h1 id="easyvulkan的初始化设计">EasyVulkan的初始化设计</h1>
-<p>在EasyVulkan中，初始化主要由VulkanContext和VulkanDevice两个类完成。</p>
-
-<h2 id="vulkancontext">VulkanContext</h2>
-<p>主要用于管理各种Vulkan的对象和资源。</p>
-<ul>
-  <li>创建 Vulkan 实例，可选择设置验证层和调试回调。</li>
-  <li>拥有对 VulkanDevice、SwapchainManager、ResourceManager、CommandPoolManager 和可选的 SynchronizationManager 的引用。</li>
-  <li>协调高级生命周期（初始化、清理）。</li>
-</ul>
-
-<h2 id="vulkandevice">VulkanDevice</h2>
-<p>VulkanDevice类主要对物理设备和逻辑设备进行管理。</p>
-<ul>
-  <li>选择具有所需功能的物理设备，创建逻辑设备。</li>
-  <li>维护队列句柄（图形、计算、传输）。</li>
-  <li>集成 Vulkan 内存分配器（VMA）。</li>
-</ul>
-
-<h2 id="使用说明">使用说明</h2>
-<p>借助VulkanDevice本身就是VulkanContext的成员，因此初始化可以简化为：</p>
-<pre><code class="language-C++">VulkanContext context;
-context.initialize();
-</code></pre>
-<p>在VulkanContext中，我们可以借助Manager类来管理各种Vulkan的对象和资源。<br>
-例如，<strong>使用SwapchainManager</strong>：</p>
-<ul>
-  <li>创建和管理交换链</li>
-  <li>处理窗口调整事件</li>
-  <li>管理交换链图像和图像视图</li>
-  <li>提供图像获取和呈现功能</li>
-</ul>
-
-<p><strong>使用ResourceManager</strong>：</p>
-<ul>
-  <li>所有主要 Vulkan 资源的生成器接口（如BufferBuilder、ImageBuilder、ShaderModuleBuilder等）</li>
-  <li>自动资源跟踪和清理</li>
-  <li>基于名称的资源查找</li>
-</ul>
+<p>始终确保资源创建和销毁调用是成对出现的，这样才能保证Vulkan 应用程序没有资源泄漏。</p>
 
     <!-- see https://giscus.app/ -->
     <div class="giscus" id="giscus" style="margin: 4rem auto;"></div>

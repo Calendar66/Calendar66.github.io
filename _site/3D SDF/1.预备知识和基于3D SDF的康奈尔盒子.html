@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>
+    
+        1.预备知识和基于3D SDF的康奈尔盒子
+    
+</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>1.预备知识和基于3D SDF的康奈尔盒子 | Calendar’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.4">
+<meta property="og:title" content="1.预备知识和基于3D SDF的康奈尔盒子">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="基础知识 留个坑。">
+<meta property="og:description" content="基础知识 留个坑。">
+<link rel="canonical" href="http://localhost:4000/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html">
+<meta property="og:url" content="http://localhost:4000/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html">
+<meta property="og:site_name" content="Calendar’s Blog">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-08-12T00:00:00+08:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="1.预备知识和基于3D SDF的康奈尔盒子">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-08-12T00:00:00+08:00","datePublished":"2025-08-12T00:00:00+08:00","description":"基础知识 留个坑。","headline":"1.预备知识和基于3D SDF的康奈尔盒子","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html"},"url":"http://localhost:4000/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link rel="shortcut icon" type="image/png" href="/assets/img/favicon.webp">
+<style>
+@font-face {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-display: optional;
+    src: local('Nunito Sans'),
+         url("/assets/fonts/NunitoSans-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: 'Righteous';
+    font-style: normal;
+    font-weight: 600;
+    font-display: optional;
+    src: local('Righteous'),
+         url("/assets/fonts/Righteous-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-display: optional;
+    src: local('Lato'),
+         url("/assets/fonts/Lato-Regular.woff2") format("woff2");
+}
+</style>
+
+<script src="/assets/js/fontfaceobserver.js" type="text/javascript"></script>
+<script type="text/javascript">
+    const nunitoObserver = new FontFaceObserver('Nunito Sans');
+    const righteousObserver = new FontFaceObserver('Righteous');
+    const latoObserver = new FontFaceObserver('Lato');
+  
+    Promise.all([
+        nunitoObserver.load(),
+        righteousObserver.load(),
+        latoObserver.load(),
+    ]).then(function(){
+        document.documentElement.className += " fonts-loaded";
+    });
+</script>
+
+<meta name="baseurl" content="">
+<meta name="description" content="A graduate student majoring in computer graphics from Xiamen University.">
+        <link rel="preload" href="/assets/img/profile.jpg" as="image">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+              tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+              }
+            });
+          </script>
+              
+            <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+            
+                <script data-goatcounter="https://calendar.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+            
+
+            <meta name="giscus_repo" content="Calendar66/Calendar66.github.io">
+            <meta name="giscus_repoId" content="R_kgDONlocmA">
+            <meta name="giscus_category" content="Q&amp;A">
+            <meta name="giscus_categoryId" content="DIC_kwDONlocmM4Cl8UB">
+
+            
+                <style>
+                        .thumbnail {
+                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822133530.png");
+                        }
+                    
+                </style>
+            
+        
+    </head>
+    <body>
+        <script type="text/javascript">
+            let currentTheme = localStorage.getItem('theme');
+        
+            document.body.classList[currentTheme === 'dark' ? 'add' : 'remove']('dark-theme');
+        </script>
+        <canvas id="stars" width="100%" height="100%"></canvas>
+        <div class="sidebar sidebar-left">
+    <div class="side-banner">
+        <h1 class="site-tab">
+            <a href="/" class="site-name">
+                <img src="/assets/img/icon/house.webp" alt="" loading="lazy">
+                <mark>Calendar's Blog</mark>
+            </a>
+            <button id="btn-brightness" aria-label="brightness-button">
+                <svg class="ico-dark" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg>
+                <svg class="ico-light" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"></path></svg>
+            </button>
+            <button id="btn-search" aria-label="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
+            </button>
+            <button id="btn-nav" aria-pressed="false" aria-label="menu-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"></path></svg>
+            </button>
+        </h1>
+        <a href="/" class="site-avatar" aria-label="site-avatar">
+            <img src="/assets/img/profile.jpg" loading="lazy" alt="homepage" aria-label="homepage-button">
+        </a>
+    </div>
+    <div class="side-info">
+        <nav id="navigation">
+    
+    
+    
+
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+    
+    
+    
+
+    <ul class="nav-list">
+<li id="nav-first" aria-label="技术学习">
+            <div class="nav-item">
+                <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>技术学习</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in 技术学习 category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list">
+<li id="nav-second" aria-label="交换链的多重缓冲机制">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E4%BA%A4%E6%8D%A2%E9%93%BE%E7%9A%84%E5%A4%9A%E9%87%8D%E7%BC%93%E5%86%B2%E6%9C%BA%E5%88%B6.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>交换链的多重缓冲机制</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="图像降采样">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>图像降采样</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="GPU通用计算">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>GPU通用计算</span>
+                        </a><button class="nav-list-expander" aria-label="toggle items in GPU通用计算 category" aria-pressed="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                        </button>
+</div>
+<ul class="nav-list">
+<li id="nav-third" aria-label="Vulkan compute shader">
+                                <div class="nav-item">
+                                    <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>Vulkan compute shader</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="integral Image计算">
+                                <div class="nav-item">
+                                    <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>integral Image计算</span>
+                                    </a>
+                                </div>
+                            </li>
+</ul>
+</li>
+</ul>
+</li>
+<li id="nav-first" aria-label="模糊阴影视效研究">
+            <div class="nav-item">
+                <a href="/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>模糊阴影视效研究</span>
+                </a>
+</div>
+</li>
+<li id="nav-first" aria-label="2D矢量图元绘制技术研究">
+            <div class="nav-item">
+                <a href="/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>2D矢量图元绘制技术研究</span>
+                </a>
+</div>
+</li>
+<li id="nav-first" aria-label="EasyVulkan">
+            <div class="nav-item">
+                <a href="/EasyVulkan/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>EasyVulkan</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in EasyVulkan category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list">
+<li id="nav-second" aria-label="Builder类">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/Builder%E7%B1%BB/" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Builder类</span>
+                        </a><button class="nav-list-expander" aria-label="toggle items in Builder类 category" aria-pressed="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                        </button>
+</div>
+<ul class="nav-list">
+<li id="nav-third" aria-label="CommandBuffer">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>CommandBuffer</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="DescriptorSet">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>DescriptorSet</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="RenderPass">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/RenderPass.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>RenderPass</span>
+                                    </a>
+                                </div>
+                            </li>
+</ul>
+</li>
+<li id="nav-second" aria-label="ResourceManagerMemoryLeak">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/ResourceManagerMemoryLeak.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>ResourceManagerMemoryLeak</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="SynchronizationManager">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/SynchronizationManager.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>SynchronizationManager</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="VMA">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/VMA.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>VMA</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="Vulkan初始化">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Vulkan初始化</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="VulkanDebug">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/VulkanDebug.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>VulkanDebug</span>
+                        </a>
+</div>
+</li>
+</ul>
+</li>
+<li id="nav-first" aria-label="Home">
+            <div class="nav-item">
+                <a href="/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>Home</span>
+                </a>
+</div>
+</li>
+<li id="nav-first" aria-label="noBug">
+            <div class="nav-item">
+                <a href="/noBug/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>noBug</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in noBug category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list">
+<li id="nav-second" aria-label="色彩空间问题">
+                    <div class="nav-item">
+                        <a href="/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>色彩空间问题</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="std140数据对齐">
+                    <div class="nav-item">
+                        <a href="/noBug/std140%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>std140数据对齐</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="vector.back()引发的指针错误">
+                    <div class="nav-item">
+                        <a href="/noBug/vector.back()%E5%BC%95%E5%8F%91%E7%9A%84%E6%8C%87%E9%92%88%E9%94%99%E8%AF%AF.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>vector.back()引发的指针错误</span>
+                        </a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+        <div id="contact">
+            <hr>
+            <h3>Contact</h3>
+            <ul class="contact-list">
+                
+                    <li><a aria-label="My Github" href="https://github.com/Calendar66">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3 .3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5 .3-6.2 2.3zm44.2-1.7c-2.9 .7-4.9 2.6-4.6 4.9 .3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3 .7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3 .3 2.9 2.3 3.9 1.6 1 3.6 .7 4.3-.7 .7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3 .7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3 .7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+                    </a></li>
+                
+                
+                    <li><a aria-label="My Email" href="mailto:guangzez67@gmaill.com">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"></path></svg>
+                    </a></li>
+                
+                
+                    <li><a aria-label="My Bilibili" href="https://space.bilibili.com/233488614">
+                        <svg viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4552" width="10" height="21"><path d="M253.568 577.6c2.496 18.176 5.056 36.48 7.552 55.36 15.488-11.584 30.272-23.04 45.248-34.304C304.384 596.096 263.296 579.776 253.568 577.6z" p-id="4553"></path><path d="M610.176 577.6c2.496 18.176 5.056 36.48 7.552 55.36 15.488-11.584 30.272-23.04 45.248-34.304C660.992 596.096 619.904 579.776 610.176 577.6z" p-id="4554"></path><path d="M515.648 63.296c-244.224 0-442.176 197.952-442.176 442.176s197.952 442.176 442.176 442.176 442.176-197.952 442.176-442.176S759.872 63.296 515.648 63.296zM490.56 447.36l14.656 0c2.496 0 3.712 0.832 3.712 3.84l0 42.752 0 3.392c-5.888-0.32-11.968-0.512-18.304-0.832L490.624 447.36zM390.464 441.856c1.664 0 2.496 1.024 2.88 3.008 1.536 15.488 2.88 30.592 4.544 46.592-5.888 0.704-11.456 0.832-17.664 1.344-2.176-16.96-4.224-33.472-6.4-50.624C379.584 441.856 385.088 441.856 390.464 441.856zM366.592 444.544c2.368-0.32 1.664 1.664 2.048 3.008 0.512 5.696 1.152 11.072 1.664 16.64 0.832 8.768 2.048 17.152 2.88 25.92l0 3.392-13.632 2.368c-3.008-16.32-5.888-32.448-8.896-49.088C356.032 446.208 361.216 444.992 366.592 444.544zM364.096 603.456c-2.176 7.232-7.232 12.928-13.44 17.664-14.656 11.584-29.76 21.696-47.424 27.584-12.416 4.224-25.088 7.232-38.016 9.28-16.832 2.496-33.984 3.712-51.136 5.376-3.52 0.512-6.912 0-10.624 0-1.664 0-2.176-0.832-2.176-2.496-0.192-7.552-0.832-15.488-1.344-23.36-0.832-10.112-1.856-20.032-3.008-30.08-1.664-14.144-3.392-27.776-5.056-41.856-1.664-14.784-3.712-29.44-5.376-44.096-1.664-14.464-3.008-28.736-5.056-43.072-2.368-16.32-4.544-32.448-7.04-49.088-2.496-19.2-6.208-38.528-11.264-57.344-0.32-0.832 0.512-2.496 1.024-3.008 16.64-6.4 33.152-12.928 49.792-19.712 5.376-2.368 5.888-3.2 5.888 3.84 0 29.76 0 59.392 0.512 89.152 0.32 15.488 0.832 30.976 2.048 46.4 1.344 18.496 3.392 37.312 5.056 56.192 0 0.832 0.512 1.536 0.512 2.048 6.4-0.32 12.608-0.832 18.816-0.832 26.432-0.704 52.288 2.88 77.056 12.608 12.096 4.864 23.872 10.432 34.304 18.304C366.784 583.488 368.768 591.552 364.096 603.456zM386.432 641.984C377.728 598.4 369.28 555.52 360.896 511.616c7.04-0.832 13.824-2.048 20.544-2.88 4.864-0.704 9.92-0.704 14.656-1.152 2.688-0.32 4.352 0.832 4.736 3.392 1.024 6.72 2.176 13.44 3.008 20.544 1.536 11.456 2.496 23.04 3.712 34.496 1.152 10.112 2.176 20.032 3.392 30.08 1.152 10.624 2.496 21.376 3.84 32.448 0.32 3.008 0.832 6.4 1.152 9.728C406.144 639.488 396.544 640.64 386.432 641.984zM458.304 629.376c-8.768-0.832-17.152-1.344-26.432-2.176-7.936-79.872-14.656-160.448-29.76-240.896 4.864-0.512 9.92-1.152 14.976-1.664 5.888-0.32 11.584-0.704 17.472-1.152 4.864-0.32 6.72 0.832 7.04 5.568l2.496 38.016c1.152 17.152 2.496 34.304 3.712 51.456 0.832 12.416 1.344 24.704 2.496 37.184 1.152 13.632 2.496 27.072 3.712 40.512 1.152 9.728 2.048 20.032 2.88 29.76 1.152 10.624 2.368 21.376 3.008 32.448l0.832 9.28C460.8 629.376 459.968 629.696 458.304 629.376zM481.472 447.232c2.176 0 3.008 0.512 3.008 3.008-0.32 6.72 0 13.824 0 20.544l0 25.536c-5.056 0.512-9.6 0.832-14.144 1.152-1.344-16.32-2.496-32.768-3.84-50.304L481.472 447.168zM484.032 644.864c-0.832 0-2.176-1.344-2.176-2.176-1.344-14.656-2.496-29.248-3.84-43.904-1.152-13.44-2.496-27.264-3.712-40.704-1.152-13.824-2.496-27.776-3.712-41.856 0-0.832 0-1.664-0.32-2.88 3.392-0.704 6.4-1.152 9.728-1.152 8.768 0 17.664 0.192 26.432 0.512 2.176 0 3.392 1.664 3.392 3.712 0.192 4.544 0.512 8.768 0.512 13.312 0 20.544-0.32 41.408 0 61.888 0.32 16.64 0.832 32.832 1.152 49.472 0 0.832 0 2.048 0.32 3.84C502.336 644.864 492.928 645.184 484.032 644.864zM847.168 447.36l14.656 0c2.496 0 3.712 0.832 3.712 3.84l0 42.752 0 3.392c-5.888-0.32-11.968-0.512-18.304-0.832L847.232 447.36zM747.072 441.856c1.664 0 2.496 1.024 2.88 3.008 1.536 15.488 2.88 30.592 4.544 46.592-5.888 0.704-11.456 0.832-17.664 1.344-2.176-16.96-4.224-33.472-6.4-50.624C736.128 441.856 741.696 441.856 747.072 441.856zM723.2 444.544c2.368-0.32 1.664 1.664 2.048 3.008 0.512 5.696 1.152 11.072 1.664 16.64 0.832 8.768 2.048 17.152 2.88 25.92l0 3.392-13.632 2.368c-3.008-16.32-5.888-32.448-8.896-49.088C712.576 446.208 717.824 444.992 723.2 444.544zM720.512 603.328c-2.176 7.232-7.232 12.928-13.44 17.664-14.656 11.584-29.76 21.696-47.424 27.584-12.416 4.224-25.088 7.232-38.016 9.28-16.832 2.496-33.984 3.712-51.136 5.376-3.52 0.512-6.912 0-10.624 0-1.664 0-2.176-0.832-2.176-2.496-0.192-7.552-0.832-15.488-1.344-23.36-0.832-10.112-1.856-20.032-3.008-30.08-1.664-14.144-3.392-27.776-5.056-41.856-1.664-14.784-3.712-29.44-5.376-44.096-1.664-14.464-3.008-28.736-5.056-43.072-2.368-16.32-4.544-32.448-7.04-49.088-2.496-19.2-6.208-38.528-11.264-57.344-0.192-0.832 0.704-2.496 1.152-2.88 16.64-6.4 33.152-12.928 49.792-19.712 5.376-2.368 5.888-3.2 5.888 3.84 0 29.76 0 59.392 0.512 89.152 0.32 15.488 0.832 30.976 2.048 46.4 1.344 18.496 3.392 37.312 5.056 56.192 0 0.832 0.512 1.536 0.512 2.048 6.4-0.32 12.608-0.832 18.816-0.832 26.432-0.704 52.288 2.88 77.056 12.608 12.096 4.864 23.872 10.432 34.304 18.304C723.392 583.488 725.376 591.552 720.512 603.328zM743.04 641.984c-8.768-43.584-17.152-86.464-25.536-130.368 7.04-0.832 13.824-2.048 20.544-2.88 4.864-0.704 9.92-0.704 14.656-1.152 2.688-0.32 4.352 0.832 4.736 3.392 1.024 6.72 2.176 13.44 3.008 20.544 1.536 11.456 2.496 23.04 3.712 34.496 1.152 10.112 2.176 20.032 3.392 30.08 1.152 10.624 2.496 21.376 3.84 32.448 0.32 3.008 0.832 6.4 1.152 9.728C762.752 639.488 753.152 640.64 743.04 641.984zM814.848 629.376c-8.768-0.832-17.152-1.344-26.432-2.176-7.936-79.872-14.656-160.448-29.76-240.896 4.864-0.512 9.92-1.152 14.976-1.664 5.888-0.32 11.584-0.704 17.472-1.152 4.864-0.32 6.72 0.832 7.04 5.568l2.496 38.016c1.152 17.152 2.496 34.304 3.712 51.456 0.832 12.416 1.344 24.704 2.496 37.184 1.152 13.632 2.496 27.072 3.712 40.512 1.152 9.728 2.048 20.032 2.88 29.76 1.152 10.624 2.368 21.376 3.008 32.448l0.832 9.28C817.408 629.376 816.576 629.696 814.848 629.376zM838.08 447.232c2.176 0 3.008 0.512 3.008 3.008-0.32 6.72 0 13.824 0 20.544l0 25.536c-5.056 0.512-9.6 0.832-14.144 1.152-1.344-16.32-2.496-32.768-3.84-50.304L838.08 447.168zM840.64 644.864c-0.832 0-2.176-1.344-2.176-2.176-1.344-14.656-2.496-29.248-3.84-43.904-1.152-13.44-2.496-27.264-3.712-40.704-1.152-13.824-2.496-27.776-3.712-41.856 0-0.832 0-1.664-0.32-2.88 3.392-0.704 6.4-1.152 9.728-1.152 8.768 0 17.664 0.192 26.432 0.512 2.176 0 3.392 1.664 3.392 3.712 0.192 4.544 0.512 8.768 0.512 13.312 0 20.544-0.32 41.408 0 61.888 0.32 16.64 0.832 32.832 1.152 49.472 0 0.832 0 2.048 0.32 3.84C858.944 644.864 849.536 645.184 840.64 644.864z" p-id="4555"></path></svg>                
+                
+                
+                
+            </a></li>
+</ul>
+            <hr>
+            <span>
+                Copyright © 2025 | <a href="/">Calendar</a>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="sidebar sidebar-right">
+    <div class="tools">
+        <button id="btn-brightness" aria-label="brightness-button">
+            <svg class="ico-dark" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg>
+            <svg class="ico-light" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"></path></svg>
+        </button>
+        <button id="btn-search" aria-label="search-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
+        </button>
+    </div>
+<div class="toc">
+        <span class="toc-header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"></path></svg>
+            Contents
+        </span>
+        <div class="toc-board"></div>
+    </div>
+</div>
+        <div id="post">
+            <div class="inner-header">
+                <span class="dot" style="background-color: #F86158;"></span>
+                <span class="dot" style="background-color: #FBBF2D;"></span>
+                <span class="dot" style="background-color: #2ACB45;"></span>
+            </div>
+            <div class="inner-content">
+                <div class="category-tree">
+<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg>
+    <p>
+                <a href="/">Home</a>
+                &gt;
+            <a href="/3D%20SDF/">3D SDF</a>
+                &gt;
+            
+                
+                    1.预备知识和基于3D SDF的康奈尔盒子
+                
+            </p>
+</div>
+                
+                    <div class="post-header">
+    <div class="thumbnail">
+        <div class="transbox">
+            
+                <span class="post-title">1.预备知识和基于3D SDF的康奈尔盒子</span>
+            
+            <div class="post-info">
+                
+                    <span class="info-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M384 480h48c11.4 0 21.9-6 27.6-15.9l112-192c5.8-9.9 5.8-22.1 .1-32.1S555.5 224 544 224H144c-11.4 0-21.9 6-27.6 15.9L48 357.1V96c0-8.8 7.2-16 16-16H181.5c4.2 0 8.3 1.7 11.3 4.7l26.5 26.5c21 21 49.5 32.8 79.2 32.8H416c8.8 0 16 7.2 16 16v32h48V160c0-35.3-28.7-64-64-64H298.5c-17 0-33.3-6.7-45.3-18.7L226.7 50.7c-12-12-28.3-18.7-45.3-18.7H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H87.7 384z"></path></svg>
+                        <span>None</span>
+                    </span>
+                
+                <span class="info-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"></path></svg>
+                    <span>
+                            2025-08-12
+                        
+                    </span>
+                </span>
+                
+                    <span class="info-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"></path></svg>
+                        <span id="page-hits" usercode="calendar">-</span>
+                    </span>
+                
+                <a class="info-box" id="comments-counter">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4l0 0 0 0 0 0 0 0 .3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"></path></svg>
+                    <span id="num-comments">-</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tag-box">
+<span class="tag theme-0" contentid="3D SDF">
+            3D SDF
+        </span><span class="tag theme-1" contentid="Vulkan">
+            Vulkan
+        </span><span class="tag theme-2" contentid="Ray Marching">
+            Ray Marching
+        </span><span class="tag theme-0" contentid="Shadow">
+            Shadow
+        </span>
+</div>
+<main>
+    <h1 id="基础知识">基础知识</h1>
+<p>留个坑。</p>
+
+<h1 id="算法步骤">算法步骤</h1>
+
+<h3 id="阶段一准备与射线生成-preparation--ray-generation"><strong>阶段一：准备与射线生成 (Preparation &amp; Ray Generation)</strong></h3>
+
+<ol>
+  <li>
+<strong>设置摄像机 (Camera Setup)</strong>：
+    <ul>
+      <li>在3D世界中定义摄像机的位置 (<code class="language-plaintext highlighter-rouge">ro</code>)、观察目标 (<code class="language-plaintext highlighter-rouge">ta</code>) 和姿态。</li>
+      <li>基于这些信息，构建一个从“相机空间”到“世界空间”的变换矩阵，用于正确地投射射线。</li>
+    </ul>
+  </li>
+  <li>
+<strong>生成主射线 (Primary Ray Generation)</strong>：
+    <ul>
+      <li>遍历屏幕上的<strong>每一个像素</strong>。</li>
+      <li>将每个像素的2D屏幕坐标（如 <code class="language-plaintext highlighter-rouge">(800, 600)</code>）转换为归一化的3D观察坐标（这是实现<strong>透视投影</strong>的关键）。</li>
+      <li>最终，为每个像素生成一条独一无二的、从摄像机位置 <code class="language-plaintext highlighter-rouge">ro</code> 出发，射入3D场景的<strong>射线方向 <code class="language-plaintext highlighter-rouge">rd</code></strong>。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="阶段二场景求交-scene-intersection-via-ray-marching"><strong>阶段二：场景求交 (Scene Intersection via Ray Marching)</strong></h3>
+
+<ol>
+  <li>
+<strong>光线步进循环 (Ray Marching Loop)</strong>：
+    <ul>
+      <li>让射线从起点开始，在场景中步进。此过程通常使用一种名为<strong>球面追踪 (Sphere Tracing)（也被称为光线步进 (Ray Marching)）</strong> 的高效算法。</li>
+      <li>在每一步，调用全局的场景SDF函数 <code class="language-plaintext highlighter-rouge">map()</code>，计算射线当前末端位置到场景中所有物体的<strong>最短距离 <code class="language-plaintext highlighter-rouge">d</code></strong>。</li>
+      <li>这个距离 <code class="language-plaintext highlighter-rouge">d</code> 保证了我们可以沿着射线方向<strong>安全前进 <code class="language-plaintext highlighter-rouge">d</code> 的距离</strong>，而不会穿过任何物体表面。</li>
+      <li>循环往复地让射线前进 <code class="language-plaintext highlighter-rouge">d</code> 的距离，直到 <code class="language-plaintext highlighter-rouge">d</code> 的值小于一个极小的阈值（例如 <code class="language-plaintext highlighter-rouge">0.0001</code>），这标志着射线已经<strong>命中</strong>了某个物体的表面。</li>
+    </ul>
+  </li>
+  <li>
+<strong>记录交点信息 (Intersection Data)</strong>：
+    <ul>
+      <li>一旦命中，记录下关键信息：
+        <ul>
+          <li>
+<strong>交点坐标 <code class="language-plaintext highlighter-rouge">pos</code></strong>: <code class="language-plaintext highlighter-rouge">ro + total_distance * rd</code>。</li>
+          <li>
+<strong>物体材质ID <code class="language-plaintext highlighter-rouge">m</code></strong>: 用于区分不同物体（例如，地面、球体、盒子等）。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="阶段三表面着色-surface-shading"><strong>阶段三：表面着色 (Surface Shading)</strong></h3>
+
+<ol>
+  <li>
+<strong>获取表面基础属性 (Acquire Surface Properties)</strong>：
+    <ul>
+      <li>
+<strong>计算法线 <code class="language-plaintext highlighter-rouge">nor</code></strong>: 通过在交点 <code class="language-plaintext highlighter-rouge">pos</code> 附近极小范围内多次采样SDF，估算出表面的梯度，从而得到该点的<strong>法线向量</strong>。这是所有光照计算的基础。</li>
+      <li>
+<strong>计算反射向量 <code class="language-plaintext highlighter-rouge">ref</code></strong>: 根据视线方向 <code class="language-plaintext highlighter-rouge">rd</code> 和法线 <code class="language-plaintext highlighter-rouge">nor</code>，计算出完美的镜面反射方向，用于模拟环境反射。</li>
+    </ul>
+  </li>
+  <li>
+<strong>确定基础材质与颜色 (Determine Base Material &amp; Color)</strong>：
+    <ul>
+      <li>根据之前记录的材质ID <code class="language-plaintext highlighter-rouge">m</code>，为交点赋予<strong>基础颜色（Albedo）</strong>。</li>
+      <li>这是一个分支判断点：如果是地面 (<code class="language-plaintext highlighter-rouge">m &lt; 1.5</code>)，则通过 <code class="language-plaintext highlighter-rouge">checkersGradBox</code> 函数计算程序化的棋盘格纹理；如果是其他物体，则根据ID赋予不同的纯色。</li>
+    </ul>
+  </li>
+  <li>
+<strong>计算环境光遮蔽 (Ambient Occlusion)</strong>：
+    <ul>
+      <li>在法线方向上进行数次短距离步进，检查周围的几何体密度，计算<strong>AO</strong>系数值。这个值会使角落和缝隙等难以被环境光照亮的区域变暗，极大地增强立体感。</li>
+    </ul>
+  </li>
+  <li>
+<strong>累加多光源光照 (Accumulate Lighting from Multiple Sources)</strong>：
+    <ul>
+      <li>
+<strong>主光源 (Key Light)</strong>: 模拟太阳等强光源。其贡献主要包括<strong>漫反射（Diffuse）</strong>和<strong>高光（Specular）</strong>两部分。高光部分使用Blinn-Phong模型计算，并且整个光照贡献会乘以 <code class="language-plaintext highlighter-rouge">calcSoftshadow</code> 函数返回的软阴影系数。</li>
+      <li>
+<strong>天空光 (Sky Light)</strong>: 模拟来自天空的环境光。通过检查<strong>反射向量 <code class="language-plaintext highlighter-rouge">ref</code></strong> 的方向来确定光照强度，并再次调用 <code class="language-plaintext highlighter-rouge">calcSoftshadow</code> 函数沿着 <code class="language-plaintext highlighter-rouge">ref</code> 方向进行检测，实现<strong>反射遮挡</strong>，防止物体“穿透”其他物体反射天空。</li>
+      <li>
+<strong>补光 (Fill Light)</strong>: 一个强度较弱的辅助光源，用于提亮场景的暗部，使其不至于死黑。</li>
+      <li>
+<strong>边缘光 (Rim Light)</strong>: 根据视线和法线的夹角（菲涅尔效应的近似）在物体边缘添加一道高光，用于将物体轮廓与背景分离开。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="阶段四后期处理与输出-post-processing--final-output"><strong>阶段四：后期处理与输出 (Post-Processing &amp; Final Output)</strong></h3>
+
+<ol>
+  <li>
+<strong>添加雾效 (Fog)</strong>：
+    <ul>
+      <li>根据交点与摄像机的<strong>距离 <code class="language-plaintext highlighter-rouge">t</code></strong>，将计算出的最终光照颜色与一个全局的“雾色”进行混合。距离越远，物体颜色越接近雾色，营造出深远的大气感。</li>
+    </ul>
+  </li>
+  <li>
+<strong>最终颜色校正与输出 (Final Correction &amp; Output)</strong>：
+    <ul>
+      <li>对计算出的颜色进行<strong>伽马校正 (Gamma Correction)</strong>，使其在显示器上看起来更自然。</li>
+      <li>将最终的颜色值输出到当前像素。</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="箱子场景算法">箱子场景算法</h1>
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822133530.png" alt="image.png" loading="lazy"></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                    +-----------------------------+
+                    |        main() 函数开始      |
+                    +-------------+---------------+
+                                  |
+            +---------------------v---------------------+
+            | 1. 设置相机，并将像素位置转换为光线方向 |
+            +---------------------+---------------------+
+                                  |
+                    +-------------v-------------+
+                    | 2. rayMarch()             |
+                    |    光线步进，寻找与物体的 |
+                    |    交点距离 d             |
+                    +-------------+-------------+
+                                  |
+                  +---------------v---------------+
+                  |  光线是否击中物体 (d &lt; MAX_DIST)? |
+                  +---------------+---------------+
+                                  |
+            +---------------------+---------------------+
+            | 是                                        | 否 (未击中)
++-----------v-----------+                     +-----------v-----------+
+| 3. 计算交点 p 和法线 n |                     |  使用默认背景色       |
++-----------+-----------+                     +-----------+-----------+
+            |                                             |
++-----------v-----------+                                 |
+| 4. 获取材质和基础色    |                                 |
+|    (albedo)           |                                 |
++-----------+-----------+                                 |
+            |                                             |
++-----------v-----------+                                 |
+| 5. getLight()         |                                 |
+|    计算光照、阴影、高光|                                 |
++-----------+-----------+                                 |
+            |                                             |
++-----------v-----------+                     +-----------v-----------+
+| 6. 添加雾效和后期调色  | &lt;-------------------+
++-----------+-----------+
+            |
++-----------v-----------+
+| 7. 输出最终像素颜色    |
++-----------------------+
+</code></pre></div></div>
+
+<ol>
+  <li>
+<strong>初始化：设置坐标与相机</strong>
+    <ul>
+      <li>
+<strong>屏幕坐标转换</strong>：在 <code class="language-plaintext highlighter-rouge">main</code> 函数中，首先将输入的二维纹理坐标（范围 <code class="language-plaintext highlighter-rouge">[0, 1]</code>）转换为以屏幕中心为原点的标准化坐标（范围 <code class="language-plaintext highlighter-rouge">[-1, 1]</code>），并根据屏幕的宽高比进行校正，防止图像拉伸。</li>
+      <li>
+<strong>定义虚拟相机</strong>：设置一个虚拟相机的位置（<code class="language-plaintext highlighter-rouge">ro</code>，光线起点）和它看向的目标点。</li>
+      <li>
+<strong>计算光线方向</strong>：根据相机的位置和当前像素在屏幕上的位置，计算出一条从相机出发、穿过该像素的<strong>光线方向向量</strong>（<code class="language-plaintext highlighter-rouge">rd</code>）。</li>
+    </ul>
+  </li>
+  <li>
+<strong>光线步进：寻找与场景的交点</strong>
+    <ul>
+      <li>调用核心的 <code class="language-plaintext highlighter-rouge">rayMarch</code> 函数，沿着上一步计算出的光线方向（<code class="language-plaintext highlighter-rouge">rd</code>）从相机位置（<code class="language-plaintext highlighter-rouge">ro</code>）开始前进。</li>
+      <li>
+<strong>核心思想</strong>：在每一步，通过调用 <code class="language-plaintext highlighter-rouge">sceneSDF</code> 函数计算当前位置到场景中所有物体表面的<strong>最短距离</strong> <code class="language-plaintext highlighter-rouge">dS</code>。这个距离就是本次可以安全前进的最大步长。</li>
+      <li>
+<strong>循环前进</strong>：不断地沿着光线方向前进 <code class="language-plaintext highlighter-rouge">dS</code> 的距离，直到光线与某个物体的表面足够近（小于阈值 <code class="language-plaintext highlighter-rouge">SURF_DIST</code>）或者超出了最大渲染距离（<code class="language-plaintext highlighter-rouge">MAX_DIST</code>）。</li>
+      <li>函数最终返回光线从相机出发到击中物体的总距离 <code class="language-plaintext highlighter-rouge">d</code>。</li>
+    </ul>
+  </li>
+  <li>
+<strong>表面着色：计算交点颜色</strong>
+    <ul>
+      <li>如果光线成功击中物体（<code class="language-plaintext highlighter-rouge">d &lt; MAX_DIST</code>），则开始计算该点的颜色。</li>
+      <li>
+<strong>计算交点信息</strong>：根据行进距离 <code class="language-plaintext highlighter-rouge">d</code> 计算出光线与场景的精确三维交点坐标 <code class="language-plaintext highlighter-rouge">p</code>，并调用 <code class="language-plaintext highlighter-rouge">getNormal</code> 函数计算该点的<strong>表面法线向量</strong> <code class="language-plaintext highlighter-rouge">n</code>。</li>
+      <li>
+<strong>判断材质</strong>：调用 <code class="language-plaintext highlighter-rouge">getMaterial</code> 函数判断交点 <code class="language-plaintext highlighter-rouge">p</code> 属于哪个物体（球体还是墙壁）。</li>
+      <li>
+<strong>获取基础色（Albedo）</strong>：
+        <ul>
+          <li>如果击中的是球体，则调用 <code class="language-plaintext highlighter-rouge">getGradientColor</code> 计算出复杂的、带有动画效果的渐变色。</li>
+          <li>如果击中的是墙壁，则赋予一个简单的、带有微小变化的蓝色。</li>
+        </ul>
+      </li>
+      <li>
+<strong>进行光照计算</strong>：调用 <code class="language-plaintext highlighter-rouge">getLight</code> 函数，这是最关键的着色步骤。它综合了多种光照效果：
+        <ul>
+          <li>
+<strong>环境光</strong>：提供一个基础的整体亮度。</li>
+          <li>
+<strong>主光源</strong>：计算来自主方向光的<strong>漫反射</strong>（物体颜色）和<strong>高光</strong>（镜面反射）。
+            <ul>
+              <li>高光计算时使用Phone模型，计算反射方向。</li>
+              <li>这是一个单pass的流程（没有使用shadowMap）==，阴影的计算依赖于反射方向。==</li>
+              <li>
+<strong>软阴影</strong>：在计算主光源时，会从交点 <code class="language-plaintext highlighter-rouge">p</code> 向光源方向再次进行一次简化的光线步进（<code class="language-plaintext highlighter-rouge">softShadow</code> 函数），以判断该点是否处于阴影中，并计算出阴影的柔和程度。</li>
+            </ul>
+          </li>
+          <li>
+<strong>辅助光</strong>：添加<strong>填充光</strong>（照亮暗部）和<strong>边缘光</strong>（勾勒轮廓），使光照效果更丰富。</li>
+        </ul>
+      </li>
+      <li>
+<strong>添加雾效</strong>：根据交点与相机的距离 <code class="language-plaintext highlighter-rouge">d</code>，将颜色与背景色进行混合，模拟出远景模糊的雾化效果，增加场景的深度感。</li>
+    </ul>
+  </li>
+  <li>
+<strong>后期处理与输出</strong>
+    <ul>
+      <li>在得到基础光照颜色后，进行最后的画面调整。</li>
+      <li>
+<strong>Gamma校正</strong>：调整颜色亮度，使其在显示器上看起来更自然。</li>
+      <li>
+<strong>色彩调整</strong>：为整个画面叠加一层微妙的蓝色调，以统一风格。</li>
+      <li>
+<strong>最终输出</strong>：将计算完成的最终颜色赋值给 <code class="language-plaintext highlighter-rouge">outColor</code>，作为当前像素的显示颜色。</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="菲涅尔效应">菲涅尔效应</h2>
+<p>对于大多数电介质（非金属，如水、玻璃、塑料等），观察角度越接近于平行于表面（即掠射角），表面的反射能力就越强。这是让材质看起来更真实、更有质感的关键因素之一。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 菲涅尔效应：视角与法线夹角越大，反射越强（常见于水面、玻璃等）
+float fresnel = 1.0;
+if (matId == 1) { // 只对球体应用
+    fresnel = pow(1.0 - max(0.0, dot(viewDir, n)), 2.0);
+}
+</code></pre></div></div>
+<p>这段代码通过计算视角和法线夹角的余弦，实现了一个简单的函数：<strong>夹角越大（越接近掠射角），fresnel 的值就越接近1.0（反射越强）</strong>。<br>
+<code class="language-plaintext highlighter-rouge">pow(1.0 - dot(V, N), power) </code>的形式是<strong>一种广为人知的</strong>、计算成本极低的“边缘光”或“伪菲涅尔”效果的实现方式。</p>
+
+<h3 id="pbr">PBR</h3>
+<p>从“基于物理的渲染 (PBR)”的角度来讲，上述方式不是标准的，但接近。<br>
+在现代PBR工作流中，行业标准是使用 ==Schlick 近似法 (Schlick’s Approximation) ==来模拟菲涅尔效应，其公式为：</p>
+
+\[F(\theta) = F_0 + (1-F_0)(1-\cos\theta)^5\]
+
+<ul>
+  <li>
+    <p><strong>基础反射率 ($F_0$)</strong>: Schlick 模型包含一个 $F_0$ 项，代表垂直入射时的基础反射率（比如水在垂直看时约有2%的反射率）。而代码中的公式相当于假设 $F_0$=0，即垂直看时完全没有反射，这在物理上是不准确的。</p>
+  </li>
+  <li>
+    <p><strong>幂次 (Power)</strong>: Schlick 模型标准使用 5 次幂，这个数字能更好地拟合真实世界物质的反射曲线。代码中使用了 2 次幂，这会使菲涅尔效应的过渡区域更宽、更柔和，是一种艺术上的选择，而非物理上的拟合。</p>
+  </li>
+</ul>
+
+<h2 id="主光源">主光源</h2>
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822133425.png" alt="image.png" loading="lazy"></p>
+
+<p>主光源，或称为关键光，是场景中最主要、最强的光源，它决定了物体大部分的明暗关系和阴影的朝向。在这段代码中，主光源的计算包含了三个主要部分：<strong>漫反射（Diffuse Reflection）</strong>、<strong>高光反射（Specular Reflection）</strong> 和 <strong>软阴影（Soft Shadow）</strong>。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// --- 准备工作 ---</span>
+<span class="kt">vec3</span> <span class="n">l</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="o">-</span><span class="n">u</span><span class="p">.</span><span class="n">lightDir</span><span class="p">.</span><span class="n">xyz</span><span class="p">);</span> <span class="c1">// 主光源方向</span>
+<span class="kt">vec3</span> <span class="n">r</span> <span class="o">=</span> <span class="n">reflect</span><span class="p">(</span><span class="o">-</span><span class="n">l</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span> <span class="c1">// 反射光方向</span>
+
+<span class="c1">// ...</span>
+
+<span class="c1">// 1. 主光源 (Key Light)</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">enableLights</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// --- 漫反射计算 ---</span>
+    <span class="kt">float</span> <span class="n">ndotl</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">l</span><span class="p">));</span>
+    <span class="kt">float</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">ndotl</span><span class="p">;</span> 
+
+    <span class="c1">// --- 高光计算 (模拟GGX) ---</span>
+    <span class="kt">float</span> <span class="n">rough</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">u</span><span class="p">.</span><span class="n">shadowParams</span><span class="p">.</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mo">05</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">95</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">specPower</span> <span class="o">=</span> <span class="n">mix</span><span class="p">(</span><span class="mi">16</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">64</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">shadowParams</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">spec</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">viewDir</span><span class="p">,</span> <span class="n">r</span><span class="p">)),</span> <span class="n">specPower</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">rough</span><span class="p">);</span>
+
+    <span class="c1">// --- 阴影计算 ---</span>
+    <span class="kt">float</span> <span class="n">shadow</span> <span class="o">=</span> <span class="n">softShadow</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mo">07</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mo">07</span><span class="p">,</span> <span class="mi">6</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">shadowParams</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">shadow</span> <span class="o">=</span> <span class="n">mix</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">shadow</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">shadowParams</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+
+    <span class="c1">// --- 最终组合 ---</span>
+    <span class="kt">vec3</span> <span class="n">lightColor</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">lightColors</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">rgb</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">lightColors</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">a</span><span class="p">;</span>
+    <span class="n">finalColor</span> <span class="o">+=</span> <span class="p">(</span><span class="n">diff</span> <span class="o">*</span> <span class="n">albedo</span> <span class="o">+</span> <span class="n">spec</span> <span class="o">*</span> <span class="n">lightColor</span><span class="p">)</span> <span class="o">*</span> <span class="n">lightColor</span> <span class="o">*</span> <span class="n">shadow</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">lightDir</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr>
+
+<h3 id="第一步向量定义">第一步：向量定义</h3>
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">vec3 n</code>: <strong>法线向量</strong> (Normal)，垂直于物体表面。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">vec3 viewDir</code>: <strong>视角向量</strong> (View Direction)。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">vec3 l = normalize(-u.lightDir.xyz);</code>: <strong>光源向量</strong> (Light Direction)。<code class="language-plaintext highlighter-rouge">u.lightDir</code> 定义的是光<strong>照射来</strong>的方向（例如从上到下），我们需要的是从<strong>表面指向光源</strong>的向量，所以要对其进行取反 <code class="language-plaintext highlighter-rouge">-</code> 并单位化 <code class="language-plaintext highlighter-rouge">normalize</code>。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">vec3 r = reflect(-l, n);</code>: <strong>反射向量</strong> (Reflection Vector)。计算的是光源向量 <code class="language-plaintext highlighter-rouge">l</code> 相对于法线 <code class="language-plaintext highlighter-rouge">n</code> 的完美镜面反射方向（用于计算<code class="language-plaintext highlighter-rouge">Phone模型高光</code>和<code class="language-plaintext highlighter-rouge">软阴影</code>）。</li>
+</ul>
+
+<h3 id="第二步漫反射-diffuse-计算">第二步：漫反射 (Diffuse) 计算</h3>
+<p>漫反射模拟的是光线被粗糙表面向各个方向均匀散射的效果。它决定了物体不受高光影响的基础明暗。<br>
+漫反射不考虑出射方向，==强度由入射方向和法向决定==。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">ndotl</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">l</span><span class="p">));</span>
+<span class="kt">float</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">ndotl</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">dot(n, l)</code></strong>: 计算法线向量 <code class="language-plaintext highlighter-rouge">n</code> 和光源向量 <code class="language-plaintext highlighter-rouge">l</code> 的点积。
+    <ul>
+      <li>当光线<strong>垂直</strong>照射到表面时 (<code class="language-plaintext highlighter-rouge">n</code> 和 <code class="language-plaintext highlighter-rouge">l</code> 方向相同)，点积为 1，表面最亮。</li>
+      <li>当光线<strong>平行</strong>于表面照射时 (<code class="language-plaintext highlighter-rouge">n</code> 和 <code class="language-plaintext highlighter-rouge">l</code> 互相垂直)，点积为 0，表面不受光。</li>
+      <li>当光线从表面<strong>背面</strong>照射时，点积为负数。</li>
+    </ul>
+  </li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">max(0.0, ...)</code></strong>: 使用 <code class="language-plaintext highlighter-rouge">max</code> 函数确保点积结果不会是负数，因为背面的光线不应该对正面产生照明效果。</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">float diff = ndotl;</code></strong>: 将这个 <code class="language-plaintext highlighter-rouge">ndotl</code> 的结果作为漫反射强度 <code class="language-plaintext highlighter-rouge">diff</code>。这种光照模型被称为 <strong>Lambertian 反射</strong>，是最简单和常见的漫反射模型。</li>
+</ul>
+
+<p>最终，漫反射对颜色的贡献是 <code class="language-plaintext highlighter-rouge">diff * albedo</code>，即<strong>漫反射强度</strong>乘以<strong>物体基础色</strong>。</p>
+
+<h3 id="第三步高光-specular-计算">第三步：高光 (Specular) 计算</h3>
+<p>高光模拟的是光滑表面（如金属、塑料）对光源的镜面反射。<br>
+==高光强度由和出射方向决定（或Blinn-Phone中使用半程向量和法向）。==</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">rough</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">u</span><span class="p">.</span><span class="n">shadowParams</span><span class="p">.</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mo">05</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">95</span><span class="p">);</span>
+<span class="kt">float</span> <span class="n">specPower</span> <span class="o">=</span> <span class="n">mix</span><span class="p">(</span><span class="mi">16</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">64</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">u</span><span class="p">.</span><span class="n">shadowParams</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="kt">float</span> <span class="n">spec</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">viewDir</span><span class="p">,</span> <span class="n">r</span><span class="p">)),</span> <span class="n">specPower</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">rough</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>这段代码实现了一个简化的 <strong>Blinn-Phong</strong> 高光模型，并加入了一些模拟PBR（基于物理的渲染）中金属度/粗糙度的概念。</p>
+
+<ul>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">dot(viewDir, r)</code></strong>: 计算视角向量 <code class="language-plaintext highlighter-rouge">viewDir</code> 和反射向量 <code class="language-plaintext highlighter-rouge">r</code> 的点积。
+    <ul>
+      <li>如果视线方向 <code class="language-plaintext highlighter-rouge">viewDir</code> 与完美反射方向 <code class="language-plaintext highlighter-rouge">r</code> <strong>完全重合</strong>，点积为 1，此时看到的高光最强。</li>
+      <li>视线与反射方向偏离得越远，点积越小，高光越弱。</li>
+    </ul>
+  </li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">max(0.0, ...)</code></strong>: 同样是防止结果为负。</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">pow(..., specPower)</code></strong>: 这是高光计算的核心。将点积结果进行 <code class="language-plaintext highlighter-rouge">specPower</code> (高光指数) 次幂。
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">specPower</code> 的值越大，高光点越小、越锐利，模拟的表面也<strong>越光滑</strong>。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">specPower</code> 的值越小，高光点越大、越模糊，模拟的表面也<strong>越粗糙</strong>。</li>
+    </ul>
+  </li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">u.shadowParams.w</code></strong>: 这个uniform变量在这里被巧妙地用作<strong>金属度 (metalness)</strong> 或<strong>光滑度 (smoothness)</strong> 的控制器。
+    <ul>
+      <li>当它为 0 时, <code class="language-plaintext highlighter-rouge">specPower</code> 为 16 (高光模糊)，当它为 1 时, <code class="language-plaintext highlighter-rouge">specPower</code> 为 64 (高光锐利)。<code class="language-plaintext highlighter-rouge">mix</code> 函数在其间进行线性插值。</li>
+    </ul>
+  </li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">* (1.0 - rough)</code></strong>: 用一个 <code class="language-plaintext highlighter-rouge">rough</code> (粗糙度) 变量来进一步控制高光强度，这借鉴了PBR的思想。<code class="language-plaintext highlighter-rouge">rough</code> 越高，高光越弱。</li>
+</ul>
+
+<p>最终，高光的颜色贡献是 <code class="language-plaintext highlighter-rouge">spec * lightColor</code>，即<strong>高光强度</strong>乘以<strong>光源颜色</strong>。</p>
+
+<h3 id="第四步软阴影-soft-shadow-计算">第四步：软阴影 (Soft Shadow) 计算</h3>
+<p>为了判断表面上的点 <code class="language-plaintext highlighter-rouge">p</code> 是否处于阴影中，代码从点 <code class="language-plaintext highlighter-rouge">p</code> 出发，沿着<strong>光源方向 <code class="language-plaintext highlighter-rouge">l</code></strong> 进行了一次光线步进（Ray Marching）。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">shadow</span> <span class="o">=</span> <span class="n">softShadow</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mo">07</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mo">07</span><span class="p">,</span> <span class="mi">6</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">shadowParams</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+<span class="n">shadow</span> <span class="o">=</span> <span class="n">mix</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">shadow</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">shadowParams</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">softShadow(...)</code></strong>: 这个函数返回一个 <code class="language-plaintext highlighter-rouge">[0.0, 1.0]</code> 之间的值。<code class="language-plaintext highlighter-rouge">1.0</code> 表示完全没有遮挡（在光下），<code class="language-plaintext highlighter-rouge">0.0</code> 表示完全被遮挡（在阴影中）。其内部通过多次步进检查光路上是否有物体，并根据遮挡物与当前点的距离来计算出柔和的阴影过渡，而不是硬邦邦的边缘。
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">p + n * 0.07</code>: 将阴影光线的起始点沿着法线方向稍微移开一点，这是一种常见的避免“自遮挡”问题的技术。</li>
+    </ul>
+  </li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">mix(0.3, 1.0, ...)</code></strong>: 对 <code class="language-plaintext highlighter-rouge">softShadow</code> 返回的原始阴影值进行调整。
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">shadow * u.shadowParams.y</code>: 使用 <code class="language-plaintext highlighter-rouge">u.shadowParams.y</code> 来控制<strong>阴影的整体强度</strong>。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">mix(...)</code>: 重新映射阴影的范围。即使在最暗的阴影处（<code class="language-plaintext highlighter-rouge">shadow</code> 值为0），最终的 <code class="language-plaintext highlighter-rouge">shadow</code> 值也是 <code class="language-plaintext highlighter-rouge">0.3</code>，而不是全黑的 <code class="language-plaintext highlighter-rouge">0.0</code>。这==模拟了现实世界中来自环境的反光==，使得阴影区域不是死黑一片，保留了细节。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="软阴影计算算法">软阴影计算算法</h4>
+<p>该算法基于<strong>SDF光线步进（SDF Ray Marching）的一种非常经典且高效的方法，其核心思想由图形学大神 Inigo Quilez 提出。它不像传统阴影那样只判断“是”或“否”（完全遮挡或完全无遮挡），而是计算一个0.0到1.0之间的遮挡系数</strong>，从而模拟出柔和的半影（Penumbra）区域。<br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250826230055.png" alt="image.png" loading="lazy"><br>
+ <code class="language-plaintext highlighter-rouge">softShadow</code> 函数：</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ro: 光线起点 (物体表面上的点)</span>
+<span class="c1">// rd: 光线方向 (从该点射向光源的方向)</span>
+<span class="c1">// mint, maxt: 步进的最小和最大距离</span>
+<span class="c1">// k:  一个关键参数，用于控制阴影的柔和度</span>
+<span class="kt">float</span> <span class="nf">softShadow</span><span class="p">(</span><span class="kt">vec3</span> <span class="n">ro</span><span class="p">,</span> <span class="kt">vec3</span> <span class="n">rd</span><span class="p">,</span> <span class="kt">float</span> <span class="n">mint</span><span class="p">,</span> <span class="kt">float</span> <span class="n">maxt</span><span class="p">,</span> <span class="kt">float</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span> <span class="c1">// 结果初始化为1.0，代表完全光亮</span>
+    <span class="kt">float</span> <span class="n">t</span> <span class="o">=</span> <span class="n">mint</span><span class="p">;</span>  <span class="c1">// t 是当前沿着光线方向步进的距离</span>
+    
+    <span class="c1">// 循环步进，从表面点向光源前进</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">64</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 计算当前点(ro + rd * t)到场景中最近物体的距离h</span>
+        <span class="kt">float</span> <span class="n">h</span> <span class="o">=</span> <span class="n">sceneSDF</span><span class="p">(</span><span class="n">ro</span> <span class="o">+</span> <span class="n">rd</span> <span class="o">*</span> <span class="n">t</span><span class="p">);</span> 
+        
+        <span class="c1">// h极小，说明光线已经击中了某个物体，返回0.0（完全阴影）</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">h</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">.</span><span class="mo">000</span><span class="mi">8</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span> 
+        
+        <span class="c1">// --- 核心公式 ---</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">k</span> <span class="o">*</span> <span class="n">h</span> <span class="o">/</span> <span class="n">t</span><span class="p">);</span> 
+        
+        <span class="c1">// 更新步进距离t。步长是自适应的，但被clamp函数限制了范围</span>
+        <span class="n">t</span> <span class="o">+=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mo">002</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mo">05</span><span class="p">);</span> 
+        
+        <span class="c1">// 如果结果已足够精确或超出了最大距离，则停止</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">.</span><span class="mo">004</span> <span class="o">||</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">maxt</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// 将结果限制在[0, 1]范围内并返回</span>
+    <span class="k">return</span> <span class="n">clamp</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="核心公式res--minres-k--h--t">核心公式：<code class="language-plaintext highlighter-rouge">res = min(res, k * h / t)</code>
+</h5>
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">h</code>: 当前光线上的点到最近遮挡物的距离。<code class="language-plaintext highlighter-rouge">h</code> 越小，意味着光线离遮挡物越近。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">t</code>: 光线从物体表面出发已经行进的距离。<code class="language-plaintext highlighter-rouge">t</code> 越小，意味着遮挡物离被着色的表面点越近。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">h / t</code>: 这个比率可以被理解为<strong>遮挡物相对于当前表面点的“视角大小”的近似</strong>。
+    <ul>
+      <li>光线到遮挡物越近，阴影越明显(很好理解)，和h有正比关系。</li>
+      <li>遮挡物到着色面越近，阴影过渡更硬，受到h的影响更大，1/t可以描述这种关系。</li>
+    </ul>
+  </li>
+  <li>
+<code class="language-plaintext highlighter-rouge">k</code>: 这是一个<strong>硬度/柔和度系数</strong>。它像一个放大器，用来调整 <code class="language-plaintext highlighter-rouge">h/t</code> 的影响范围。<code class="language-plaintext highlighter-rouge">k</code> 值越大，<code class="language-plaintext highlighter-rouge">k * h / t</code> 的结果就越大，这意味着 <code class="language-plaintext highlighter-rouge">res</code> 更容易保持在较高的值（更亮），从而产生更大、更模糊、更柔和的阴影。反之，<code class="language-plaintext highlighter-rouge">k</code> 值越小，阴影就越小、越清晰、越硬。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">min(res, ...)</code>: 在整个光线步进过程中，我们取所有计算出的遮挡值的最小值。这意味着阴影的暗度是由光线路径上<strong>最危险</strong>（离遮挡物最近）的那一刻决定的。
+    <h5 id="设置步长带来的影响">设置步长带来的影响</h5>
+    <p>最开始的渲染结果如下：<br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250826220024.png" alt="image.png" loading="lazy"></p>
+  </li>
+  <li>可以看到，阴影非常柔和/模糊：这是因为算法丢失了所有的细节。由于无法精确地找到物体的边缘，阴影的边界变得极不确定，只能形成一团模糊的、平均化的结果。</li>
+  <li>并且阴影的过渡部分非常不自然，这种瑕疵是<strong>严重欠采样的典型表现</strong>。算法得到的数据是粗糙且不连续的。</li>
+</ul>
+
+<p>==当缩小步长：==<br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250826215936.png" alt="image.png" loading="lazy"><br>
+这一次阴影清晰、自然：由于采样精度足够高，算法能够准确地“感知”到遮挡物的边缘在哪里。因此，生成的阴影轮廓分明，半影的过渡也平滑且符合物理规律。</p>
+
+<h3 id="第五步最终组合">第五步：最终组合</h3>
+
+<p>最后，将漫反射、高光和阴影组合在一起，计算出主光源对最终颜色的总贡献。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">lightColor</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">lightColors</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">rgb</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">lightColors</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">a</span><span class="p">;</span>
+<span class="n">finalColor</span> <span class="o">+=</span> <span class="p">(</span><span class="n">diff</span> <span class="o">*</span> <span class="n">albedo</span> <span class="o">+</span> <span class="n">spec</span> <span class="o">*</span> <span class="n">lightColor</span><span class="p">)</span> <span class="o">*</span> <span class="n">lightColor</span> <span class="o">*</span> <span class="n">shadow</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">lightDir</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">(diff * albedo + spec * lightColor)</code></strong>: 这是光照的核心部分。将<strong>漫反射贡献</strong>（光与物体表面颜色互动）和<strong>高光贡献</strong>（光被直接反射）相加。</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">* lightColor</code></strong>: 乘以光源的颜色。</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">* shadow</code></strong>: 乘以阴影值。如果 <code class="language-plaintext highlighter-rouge">shadow</code> 值为 1，颜色不变；如果为 0.3，则颜色衰减为原来的30%。</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">* u.lightDir.w</code></strong>: 乘以光源的强度。</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">finalColor += ...</code></strong>: 将计算出的主光源贡献累加到最终颜色 <code class="language-plaintext highlighter-rouge">finalColor</code>上。</li>
+</ul>
+
+<h2 id="填充光-fill-light">填充光 (Fill Light)？</h2>
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822133450.png" alt="image.png" loading="lazy"></p>
+
+<p>首先，我们理解一下“填充光”在光照设计中的作用。在一个==经典的三点照明（Three-Point Lighting）系统==中，有三个主要光源：</p>
+
+<ol>
+  <li>
+<strong>主光源 (Key Light)</strong>：最强的光，决定物体的基本形态和阴影(看上一节)。</li>
+  <li>
+<strong>填充光 (Fill Light)</strong>：较弱的光，从主光源的另一侧照射物体，<strong>目的在于“填充”和柔化主光源制造出的浓重阴影</strong>，降低场景的对比度，让暗部的细节能够显现出来。</li>
+  <li>
+<strong>边缘光 (Rim Light)</strong>：从物体背后打来的光，用于勾勒物体的轮廓，使其从背景中分离出来。</li>
+</ol>
+
+<p>因此，填充光的特点是：<strong>强度较弱、通常不产生高光、并且不投射自己独立的阴影</strong>。</p>
+
+<h3 id="计算方法解析">计算方法解析</h3>
+<h3 id="填充光的实现特点">填充光的实现特点</h3>
+
+<p>通过分析代码，我们可以总结出这个填充光的几个鲜明特点：</p>
+
+<ul>
+  <li>
+<strong>仅有漫反射</strong>：它只计算了漫反射（<code class="language-plaintext highlighter-rouge">diffuse</code>），完全没有计算高光（<code class="language-plaintext highlighter-rouge">specular</code>）。这非常符合填充光的定位——只为照亮暗部，不制造新的亮点。</li>
+  <li>
+<strong>不投射阴影</strong>：代码中没有为填充光调用 <code class="language-plaintext highlighter-rouge">softShadow</code> 函数。这也是一种常见且必要的优化，因为计算多光源的阴影成本非常高，而且通常只有主光源的阴影对场景的视觉贡献是必要的。</li>
+  <li>
+<strong>强度较弱且固定</strong>：它的强度被一个固定的 <code class="language-plaintext highlighter-rouge">0.6</code> 系数削弱，明确了其作为次级光源的地位。</li>
+</ul>
+
+<h2 id="边缘光">边缘光</h2>
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822131336.png" alt="image.png" loading="lazy"></p>
+
+<p>边缘光，有时也叫“背光”（Backlight），是三点照明系统中的第三个光源，如上图所示。</p>
+<ul>
+  <li>
+<strong>目的</strong>：它的主要作用不是照亮物体本身，而是<strong>勾勒出物体的轮廓</strong>。通过在物体的边缘形成一道亮边，可以将物体与深色的背景清晰地分离开来，极大地增强了场景的深度感和立体感。</li>
+  <li>
+<strong>位置</strong>：通常放置在物体的<strong>斜后方</strong>，正对着相机。</li>
+</ul>
+
+<h3 id="计算方法解析-1">计算方法解析</h3>
+
+<p>边缘光的计算利用了一个非常巧妙且高效的技巧，它甚至不需要一个实际的光源位置。它基于<strong>视角和表面法线</strong>之间的关系来模拟这个效果。</p>
+
+<p>我们来看 <code class="language-plaintext highlighter-rouge">getLight</code> 函数中对应的代码块：</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 3. 边缘光 (Rim Light)，用于勾勒物体轮廓</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">enableLights</span><span class="p">.</span><span class="n">z</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">rim</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">viewDir</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+    <span class="n">rim</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">rim</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">finalColor</span> <span class="o">+=</span> <span class="n">rim</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">lightColors</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">rgb</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">lightColors</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">a</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">8</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>这个计算过程可以分解为以下几个步骤：</p>
+
+<h4 id="步骤-1-计算基础边缘强度">步骤 1: 计算基础边缘强度</h4>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">rim</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">viewDir</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">dot(viewDir, n)</code>: 我们再次见到了这个点积运算。它计算的是视角方向 <code class="language-plaintext highlighter-rouge">viewDir</code> 和表面法线 <code class="language-plaintext highlighter-rouge">n</code> 之间夹角的余弦值。
+    <ul>
+      <li>当你的视线<strong>正对</strong>着一个表面时（例如球体的正中心），<code class="language-plaintext highlighter-rouge">viewDir</code> 和 <code class="language-plaintext highlighter-rouge">n</code> 方向几乎重合，点积结果接近 <code class="language-plaintext highlighter-rouge">1.0</code>。</li>
+      <li>当你的视线与表面<strong>近乎平行</strong>时（也就是你正在看物体的<strong>边缘/轮廓</strong>），<code class="language-plaintext highlighter-rouge">viewDir</code> 和 <code class="language-plaintext highlighter-rouge">n</code> 几乎互相垂直，点积结果接近 <code class="language-plaintext highlighter-rouge">0.0</code>。</li>
+    </ul>
+  </li>
+  <li>
+<code class="language-plaintext highlighter-rouge">1.0 - ...</code>: 通过用 <code class="language-plaintext highlighter-rouge">1.0</code> 减去点积的结果，这个操作巧妙地将数值“反转”了：
+    <ul>
+      <li>在物体中心，<code class="language-plaintext highlighter-rouge">1.0 - 1.0 = 0.0</code>。边缘光强度为0。</li>
+      <li>在物体边缘，<code class="language-plaintext highlighter-rouge">1.0 - 0.0 = 1.0</code>。边缘光强度为1。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>这行代码实现的效果是：<strong>一个物体越是靠近其视觉上的轮廓，<code class="language-plaintext highlighter-rouge">rim</code> 的值就越大</strong>。这正是边缘光所需要的！这个技巧与我们之前讨论的<strong>菲涅尔效应</strong>的计算几乎完全一样，它们都依赖于视角和法线的关系。</p>
+
+<h4 id="步骤-2-调整边缘光的衰减">步骤 2: 调整边缘光的衰减</h4>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rim</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">rim</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>上一步计算出的 <code class="language-plaintext highlighter-rouge">rim</code> 值是从边缘（1.0）到中心（0.0）线性变化的。直接使用这个值会导致边缘光范围太宽，过渡不够锐利。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">pow(rim, 3.0)</code>: 通过对 <code class="language-plaintext highlighter-rouge">rim</code> 值进行幂运算（这里是3次方），可以收紧这个亮边的范围。因为 <code class="language-plaintext highlighter-rouge">[0, 1]</code> 之间的数字，其幂次越高，值就越小。例如，<code class="language-plaintext highlighter-rouge">0.5^3 = 0.125</code>。</li>
+  <li>这个操作使得只有 <code class="language-plaintext highlighter-rouge">rim</code> 值非常接近 <code class="language-plaintext highlighter-rouge">1.0</code> 的区域（也就是最边缘的区域）才能保持较高的亮度，而稍微离开边缘一点，亮度就会迅速衰减下去。这就形成了一道<strong>更窄、更集中的亮边</strong>，效果更佳。</li>
+</ul>
+
+<h4 id="步骤-3-组合最终颜色">步骤 3: 组合最终颜色</h4>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">finalColor</span> <span class="o">+=</span> <span class="n">rim</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">lightColors</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">rgb</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">lightColors</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">a</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">8</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">rim * ...</code>: 将计算出的边缘光强度 <code class="language-plaintext highlighter-rouge">rim</code> 乘以指定的边缘光颜色 <code class="language-plaintext highlighter-rouge">u.lightColors[2].rgb</code> 和强度 <code class="language-plaintext highlighter-rouge">u.lightColors[2].a</code>。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">* 0.8</code>: 额外再乘以一个 <code class="language-plaintext highlighter-rouge">0.8</code> 的系数，稍微降低一点边缘光的整体亮度。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">finalColor += ...</code>: 和填充光一样，将边缘光的颜色贡献<strong>累加</strong>到最终颜色上。</li>
+</ul>
+
+<h3 id="边缘光的特点">边缘光的特点</h3>
+
+<ul>
+  <li>
+<strong>虚拟光源</strong>：它不依赖于一个明确的光源方向向量（如 <code class="language-plaintext highlighter-rouge">fillDir</code> 或 <code class="language-plaintext highlighter-rouge">l</code>），而是完全通过几何关系（视角和法线）来模拟，非常高效。</li>
+  <li>
+<strong>依赖视角</strong>：效果是完全相对于观察者的。当你转动视角时，边缘光会一直出现在物体的轮廓上。</li>
+  <li>
+<strong>高度可控</strong>：通过调整 <code class="language-plaintext highlighter-rouge">pow</code> 函数的指数，可以非常方便地控制亮边的宽度和锐利程度。指数越高，亮边越窄。</li>
+  <li>
+<strong>纯粹的附加效果</strong>：和填充光一样，它没有高光，也不投射阴影，纯粹是为了增强视觉表现力而添加的颜色。</li>
+</ul>
+
+<h2 id="环境光计算">环境光计算</h2>
+
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822132533.png" alt="image.png" loading="lazy"></p>
+
+<p><strong>这里采用了一种非常简化的模型</strong>：当的眼睛看向物体表面时，==如果视线被反射向了“天空”==，就会在物体表面看到一抹来自天空的蓝色反光。这个反光在物体的边缘处以及正对着天空的表面上会最强。<br>
+步骤：</p>
+<ol>
+  <li>根据视线方向和法线方向计算视线反射方向。<code class="language-plaintext highlighter-rouge">vec3 envReflect = reflect(-viewDir, n);</code>
+</li>
+  <li>计算反射向量有多大程度指向天空，结合用菲涅尔效应计算最终的反射光。<br>
+```<br>
+// 1. 计算反射方向指向天空的程度<br>
+float envAmount = max(0.0, envReflect.y) * fresnel;</li>
+</ol>
+
+<p>// 2. 添加环境光颜色<br>
+finalColor += envAmount * vec3(0.3, 0.5, 0.8) * 0.4;</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+[[图形学八股总结#2. 基于图像的照明 (IBL)]]
+这种方式是“基于图像的照明”方法的一种简化，采用==程序化的模拟生成简化天空==（一个半球），只模拟了天空的镜面反射和菲涅尔效应。
+
+
+## 思考一：shapMap和直接软阴影计算的区别
+
+### `softShadow` (基于光线步进)
+
+* **原理**：这是一种 “屏幕空间”方法。对于屏幕上每一个被渲染的像素点，它都会从这个点向光源方向发射一条“阴影光线”，并进行多次步进（Ray Marching）。通过在步进过程中检测离场景的最近距离，来判断这条路径上是否有遮挡物，并根据遮挡的紧密程度计算出阴影的柔和度。
+
+* **特点**：
+    * **逐像素计算**：每个需要计算阴影的像素都要执行一个循环（在你的代码里是64次），计算成本非常高。
+    * **高质量**：可以产生==非常精确、物理正确的柔和阴影==，阴影的柔和度会根据遮挡物和接收物之间的距离自然变化。
+    * **无额外内存**：不需要额外的显存来存储纹理。
+    * **与SDF渲染原生集成**：这是在SDF光线步进渲染器中实现阴影的最自然、最直接的方法。
+
+### Shadow Map (基于光栅化)
+
+* **原理**：这是一种“两遍渲染（Two-Pass）”的技术。
+    1.  **第一遍 (深度图渲染)**：将相机移动到光源的位置，并朝光源的方向渲染整个场景。但这次渲染不输出颜色，只输出每个像素的**深度信息**（即距离光源的远近），并将这些信息存储在一张纹理中，这张纹理就是**Shadow Map**。
+    2.  **第二遍 (最终场景渲染)**：从主相机的位置正常渲染场景。对于每个像素，将其坐标转换到光源的视角下，并查询第一遍生成的Shadow Map。通过比较当前像素的深度和Shadow Map中记录的深度，就可以判断出该像素是否在阴影中。
+
+* **特点**：
+* 
+    * **速度快**：整个过程主要依赖于硬件高度优化的光栅化管线，渲染深度图通常非常快。最终着色时，只是多了一次纹理采样，计算成本远低于光线步进。
+    * **硬阴影**：基础的Shadow Map只能产生边缘锐利的**硬阴影**。要实现软阴影，需要额外的技术，如 **PCF** (Percentage-Closer Filtering) 或 **VSM** (Variance Shadow Maps)，这会增加一些计算成本，但通常仍比光线步进快。
+    * **依赖分辨率**：阴影的质量受Shadow Map纹理分辨率的限制，分辨率太低会导致阴影边缘出现锯齿（Aliasing）。
+    * **常见问题**：有可能会产生一些瑕疵，如“Shadow Acne”（阴影痤疮）和“Peter Panning”（物体悬浮）。
+
+## 思考二：菲涅尔效应和边缘光
+在上述介绍的光照计算方法中，菲涅尔效应系数的计算和边缘光的计算存在类似的地方：
+</code></pre></div></div>
+<p>// 边缘光<br>
+float rim = 1.0 - max(0.0, dot(viewDir, n));</p>
+
+<p>// 菲涅尔<br>
+fresnel = pow(1.0 - max(0.0, dot(viewDir, n)), 2.0);</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+但实际上，**这种方式只是对场景的一种简化**，边缘光可以认为是一种艺术效果，是为了更好的模拟物理场景，**只是这种物理场景的模拟方式恰好和菲涅尔系数的计算方法类似**。
+
+在该方法中，菲涅尔系数只被用于环境光的衰减,**严格意义上来说，这里并不能被称作菲涅尔系数。**
+
+### PBR中的菲涅尔效应
+
+在基于物理的渲染（PBR）中，菲涅尔效应是其核心原则之一，它不再是一个可选的“艺术效果”，而是**精确描述光与物质相互作用、保证能量守恒的关键物理规律**。
+
+它的核心作用是：**根据视角，动态地决定进入材质的光线能量中有多少被镜面反射（Specular），有多少被折射并形成漫反射（Diffuse）。**
+
+-----
+
+#### 1\. 核心公式：Schlick近似法(前面提到过)
+
+在PBR中，精确计算菲涅尔方程非常复杂且耗时。因此，业界广泛采用由Christophe Schlick提出的近似公式：
+
+$$F(\theta) = F_0 + (1 - F_0) (1 - \cos\theta)^5$$
+
+我们来分解这个公式的每一个部分：
+
+  * $F(\theta)$: **最终的菲涅尔反射率**。这是一个介于0和1之间的值（或RGB向量），代表在当前角度下，光线被镜面反射的比例。
+  * $F_0$: **基础反射率（Base Reflectivity）**。这是菲涅尔效应的**关键输入参数**，代表当视线**垂直于**表面时（即 $\theta = 0$）的反射率。这个值是**材质的固有属性**。
+  * $\\cos\\theta$: 视角与法线（或半角向量）夹角的余弦值。在PBR中，通常使用**半角向量 (h)** 和 **视角向量 (v)** 的点积来计算，即 $\cos\theta = \text{dot}(h, v)$。
+  * $(1 - \\cos\\theta)^5$: 这部分描述了反射率随角度变化的曲线。当视角从垂直（$\cos\theta \approx 1$）变为掠射角（$\\cos\\theta \\approx 0$）时，这一项的值从0迅速增长到1，使得最终的反射率 $F(\\theta)$ 趋近于1（即100%反射）。
+
+$F\_0$ 的值取决于材质是**电介质（Dielectric，非金属）还是导体（Conductor，金属）**：
+
+  * **非金属 (Dielectrics)**：
+      * $F_0$ 通常是一个**很低且没有色彩的灰度值**。
+      * 大部分常见非金属的 $F\_0$ 值都非常接近，范围约在 **0.02 到 0.05** 之间。
+      * 因此，在PBR工作流中，非金属的 $F_0$ 经常被硬编码为一个**平均值 `vec3(0.04)`**。这个值是通过折射率（IOR）计算得出的：$F_0 = (\frac{IOR - 1}{IOR + 1})^2$。对于IOR为1.5的普通非金属，其$F_0$约等于0.04。
+
+  * **金属 (Metals)**：
+
+      * $F_0$ 通常是一个**很高且带有色彩的RGB值**。
+      * 金属会吸收所有折射光，因此它们的漫反射颜色为黑色。我们看到的金属颜色，实际上就是它们**有色的镜面反射**。
+      * 在PBR的金属/粗糙度（Metallic/Roughness）**工作流中，金属的 $F_0$ 值通常就是它的**反照率（Albedo）贴图提供的颜色。
+
+在着色器代码中，我们可以这样动态计算 $F\_0$：
+
+```glsl
+vec3 F0 = vec3(0.04); // 非金属的默认F0
+F0 = mix(F0, albedo.rgb, metallic); // 如果是金属(metallic=1)，则用albedo颜色作为F0
+</code></pre></div></div>
+
+<hr>
+
+<h4 id="2-pbr中的应用能量守恒的分配器">2. PBR中的应用：能量守恒的“分配器”</h4>
+
+<p>现在我们知道了如何计算菲涅尔反射率 $F$，那么它在整个PBR光照模型中是如何使用的呢？</p>
+
+<p>PBR将物体表面的光照分为两个部分：<strong>漫反射（Diffuse）和镜面反射（Specular）</strong>。渲染方程的简化形式（也称为反射方程）的BRDF（双向反射分布函数）部分可以概括为：</p>
+
+\[f_{r} = k_d \cdot f_{\text{diffuse}} + k_s \cdot f_{\text{specular}}\]
+
+<p>这里的 $k_d$ 和 $k_s$ 分别是漫反射和镜面反射所占的能量比例。为了保证<strong>能量守恒</strong>（反射出去的光不能比入射的光更多），==这两个比例之和必须小于等于1。==</p>
+
+<p><strong>菲涅尔项 $F$ 在这里就扮演了镜面反射比例 $k_s$ 的角色！</strong></p>
+
+<ol>
+  <li>
+    <p>首先，我们使用Schlick近似法计算出当前角度的菲涅尔反射率 $F$。</p>
+
+    <div class="language-glsl highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="c1">// H: 半角向量, V: 视角向量, F0: 基础反射率</span>
+<span class="kt">vec3</span> <span class="n">F</span> <span class="o">=</span> <span class="n">fresnelSchlick</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">V</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span> <span class="n">F0</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>这个 $F$ 值直接告诉我们：<strong>有多少比例的入射光能量被用于镜面反射</strong>。<br>
+\(k_s = F\)</p>
+  </li>
+  <li>
+    <p>根据能量守恒，剩下的能量则被用于折射和漫反射。所以漫反射的能量比例就是：<br>
+\(k_d = 1 - k_s = vec3(1.0) - F\)</p>
+  </li>
+  <li>
+    <p>最终，我们将这两个部分组合起来，得到总的光照贡献：</p>
+
+    <div class="language-glsl highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="c1">// NDF, G, F 是Cook-Torrance BRDF的三大核心部分</span>
+<span class="kt">vec3</span> <span class="n">specular_part</span> <span class="o">=</span> <span class="n">NDF</span> <span class="o">*</span> <span class="n">G</span> <span class="o">*</span> <span class="n">F</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="nf">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mo">001</span><span class="p">);</span>
+
+<span class="c1">// 计算漫反射能量比例 kD</span>
+<span class="kt">vec3</span> <span class="n">kD</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">F</span><span class="p">;</span>
+
+<span class="c1">// 如果是金属，没有漫反射</span>
+<span class="n">kD</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">metallic</span><span class="p">);</span> 
+
+<span class="kt">vec3</span> <span class="n">diffuse_part</span> <span class="o">=</span> <span class="n">kD</span> <span class="o">*</span> <span class="n">albedo</span> <span class="o">/</span> <span class="n">PI</span><span class="p">;</span>
+
+<span class="c1">// 最终颜色是漫反射和镜面反射的总和</span>
+<span class="kt">vec3</span> <span class="n">finalColor</span> <span class="o">=</span> <span class="p">(</span><span class="n">diffuse_part</span> <span class="o">+</span> <span class="n">specular_part</span><span class="p">)</span> <span class="o">*</span> <span class="n">lightColor</span> <span class="o">*</span> <span class="nf">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">L</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h4 id="3补充cook-torrence-brdf的其他项">3.补充Cook-Torrence BRDF的其他项</h4>
+<p>对于PBR中的Cook-Torrance BRDF镜面反射部分，其核心思想是基于<strong>微表面理论（Microfacet Theory）</strong>。该理论假设，从宏观上看是粗糙的表面，在微观尺度上是由大量朝向各异的、平整的微小镜面（microfacet）组成的。表面的“粗糙度”（Roughness）参数，就决定了这些微小镜面的朝向混乱程度。</p>
+
+<p><code class="language-plaintext highlighter-rouge">NDF</code> 和 <code class="language-plaintext highlighter-rouge">G</code> 这两项就是用来从统计学上描述这些微表面的行为的。</p>
+
+<hr>
+
+<h5 id="1-ndf---法线分布函数-normal-distribution-function">1. NDF - 法线分布函数 (Normal Distribution Function)</h5>
+
+<p><strong>核心作用</strong>：<strong>描述微表面的法线朝向集中度。</strong></p>
+
+<p>简单来说，NDF回答了这样一个问题：“在所有微表面中，究竟有多少比例的微表面其法线正好对齐在了某个特定方向上？”</p>
+
+<p>在Cook-Torrance模型中，我们最关心的方向是<strong>半程向量 (Halfway Vector, H)</strong>，即光线方向 <code class="language-plaintext highlighter-rouge">L</code> 和视线方向 <code class="language-plaintext highlighter-rouge">V</code> 的角平分线方向 (<code class="language-plaintext highlighter-rouge">H = normalize(L + V)</code>)。因为只有当微表面的法线 <code class="language-plaintext highlighter-rouge">m</code> 正好等于 <code class="language-plaintext highlighter-rouge">H</code> 时，光线才能被完美地反射到观察者眼中。</p>
+
+<ul>
+  <li>
+<strong>如果表面非常光滑 (Roughness → 0)</strong>：绝大多数微表面的法线都与宏观表面法线 <code class="language-plaintext highlighter-rouge">N</code> 一致。NDF函数会输出一个非常大（集中）的值当 <code class="language-plaintext highlighter-rouge">H</code> 接近 <code class="language-plaintext highlighter-rouge">N</code> 时，而在其他方向迅速衰减为0。这会形成一个非常小而亮的镜面高光。</li>
+  <li>
+<strong>如果表面非常粗糙 (Roughness → 1)</strong>：微表面的法线朝向非常混乱。NDF函数在一个很宽的角度范围内都会有返回值，当 <code class="language-plaintext highlighter-rouge">H</code> 偏离 <code class="language-plaintext highlighter-rouge">N</code> 较远时，函数值衰减得也更慢。这会形成一个范围很广且更模糊的高光。</li>
+</ul>
+
+<p><strong>常用计算模型：Trowbridge-Reitz GGX</strong></p>
+
+<p>这是目前实时渲染中最流行和效果最自然的模型。它的公式如下：</p>
+
+\[NDF_{GGX}(N, H, \alpha) = \frac{\alpha^2}{\pi((N \cdot H)^2(\alpha^2 - 1) + 1)^2}\]
+
+<ul>
+  <li>$N$: 宏观表面的法线。</li>
+  <li>$H$: 半程向量。</li>
+  <li>$\alpha$: 代表表面粗糙度的参数，通常由 <code class="language-plaintext highlighter-rouge">roughness</code> 参数计算而来：$\alpha = \text{roughness} \times \text{roughness}$。</li>
+</ul>
+
+<p><strong>在Shader中实现：</strong></p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// NDF (Trowbridge-Reitz GGX)</span>
+<span class="kt">float</span> <span class="nf">DistributionGGX</span><span class="p">(</span><span class="kt">vec3</span> <span class="n">N</span><span class="p">,</span> <span class="kt">vec3</span> <span class="n">H</span><span class="p">,</span> <span class="kt">float</span> <span class="n">roughness</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">a</span> <span class="o">=</span> <span class="n">roughness</span> <span class="o">*</span> <span class="n">roughness</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">a2</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">NdotH</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">H</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">NdotH2</span> <span class="o">=</span> <span class="n">NdotH</span> <span class="o">*</span> <span class="n">NdotH</span><span class="p">;</span>
+
+    <span class="kt">float</span> <span class="n">denom</span> <span class="o">=</span> <span class="p">(</span><span class="n">NdotH2</span> <span class="o">*</span> <span class="p">(</span><span class="n">a2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">denom</span> <span class="o">=</span> <span class="n">PI</span> <span class="o">*</span> <span class="n">denom</span> <span class="o">*</span> <span class="n">denom</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">a2</span> <span class="o">/</span> <span class="n">denom</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr>
+
+<h5 id="2-g---几何函数-geometry-function">2. G - 几何函数 (Geometry Function)</h5>
+
+<p><strong>核心作用</strong>：<strong>描述微表面的自遮挡属性。</strong></p>
+
+<p>几何函数模拟了微表面之间的相互遮挡和阴影。即使某个微表面的法线正好对齐了半程向量 <code class="language-plaintext highlighter-rouge">H</code>，它也可能因为以下两种原因而无法贡献光照：</p>
+
+<ol>
+  <li>
+<strong>遮蔽 (Masking)</strong>：从观察者视线方向 <code class="language-plaintext highlighter-rouge">V</code> 看去，这个微表面被其他微表面挡住了。</li>
+  <li>
+<strong>阴影 (Shadowing)</strong>：从光源方向 <code class="language-plaintext highlighter-rouge">L</code> 看去，这个微表面处于其他微表面投下的阴影中。</li>
+</ol>
+
+<ul>
+  <li>当视线或光线接近掠射角（grazing angles，即与表面近乎平行）时，这种遮挡效应会变得非常明显，导致镜面反射急剧减弱。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">G</code> 函数的取值范围是 <code class="language-plaintext highlighter-rouge">[0, 1]</code>，0代表完全遮挡，1代表完全无遮挡。</li>
+</ul>
+
+<p><strong>常用计算模型：Schlick-GGX (Smith’s Method的近似)</strong></p>
+
+<p>为了高效计算，通常使用Schlick对Smith’s Method的近似模型。它将几何函数分为视线和光源两个方向的项，然后相乘：</p>
+
+\[G(N, V, L, k) = G_1(N, V, k) \cdot G_1(N, L, k)\]
+
+<p>其中 $G_1$ 的计算公式为：</p>
+
+\[G_1(v, k) = \frac{N \cdot v}{(N \cdot v)(1 - k) + k}\]
+
+<ul>
+  <li>$v$: 代表视线向量 <code class="language-plaintext highlighter-rouge">V</code> 或光源向量 <code class="language-plaintext highlighter-rouge">L</code>。</li>
+  <li>$k$: 是一个基于粗糙度 $\alpha$ 计算的参数。对于直接光照，通常使用：$k = \frac{(\alpha + 1)^2}{8}$。</li>
+</ul>
+
+<p><strong>在Shader中实现：</strong></p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Geometry Function (Schlick-GGX)</span>
+<span class="kt">float</span> <span class="nf">GeometrySchlickGGX</span><span class="p">(</span><span class="kt">float</span> <span class="n">NdotV</span><span class="p">,</span> <span class="kt">float</span> <span class="n">roughness</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// k for direct lighting</span>
+    <span class="kt">float</span> <span class="n">r</span> <span class="o">=</span> <span class="n">roughness</span> <span class="o">+</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+
+    <span class="kt">float</span> <span class="n">num</span> <span class="o">=</span> <span class="n">NdotV</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">den</span> <span class="o">=</span> <span class="n">NdotV</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">k</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Smith's Method</span>
+<span class="kt">float</span> <span class="nf">GeometrySmith</span><span class="p">(</span><span class="kt">vec3</span> <span class="n">N</span><span class="p">,</span> <span class="kt">vec3</span> <span class="n">V</span><span class="p">,</span> <span class="kt">vec3</span> <span class="n">L</span><span class="p">,</span> <span class="kt">float</span> <span class="n">roughness</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">NdotV</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">V</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">NdotL</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">L</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">ggx_V</span> <span class="o">=</span> <span class="n">GeometrySchlickGGX</span><span class="p">(</span><span class="n">NdotV</span><span class="p">,</span> <span class="n">roughness</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">ggx_L</span> <span class="o">=</span> <span class="n">GeometrySchlickGGX</span><span class="p">(</span><span class="n">NdotL</span><span class="p">,</span> <span class="n">roughness</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">ggx_V</span> <span class="o">*</span> <span class="n">ggx_L</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong>NDF (法线分布)</strong>：决定了高光的<strong>形状</strong>、<strong>大小</strong>和<strong>锐利度</strong>。粗糙度越高，高光越弥散。</li>
+  <li>
+<strong>G (几何遮挡)</strong>：决定了高光的<strong>能量损失</strong>。在掠射角时，它会衰减高光的强度，以模拟微观层面的自遮挡，这是保证PBR能量守恒的重要一环。</li>
+</ul>
+
+<h1 id="箱子场景软阴影bug">箱子场景软阴影bug</h1>
+
+<p>观察到SDF软阴影在阴影过渡区域存在不自然的过渡区域，例如墙壁上本来的阴影和球体阴影之前的过渡。<strong>该现象可以通过减少ray march的步长解决</strong>，当ray march的步长过大时，采样率低，无法得到精确的物理近似。</p>
+
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250826214501.png" alt="image.png" loading="lazy"></p>
+
+
+    <!-- see https://giscus.app/ -->
+    <div class="giscus" id="giscus" style="margin: 4rem auto;"></div>
+    <div id="related-box">
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l74.8-74.8c7.4 4.6 15.3 8.2 23.8 10.5C200.3 452.8 270 454.5 338 409.4c12.2-8.1 5.8-25.4-8.8-25.4l-16.1 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l97.7-29.3c3.4-1 6.4-3.1 8.4-6.1c4.4-6.4 8.6-12.9 12.6-19.6c6.2-10.3-1.5-23-13.5-23l-38.6 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l80.9-24.3c4.6-1.4 8.4-4.8 10.2-9.3C494.5 163 507.8 86.1 511.9 36.8c.8-9.9-3-19.6-10-26.6s-16.7-10.8-26.6-10C391.5 7 228.5 40.5 137.4 131.6C57.3 211.7 56.7 302.3 71.3 356.4c2.1 7.9 12 9.6 17.8 3.8L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"></path></svg>
+            You May Also Like
+        </span>
+        <ul id="related-posts"></ul>
+    </div>
+</main>
+<div class="top-arrow">
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"></path></svg>
+</div>
+                
+            </div>
+        </div>
+        <div id="search">
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+
+    <div class="search-box">
+        <mark>Touch background to close</mark>
+        <div class="input-box">
+            <input id="search-input" type="search" tabindex="1" spellcheck="false" placeholder="Search...">
+            <button id="btn-clear">
+                <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg>
+            </button>
+        </div>
+        <ul id="search-result"></ul>
+    </div>
+</div>
+    </body>
+    <script defer src="/assets/js/background.js"></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+
+    gtag('js', new Date());
+    gtag('config', '');
+</script>
+    
+        <script src="/assets/js/post.js"></script>
+        <link rel="preload" href="/assets/css/highlight.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/assets/css/highlight.min.css"></noscript>
+        <script defer src="/assets/js/highlight.min.js"></script>
+    
+    <script src="/assets/js/common.js"></script>
+    <script defer>
+    var posts = [];
+
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "2D矢量图元绘制技术研究",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "EasyVulkan",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/EasyVulkan/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "noBug",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/noBug/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "技术学习",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "模糊阴影视效研究",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan Compute Shader",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "post",
+            'tags'     : "GPU, Vulkan, ComputeShader",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html",
+            'image'    : "https://paminerva.github.io/docs/LearnVulkan/images/02/F/hardware-model.png",
+            'date'     : "2024-03-12"
+        });
+    
+
+        posts.push({
+            'title'    : "How to compute integral image on GPU?",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "post",
+            'tags'     : "user manual, markdown, writing format",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102174554.png",
+            'date'     : "2025-01-03"
+        });
+    
+
+        posts.push({
+            'title'    : "图像降采样",
+            'path'     : "技术学习",
+            'type'     : "post",
+            'tags'     : "Image Processing, Vulkan, Opengl, 降采样",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250112201138.png",
+            'date'     : "2025-01-12"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan初始化",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan",
+            'url'      : "/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250124230354.png",
+            'date'     : "2025-01-24"
+        });
+    
+
+        posts.push({
+            'title'    : "VMA",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, VMA",
+            'url'      : "/EasyVulkan/VMA.html",
+            'image'    : "https://docs.vulkan.org/guide/latest/_images/memory_allocation_sub_allocation.png",
+            'date'     : "2025-01-26"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan命令缓冲区",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, CommandBuffer",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011015.png",
+            'date'     : "2025-01-27"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan描述符集",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, DescriptorSet",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011726.png",
+            'date'     : "2025-01-27"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan渲染通道",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, RenderPass, Subpass, Attachment, Subpass Dependency",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/RenderPass.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202012410.png",
+            'date'     : "2025-01-29"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan同步机制",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, VMA",
+            'url'      : "/EasyVulkan/SynchronizationManager.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202013124.png",
+            'date'     : "2025-02-01"
+        });
+    
+
+        posts.push({
+            'title'    : "vector.back()引发的指针错误",
+            'path'     : "noBug",
+            'type'     : "post",
+            'tags'     : "指针, Vulkan, Bug",
+            'url'      : "/noBug/vector.back()%E5%BC%95%E5%8F%91%E7%9A%84%E6%8C%87%E9%92%88%E9%94%99%E8%AF%AF.html",
+            'image'    : "https://www.kawabangga.com/wp-content/uploads/2015/04/logo-cpp.jpg",
+            'date'     : "2025-02-06"
+        });
+    
+
+        posts.push({
+            'title'    : "色彩空间错误导致图像亮度增加",
+            'path'     : "noBug",
+            'type'     : "post",
+            'tags'     : "Color Space, Vulkan, Bug",
+            'url'      : "/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/color_Conversion.png",
+            'date'     : "2025-02-09"
+        });
+    
+
+        posts.push({
+            'title'    : "共享内存中的std140对齐",
+            'path'     : "noBug",
+            'type'     : "post",
+            'tags'     : "数据对齐, Vulkan, Bug",
+            'url'      : "/noBug/std140%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250214000847.png",
+            'date'     : "2025-02-13"
+        });
+    
+
+        posts.push({
+            'title'    : "交换链的多重缓冲机制",
+            'path'     : "技术学习",
+            'type'     : "post",
+            'tags'     : "交换链缓冲, Vulkan",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E4%BA%A4%E6%8D%A2%E9%93%BE%E7%9A%84%E5%A4%9A%E9%87%8D%E7%BC%93%E5%86%B2%E6%9C%BA%E5%88%B6.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250228142753.png",
+            'date'     : "2025-02-27"
+        });
+    
+
+        posts.push({
+            'title'    : "VK_EXT_debug_utils扩展的技术应用与分析",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, Debug",
+            'url'      : "/EasyVulkan/VulkanDebug.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250513124719.png",
+            'date'     : "2025-05-11"
+        });
+    
+
+        posts.push({
+            'title'    : "EasyVulkan资源管理中的内存泄漏问题",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, ResourceManager",
+            'url'      : "/EasyVulkan/ResourceManagerMemoryLeak.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/LOGO.png",
+            'date'     : "2025-07-07"
+        });
+    
+
+        posts.push({
+            'title'    : "1.预备知识和基于3D SDF的康奈尔盒子",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, Ray Marching, Shadow",
+            'url'      : "/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822133530.png",
+            'date'     : "2025-08-12"
+        });
+    
+
+        posts.push({
+            'title'    : "2.RSM阴影和一次间接光照",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, RSM, Shadow, Ray Marching, Indirect lighting",
+            'url'      : "/3D%20SDF/2.RSM%E9%98%B4%E5%BD%B1%E5%92%8C%E4%B8%80%E6%AC%A1%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250902115532.png",
+            'date'     : "2025-08-25"
+        });
+    
+
+        posts.push({
+            'title'    : "3.优化VPLs采样",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, RSM, Ray Marching, Indirect lighting",
+            'url'      : "/3D%20SDF/3.%E4%BC%98%E5%8C%96VPL%E9%87%87%E6%A0%B7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250902104454.png",
+            'date'     : "2025-08-25"
+        });
+    
+
+    searchPost(posts);
+
+    
+        searchRelated(posts);
+    
+</script>
+</html>

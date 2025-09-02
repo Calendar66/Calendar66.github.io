@@ -180,6 +180,21 @@
         
     
 
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
     
     
     
@@ -303,6 +318,14 @@
                             </li>
 </ul>
 </li>
+<li id="nav-second" aria-label="ResourceManagerMemoryLeak">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/ResourceManagerMemoryLeak.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>ResourceManagerMemoryLeak</span>
+                        </a>
+</div>
+</li>
 <li id="nav-second" aria-label="SynchronizationManager">
                     <div class="nav-item">
                         <a href="/EasyVulkan/SynchronizationManager.html" class="nav-list-link nav-sh">
@@ -324,6 +347,14 @@
                         <a href="/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html" class="nav-list-link nav-sh">
                             <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
                             <span>Vulkan初始化</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="VulkanDebug">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/VulkanDebug.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>VulkanDebug</span>
                         </a>
 </div>
 </li>
@@ -869,6 +900,59 @@ void main() {
 
 先将颜色从sRGB空间转换到线性空间，颜色输出时，硬件再将颜色从线性空间转换到正确的sRGB空间。
 
+4.3 方案三：直接使用 sRGB 纹理格式（推荐给采样类纹理）
+
+当纹理来源于 LDR 图片（PNG/JPEG 等，天然是 sRGB 编码）且仅用于“采样”时，最简洁和不易出错的方式是直接使用 sRGB 纹理格式，例如 VK_FORMAT_R8G8B8A8_SRGB 或 VK_FORMAT_B8G8R8A8_SRGB。
+
+
+  工作机制：对 sRGB 格式的图像视图进行采样时，GPU 会在采样阶段自动执行 sRGB → Linear 解码，然后再做过滤与着色计算。
+  结果：着色器里拿到的就是线性空间值，无需手动 sRGBToLinear，也避免了重复 Gamma 造成的过亮。
+
+
+示例代码（省略错误检查）：
+
+// 1) 创建图像时使用 SRGB 格式（仅用于采样/渲染，不作为 storage image）
+VkImageCreateInfo imageInfo{};
+imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+imageInfo.imageType = VK_IMAGE_TYPE_2D;
+imageInfo.format   = VK_FORMAT_R8G8B8A8_SRGB;  // 关键：SRGB 格式
+imageInfo.extent   = {static_cast&lt;uint32_t&gt;(width), static_cast&lt;uint32_t&gt;(height), 1};
+imageInfo.mipLevels = mipLevels;
+imageInfo.arrayLayers = 1;
+imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+imageInfo.tiling  = VK_IMAGE_TILING_OPTIMAL;
+imageInfo.usage   = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+
+// 2) 视图格式保持 SRGB（采样时自动解码）
+VkImageViewCreateInfo viewInfo{};
+viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+viewInfo.image = textureImage;
+viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+viewInfo.format = VK_FORMAT_R8G8B8A8_SRGB;     // 关键：SRGB 视图
+viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+viewInfo.subresourceRange.baseMipLevel = 0;
+viewInfo.subresourceRange.levelCount   = mipLevels;
+viewInfo.subresourceRange.baseArrayLayer = 0;
+viewInfo.subresourceRange.layerCount     = 1;
+
+// 3) 着色器中无需手动转换
+// vec4 color = texture(sampler2D, uv); // 这里拿到的已是线性空间
+
+
+注意事项：
+
+  不要将 sRGB 格式的图像用作 storage image（大多数设备不支持 VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT）。
+  纹理数据上传时，保持 8-bit 整数数据（如 stbi_load 的 stbi_uc*），SRGB 解码由采样器负责，不要在 CPU 端先做 Gamma。
+  若需要生成 mipmap，mip 也应基于 sRGB 视图生成（驱动会在采样域做正确的线性化后再过滤）。
+
+
+4.4 方案选择建议（针对本文场景）
+
+  原始贴图/材质：优先使用 sRGB 纹理（方案三），着色器保持线性运算；最终输出依赖交换链色彩空间。
+  计算管线产物（storage image 写入）：保持线性格式（UNORM 或 SFLOAT），在图形管线中以线性格式采样；不要把线性数据当 sRGB 采样。
+  如果整个链路中既有“sRGB 来源贴图”也有“线性计算产物”，请分别以合适格式管理，不要混用一个图像在 sRGB/UNORM 视图间交替用于不同语义的数据。
+
+
 五、延伸知识：常见色彩空间与应用
 
 Vulkan 色彩空间对应关系
@@ -920,6 +1004,73 @@ Vulkan 色彩空间对应关系
       VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT
     
   
+
+
+5.1 纹理格式基础知识（UNORM / SRGB / SFLOAT）
+
+
+  
+    
+      分类
+      典型格式
+      取值域
+      采样行为
+      可否作 storage image
+      常见用途
+    
+  
+  
+    
+      UNORM（线性）
+      R8G8B8A8_UNORM
+      0..1（量化到 8-bit）
+      直接按线性值采样/过滤
+      通常支持
+      线性中间结果、G-Buffer、计算管线输出
+    
+    
+      SRGB（非线性编码）
+      R8G8B8A8_SRGB/B8G8R8A8_SRGB
+      0..1（sRGB 编码）
+      采样时自动 sRGB→Linear
+      一般不支持
+      来自 PNG/JPEG 的 LDR 贴图、UI 纹理
+    
+    
+      浮点（线性）
+      R16G16B16A16_SFLOAT/R32G32B32A32_SFLOAT
+      宽动态范围
+      线性采样/高精度
+      通常支持
+      HDR、物理光照、计算精度要求高的通道
+    
+  
+
+
+关键要点：
+
+  sRGB 只在“采样”/“颜色附件写回”路径定义了编码转换语义；
+    
+      采样：sRGB → Linear 自动执行；
+      颜色附件写回：实现可将线性写入值转换为 sRGB 存储格式；
+      storage image：通常未定义/不支持。
+    
+  
+  同一物理图像若想创建不同格式的视图，必须在 VkImageCreateInfo::flags 中设置 VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT，且格式需属于同一兼容类。但请谨慎：
+    
+      用 sRGB 视图读取“线性数据”会被错误地当作 sRGB 再解码，导致画面偏暗。
+      只有当底层数据确实是 sRGB 编码时，才应使用 sRGB 视图进行采样。
+    
+  
+
+
+5.2 实战配置与排错清单
+
+  来自磁盘的 LDR 贴图：图像/视图用 *_SRGB，采样拿到线性；不要再手动 sRGBToLinear。
+  中间缓冲/计算结果：使用 UNORM 或 SFLOAT，线性采样；如要节省带宽可选 R11G11B10_UFLOAT_PACK32 等。
+  交换链：常见为 format=*_SRGB 且 colorSpace=VK_COLOR_SPACE_SRGB_NONLINEAR_KHR，负责最终 Linear → sRGB。
+  校验格式能力：用 vkGetPhysicalDeviceFormatProperties 检查 FORMAT_FEATURE_SAMPLED_IMAGE_BIT、COLOR_ATTACHMENT_BIT、STORAGE_IMAGE_BIT 是否满足需求。
+  避免重复 Gamma：出现“偏亮/偏暗”优先检查：贴图格式、图像视图格式、是否手动 Gamma、交换链色彩空间是否与期望匹配。
 
 
 六、EasyVulkan中的色彩空间
@@ -1328,6 +1479,61 @@ write.pImageInfo = &amp;imageInfo;
             'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E4%BA%A4%E6%8D%A2%E9%93%BE%E7%9A%84%E5%A4%9A%E9%87%8D%E7%BC%93%E5%86%B2%E6%9C%BA%E5%88%B6.html",
             'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250228142753.png",
             'date'     : "2025-02-27"
+        });
+    
+
+        posts.push({
+            'title'    : "VK_EXT_debug_utils扩展的技术应用与分析",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, Debug",
+            'url'      : "/EasyVulkan/VulkanDebug.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250513124719.png",
+            'date'     : "2025-05-11"
+        });
+    
+
+        posts.push({
+            'title'    : "EasyVulkan资源管理中的内存泄漏问题",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, ResourceManager",
+            'url'      : "/EasyVulkan/ResourceManagerMemoryLeak.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/LOGO.png",
+            'date'     : "2025-07-07"
+        });
+    
+
+        posts.push({
+            'title'    : "1.预备知识和基于3D SDF的康奈尔盒子",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, Ray Marching, Shadow",
+            'url'      : "/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822133530.png",
+            'date'     : "2025-08-12"
+        });
+    
+
+        posts.push({
+            'title'    : "2.RSM阴影和一次间接光照",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, RSM, Shadow, Ray Marching, Indirect lighting",
+            'url'      : "/3D%20SDF/2.RSM%E9%98%B4%E5%BD%B1%E5%92%8C%E4%B8%80%E6%AC%A1%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250902115532.png",
+            'date'     : "2025-08-25"
+        });
+    
+
+        posts.push({
+            'title'    : "3.优化VPLs采样",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, RSM, Ray Marching, Indirect lighting",
+            'url'      : "/3D%20SDF/3.%E4%BC%98%E5%8C%96VPL%E9%87%87%E6%A0%B7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250902104454.png",
+            'date'     : "2025-08-25"
         });
     
 
