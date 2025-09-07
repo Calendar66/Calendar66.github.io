@@ -7,25 +7,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>
     
-        Vulkan描述符集
+        4.基于物理的渲染
     
 </title>
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Vulkan描述符集 | Calendar’s Blog</title>
+<title>4.基于物理的渲染 | Calendar’s Blog</title>
 <meta name="generator" content="Jekyll v4.3.4">
-<meta property="og:title" content="Vulkan描述符集">
+<meta property="og:title" content="4.基于物理的渲染">
 <meta property="og:locale" content="en_US">
-<meta name="description" content="Vulkan描述符集的简化之道：探索EasyVulkan的实现">
-<meta property="og:description" content="Vulkan描述符集的简化之道：探索EasyVulkan的实现">
-<link rel="canonical" href="http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html">
-<meta property="og:url" content="http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html">
+<meta name="description" content="效果对比 经验模型： PBR模型：">
+<meta property="og:description" content="效果对比 经验模型： PBR模型：">
+<link rel="canonical" href="http://localhost:4000/3D%20SDF/4.PBR.html">
+<meta property="og:url" content="http://localhost:4000/3D%20SDF/4.PBR.html">
 <meta property="og:site_name" content="Calendar’s Blog">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2025-01-27T00:00:00+08:00">
+<meta property="article:published_time" content="2025-09-07T00:00:00+08:00">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="Vulkan描述符集">
+<meta property="twitter:title" content="4.基于物理的渲染">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-01-27T00:00:00+08:00","datePublished":"2025-01-27T00:00:00+08:00","description":"Vulkan描述符集的简化之道：探索EasyVulkan的实现","headline":"Vulkan描述符集","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html"},"url":"http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-07T00:00:00+08:00","datePublished":"2025-09-07T00:00:00+08:00","description":"效果对比 经验模型： PBR模型：","headline":"4.基于物理的渲染","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/3D%20SDF/4.PBR.html"},"url":"http://localhost:4000/3D%20SDF/4.PBR.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -102,7 +102,7 @@
             
                 <style>
                         .thumbnail {
-                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011726.png");
+                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250907153024105.png");
                         }
                     
                 </style>
@@ -545,13 +545,11 @@
     <p>
                 <a href="/">Home</a>
                 &gt;
-            <a href="/EasyVulkan/">EasyVulkan</a>
-                &gt;
-            <a href="/EasyVulkan/Builder%E7%B1%BB/">Builder类</a>
+            <a href="/3D%20SDF/">3D SDF</a>
                 &gt;
             
                 
-                    Vulkan描述符集
+                    4.基于物理的渲染
                 
             </p>
 </div>
@@ -560,19 +558,19 @@
     <div class="thumbnail">
         <div class="transbox">
             
-                <span class="post-title">Vulkan描述符集</span>
+                <span class="post-title">4.基于物理的渲染</span>
             
             <div class="post-info">
                 
-                    <a class="info-box category-box" href="/EasyVulkan">
+                    <span class="info-box">
                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M384 480h48c11.4 0 21.9-6 27.6-15.9l112-192c5.8-9.9 5.8-22.1 .1-32.1S555.5 224 544 224H144c-11.4 0-21.9 6-27.6 15.9L48 357.1V96c0-8.8 7.2-16 16-16H181.5c4.2 0 8.3 1.7 11.3 4.7l26.5 26.5c21 21 49.5 32.8 79.2 32.8H416c8.8 0 16 7.2 16 16v32h48V160c0-35.3-28.7-64-64-64H298.5c-17 0-33.3-6.7-45.3-18.7L226.7 50.7c-12-12-28.3-18.7-45.3-18.7H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H87.7 384z"></path></svg>
-                        <span>EasyVulkan</span>
-                    </a>
+                        <span>None</span>
+                    </span>
                 
                 <span class="info-box">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"></path></svg>
                     <span>
-                            2025-01-27
+                            2025-09-07
                         
                     </span>
                 </span>
@@ -591,145 +589,318 @@
     </div>
 </div>
 <div class="tag-box">
-<span class="tag theme-0" contentid="Vulkan">
+<span class="tag theme-0" contentid="3D SDF">
+            3D SDF
+        </span><span class="tag theme-1" contentid="Vulkan">
             Vulkan
-        </span><span class="tag theme-1" contentid="EasyVulkan">
-            EasyVulkan
-        </span><span class="tag theme-2" contentid="DescriptorSet">
-            DescriptorSet
+        </span><span class="tag theme-2" contentid="PBR">
+            PBR
         </span>
 </div>
 <main>
-    <h1 id="vulkan描述符集的简化之道探索easyvulkan的实现">Vulkan描述符集的简化之道：探索EasyVulkan的实现</h1>
+    <h1 id="效果对比">效果对比</h1>
+<p><strong>经验模型：</strong><br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250907152943354.png" alt="image.png" loading="lazy"><br>
+<strong>PBR模型：</strong><br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250907153024105.png" alt="image.png" loading="lazy"></p>
 
-<blockquote>
-  <p>在使用Vulkan时，需要使用描述符集来管理资源。描述符集是Vulkan中的一种资源管理机制，用于管理资源（如纹理、缓冲区等）的绑定和使用。然而，描述符集的创建和使用需要大量的代码操作，包括创建描述符池、创建layout binding、创建描述符池、创建和更新descriptorSet等。并且，增加新的资源时，也需要修改大量的代码，这无疑增加了开发者的负担。</p>
-</blockquote>
+<h1 id="渲染方程与brdf">渲染方程与BRDF</h1>
+<p>理论上，PBR致力于求解<strong>渲染方程</strong>的简化形式。对于单个方向光，我们可以将其简化为：</p>
 
-<p>为了简化这个过程，EasyVulkan提供了<code class="language-plaintext highlighter-rouge">DescriptorSetBuilder</code>类，它采用了构建器模式，大大简化了描述符集的创建和管理过程。让我们一起深入了解这个实现。</p>
+\[L_o(v) = (\text{BRDF}) \cdot L_i \cdot \max(0, n \cdot l)\]
 
-<h1 id="descriptorsetbuilder的核心设计">DescriptorSetBuilder的核心设计</h1>
+<p>其中：</p>
 
-<h2 id="1-构建器模式的应用">1. 构建器模式的应用</h2>
+<ul>
+  <li>$L_o(v)$ 是出射到观察者（视角向量 $v$）的光的辐射率（最终颜色）。</li>
+  <li>$L_i$ 是入射光的辐射率（光源颜色和强度）。</li>
+  <li>$n$ 是表面法线。</li>
+  <li>$l$ 是光照方向向量。</li>
+  <li>$\max(0, n \cdot l)$ 是朗伯余弦项，表示光线入射角度对表面亮度的影响。</li>
+</ul>
 
-<p>EasyVulkan的<code class="language-plaintext highlighter-rouge">DescriptorSetBuilder</code>采用了构建器模式，这使得描述符集的创建过程变得更加流畅和直观。主要体现在：</p>
+<p>在代码的 <code class="language-plaintext highlighter-rouge">getLight</code> 函数中，这一步对应：</p>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">DescriptorSetBuilder</span> <span class="nf">builder</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">context</span><span class="p">);</span>
-<span class="n">VkDescriptorSet</span> <span class="n">descriptorSet</span> <span class="o">=</span> <span class="n">builder</span>
-    <span class="p">.</span><span class="n">addBinding</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">VK_SHADER_STAGE_VERTEX_BIT</span><span class="p">)</span>
-    <span class="p">.</span><span class="n">addBufferDescriptor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">bufferSize</span><span class="p">,</span> <span class="n">VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER</span><span class="p">)</span>
-    <span class="p">.</span><span class="n">buildWithLayout</span><span class="p">(</span><span class="s">"myDescriptorSet"</span><span class="p">);</span>
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// === PBR LIGHTING ===</span>
+<span class="kt">vec3</span> <span class="n">brdf</span> <span class="o">=</span> <span class="n">cook_torrance_brdf</span><span class="p">(</span><span class="n">pbrAlbedo</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">viewDir</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">roughness</span><span class="p">,</span> <span class="n">metallic</span><span class="p">);</span>
+<span class="kt">float</span> <span class="n">pbrIntensity</span> <span class="o">=</span> <span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span> <span class="c1">// 艺术调整的强度</span>
+<span class="c1">//          BRDF       * Li      * (n·l) is inside brdf</span>
+<span class="n">finalColor</span> <span class="o">+=</span> <span class="n">brdf</span> <span class="o">*</span> <span class="n">lightColor</span> <span class="o">*</span> <span class="n">shadow</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">lightDir</span><span class="p">.</span><span class="n">w</span> <span class="o">*</span> <span class="n">pbrIntensity</span><span class="p">;</span>
 </code></pre></div></div>
 
-<h2 id="2-资源绑定的简化">2. 资源绑定的简化</h2>
+<p><em>注意：代码中的 <code class="language-plaintext highlighter-rouge">(n·l)</code> (<code class="language-plaintext highlighter-rouge">NdotL</code>) 项被移到了 <code class="language-plaintext highlighter-rouge">cook_torrance_brdf</code> 函数的末尾进行计算，这是出于组合上的方便。</em></p>
 
-<p><code class="language-plaintext highlighter-rouge">DescriptorSetBuilder</code>提供了多个直观的方法来添加不同类型的资源，这些方法中封装了原本复杂的Vulkan API调用操作：</p>
+<h1 id="brdf的构成漫反射--镜面反射">BRDF的构成：漫反射 + 镜面反射</h1>
+
+<p>Cook-Torrance BRDF将反射分为两个部分：<strong>漫反射（Diffuse）</strong> 和 <strong>镜面反射（Specular）</strong>。</p>
+
+\[f_r = k_d f_{\text{lambert}} + k_s f_{\text{cook-torrance}}\]
+
+<ul>
+  <li>$f_{\text{lambert}}$ 是漫反射项。</li>
+  <li>$f_{\text{cook-torrance}}$ 是镜面反射项。</li>
+  <li>$k_d$ 和 $k_s$ 是能量守恒系数，代表漫反射和镜面反射的能量比例。</li>
+</ul>
+
+<hr>
+
+<h2 id="1-漫反射分量-diffuse-component">1. 漫反射分量 (Diffuse Component)</h2>
+
+<p>程序使用了标准的 <strong>Lambertian 模型（兰伯特）</strong>。</p>
 
 <ul>
   <li>
-<code class="language-plaintext highlighter-rouge">addBinding</code>: 添加描述符布局绑定</li>
+    <p><strong>公式</strong>:<br>
+\(f_{\text{lambert}} = \frac{c}{\pi}\)<br>
+其中 $c$ 是表面的<strong>反照率（Albedo）</strong>，即基础颜色。除以 $\pi$ 是为了对所有出射方向的半球进行归一化，确保表面反射的总能量不超过入射能量。</p>
+  </li>
   <li>
-<code class="language-plaintext highlighter-rouge">addBufferDescriptor</code>: 添加缓冲区描述符</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">addImageDescriptor</code>: 添加图像描述符</li>
-  <li>
-<code class="language-plaintext highlighter-rouge">addStorageImageDescriptor</code>: 添加存储图像描述符</li>
+    <p><strong>代码实现</strong>:<br>
+在 <code class="language-plaintext highlighter-rouge">cook_torrance_brdf</code> 函数中：</p>
+
+    <div class="language-glsl highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="c1">// albedo 就是公式中的 c</span>
+<span class="c1">// kD 是能量守恒系数，我们稍后讨论</span>
+<span class="kt">vec3</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="n">kD</span> <span class="o">*</span> <span class="n">albedo</span> <span class="o">/</span> <span class="n">PI</span><span class="p">;</span>
+</code></pre></div>    </div>
+  </li>
 </ul>
 
-<h2 id="3-自动化的资源管理">3. 自动化的资源管理</h2>
+<hr>
 
-<p><code class="language-plaintext highlighter-rouge">DescriptorSetBuilder</code>还提供了自动的资源管理功能：</p>
+<h2 id="2-镜面反射分量-specular-component">2. 镜面反射分量 (Specular Component)</h2>
+
+<p>这是PBR的核心，由Cook-Torrance微表面模型定义。</p>
 
 <ul>
-  <li>自动创建和管理描述符池</li>
-  <li>自动验证绑定的正确性</li>
-  <li>自动注册资源到资源管理器</li>
-  <li>自动处理错误情况</li>
+  <li>
+    <p><strong>公式</strong>:<br>
+\(f_{\text{cook-torrance}} = \frac{D \cdot G \cdot F}{4(n \cdot v)(n \cdot l)}\)<br>
+它由三个核心函数（D, G, F）和一个归一化分母组成。</p>
+  </li>
+  <li>
+    <p><strong>代码实现</strong>:</p>
+
+    <div class="language-glsl highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">numerator</span> <span class="o">=</span> <span class="n">NDF</span> <span class="o">*</span> <span class="n">G</span> <span class="o">*</span> <span class="n">F</span><span class="p">;</span> <span class="c1">// 分子 D*G*F</span>
+<span class="c1">// 分母 4(n·v)(n·l)，并加一个极小值避免除以零</span>
+<span class="kt">float</span> <span class="n">denominator</span> <span class="o">=</span> <span class="mi">4</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">V</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">L</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mo">0001</span><span class="p">;</span>
+<span class="kt">vec3</span> <span class="n">specular</span> <span class="o">=</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">;</span>
+</code></pre></div>    </div>
+
+    <p>现在我们来逐一解析 D, G, F。</p>
+  </li>
 </ul>
 
-<h1 id="实现细节解析">实现细节解析</h1>
+<h3 id="21-法线分布函数-d---distribution_ggx">2.1 法线分布函数 (D) - <code class="language-plaintext highlighter-rouge">distribution_ggx</code>
+</h3>
 
-<h2 id="1-描述符池的创建">1. 描述符池的创建</h2>
+<p>该函数描述了微表面法线的统计学分布，<strong>即有多少微表面的朝向恰好能将光线反射到观察者眼中。</strong></p>
 
-<p>描述符池的创建在build方法中调用createPool方法完成。该方法的实现如下：</p>
+<ul>
+  <li>
+    <p><strong>模型</strong>: GGX (Trowbridge-Reitz)</p>
+  </li>
+  <li>
+    <p><strong>公式</strong>:<br>
+\(D(h) = \frac{\alpha^2}{\pi(((n \cdot h)^2(\alpha^2 - 1) + 1)^2)}\)</p>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">VkDescriptorPool</span> <span class="n">DescriptorSetBuilder</span><span class="o">::</span><span class="n">createPool</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
-    <span class="c1">// 统计每种描述符类型的数量</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">VkDescriptorType</span><span class="p">,</span> <span class="kt">uint32_t</span><span class="o">&gt;</span> <span class="n">typeCount</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="n">binding</span> <span class="o">:</span> <span class="n">m_layoutBindings</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">typeCount</span><span class="p">[</span><span class="n">binding</span><span class="p">.</span><span class="n">descriptorType</span><span class="p">]</span> <span class="o">+=</span> <span class="n">binding</span><span class="p">.</span><span class="n">descriptorCount</span><span class="p">;</span>
-    <span class="p">}</span>
+    <ul>
+      <li>$h$ 是半程向量（<code class="language-plaintext highlighter-rouge">normalize(v + l)</code>），代表了能够完美反射光线到视角的微表面法线方向。</li>
+      <li>$\alpha$ 是表面<strong>粗糙度（roughness）</strong> 的平方，即 $\alpha = \text{roughness}^2$。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>代码实现</strong>: <code class="language-plaintext highlighter-rouge">distribution_ggx</code> 函数完美地复现了这个公式。</p>
 
-    <span class="c1">// 创建池大小信息</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VkDescriptorPoolSize</span><span class="o">&gt;</span> <span class="n">poolSizes</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="p">[</span><span class="n">type</span><span class="p">,</span> <span class="n">count</span><span class="p">]</span> <span class="o">:</span> <span class="n">typeCount</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">poolSizes</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">type</span><span class="p">,</span> <span class="n">count</span><span class="p">});</span>
-    <span class="p">}</span>
-    
-    <span class="c1">// ... 创建描述符池</span>
+    <div class="language-glsl highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="nf">distribution_ggx</span><span class="p">(</span><span class="kt">vec3</span> <span class="n">N</span><span class="p">,</span> <span class="kt">vec3</span> <span class="n">H</span><span class="p">,</span> <span class="kt">float</span> <span class="n">roughness</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">a</span> <span class="o">=</span> <span class="n">roughness</span> <span class="o">*</span> <span class="n">roughness</span><span class="p">;</span> <span class="c1">// α</span>
+    <span class="kt">float</span> <span class="n">a2</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span><span class="p">;</span>                <span class="c1">// α²</span>
+    <span class="kt">float</span> <span class="n">NdotH</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">H</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// (n·h)</span>
+    <span class="kt">float</span> <span class="n">NdotH2</span> <span class="o">=</span> <span class="n">NdotH</span> <span class="o">*</span> <span class="n">NdotH</span><span class="p">;</span>    <span class="c1">// (n·h)²</span>
+        
+    <span class="kt">float</span> <span class="n">num</span> <span class="o">=</span> <span class="n">a2</span><span class="p">;</span>                  <span class="c1">// 分子: α²</span>
+    <span class="c1">// 分母中的括号项: ((n·h)²(α² - 1) + 1)</span>
+    <span class="kt">float</span> <span class="n">denom</span> <span class="o">=</span> <span class="p">(</span><span class="n">NdotH2</span> <span class="o">*</span> <span class="p">(</span><span class="n">a2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">denom</span> <span class="o">=</span> <span class="n">PI</span> <span class="o">*</span> <span class="n">denom</span> <span class="o">*</span> <span class="n">denom</span><span class="p">;</span>      <span class="c1">// 最终分母: π * (...)^2</span>
+        
+    <span class="k">return</span> <span class="n">num</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">denom</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mo">0001</span><span class="p">);</span> <span class="c1">// D = num / denom</span>
 <span class="p">}</span>
-</code></pre></div></div>
+</code></pre></div>    </div>
+  </li>
+</ul>
 
-<h2 id="2-绑定验证机制">2. 绑定验证机制</h2>
+<h3 id="22-几何函数-g---geometry_smith">2.2 几何函数 (G) - <code class="language-plaintext highlighter-rouge">geometry_smith</code>
+</h3>
 
-<p>为了确保描述符集的正确性，<code class="language-plaintext highlighter-rouge">DescriptorSetBuilder</code>实现了完善的验证机制：</p>
+<p>该函数模拟微表面之间的自遮蔽和自阴影，确保光照计算的物理准确性。法线分布函数去估计了反射到观察者视角的光线强度，比较容易理解，而几何函数则相对抽象。</p>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">DescriptorSetBuilder</span><span class="o">::</span><span class="n">validateBindings</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
-    <span class="c1">// 检查是否存在绑定</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">m_layoutBindings</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"No descriptor set bindings specified"</span><span class="p">);</span>
-    <span class="p">}</span>
+<p><strong>具体来说，存在两种遮挡情况：</strong></p>
+<ul>
+  <li>遮蔽 (Masking)：从某个微表面反射出来的光，在到达你的眼睛（相机）之前，被另一个微表面挡住了。</li>
+  <li>
+    <p>阴影 (Shadowing)：入射的光线，在到达某个微表面之前，被另一个微表面挡住了，导致那个微表面本身就处于阴影中。</p>
 
-    <span class="c1">// 检查重复绑定</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="p">,</span> <span class="n">VkDescriptorType</span><span class="o">&gt;</span> <span class="n">bindingTypes</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="n">binding</span> <span class="o">:</span> <span class="n">m_layoutBindings</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">auto</span> <span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="n">inserted</span><span class="p">]</span> <span class="o">=</span> <span class="n">bindingTypes</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span><span class="n">binding</span><span class="p">.</span><span class="n">binding</span><span class="p">,</span> <span class="n">binding</span><span class="p">.</span><span class="n">descriptorType</span><span class="p">});</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">inserted</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"Duplicate binding number in descriptor set layout"</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+    <ul>
+      <li>
+<strong>模型</strong>: Smith’s Method，并为视线（view）和光线（light）方向分别计算，然后相乘。每个方向的计算都使用了高效的 <strong>Schlick-GGX 近似</strong>。==这种方法将“遮蔽 (Masking)”和“阴影 (Shadowing)”分开计算，然后将它们的“可见”比例相乘，得到最终的总“可见”比例。==
+        <ul>
+          <li>G_view：从观察方向（向量 v）看，有多少微表面是可见的（没有被 Masking）。</li>
+          <li>G_light：从光照方向（向量 l）看，有多少微表面是被照亮的（没有被 Shadowing）。</li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>公式</strong>:<br>
+\(G(n, v, l) = G_{\text{schlick}}(n, v, k) \cdot G_{\text{schlick}}(n, l, k)\)<br>
+其中，<br>
+\(G_{\text{schlick}}(n, \text{vec}, k) = \frac{n \cdot \text{vec}}{(n \cdot \text{vec})(1 - k) + k}\)<br>
+而 $k$ 是粗糙度的重映射：$k = \frac{(\text{roughness} + 1)^2}{8}$。</p>
+      </li>
+      <li>
+        <p><strong>代码实现</strong>: <code class="language-plaintext highlighter-rouge">geometry_smith</code> 和 <code class="language-plaintext highlighter-rouge">geometry_schlick_ggx</code> 两个函数协同工作。</p>
 
-    <span class="c1">// 验证写入描述符与绑定的匹配性</span>
-    <span class="c1">// ...</span>
+        <div class="language-glsl highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="c1">// G_schlick 实现</span>
+<span class="kt">float</span> <span class="nf">geometry_schlick_ggx</span><span class="p">(</span><span class="kt">float</span> <span class="n">NdotV</span><span class="p">,</span> <span class="kt">float</span> <span class="n">roughness</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">roughness</span> <span class="o">+</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span> <span class="c1">// k</span>
+        
+    <span class="kt">float</span> <span class="n">num</span> <span class="o">=</span> <span class="n">NdotV</span><span class="p">;</span> <span class="c1">// 分子: (n·v)</span>
+    <span class="kt">float</span> <span class="n">denom</span> <span class="o">=</span> <span class="n">NdotV</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">k</span><span class="p">;</span> <span class="c1">// 分母</span>
+        
+    <span class="k">return</span> <span class="n">num</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">denom</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mo">0001</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div></div>
 
-<h2 id="3-资源更新机制">3. 资源更新机制</h2>
-
-<p>描述符集的更新过程也被简化：</p>
-
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">DescriptorSetBuilder</span><span class="o">::</span><span class="n">updateDescriptorSet</span><span class="p">(</span><span class="n">VkDescriptorSet</span> <span class="n">descriptorSet</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VkWriteDescriptorSet</span><span class="o">&gt;</span> <span class="n">writes</span> <span class="o">=</span> <span class="n">m_writes</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">write</span> <span class="o">:</span> <span class="n">writes</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">write</span><span class="p">.</span><span class="n">dstSet</span> <span class="o">=</span> <span class="n">descriptorSet</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="n">vkUpdateDescriptorSets</span><span class="p">(</span><span class="n">m_device</span><span class="o">-&gt;</span><span class="n">getLogicalDevice</span><span class="p">(),</span>
-                          <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">writes</span><span class="p">.</span><span class="n">size</span><span class="p">()),</span>
-                          <span class="n">writes</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">nullptr</span><span class="p">);</span>
+<span class="c1">// Smith's Method 实现</span>
+<span class="kt">float</span> <span class="nf">geometry_smith</span><span class="p">(</span><span class="kt">vec3</span> <span class="n">N</span><span class="p">,</span> <span class="kt">vec3</span> <span class="n">V</span><span class="p">,</span> <span class="kt">vec3</span> <span class="n">L</span><span class="p">,</span> <span class="kt">float</span> <span class="n">roughness</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">NdotV</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">V</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">NdotL</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">L</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">ggx2</span> <span class="o">=</span> <span class="n">geometry_schlick_ggx</span><span class="p">(</span><span class="n">NdotV</span><span class="p">,</span> <span class="n">roughness</span><span class="p">);</span> <span class="c1">// G_schlick(n, v)</span>
+    <span class="kt">float</span> <span class="n">ggx1</span> <span class="o">=</span> <span class="n">geometry_schlick_ggx</span><span class="p">(</span><span class="n">NdotL</span><span class="p">,</span> <span class="n">roughness</span><span class="p">);</span> <span class="c1">// G_schlick(n, l)</span>
+        
+    <span class="k">return</span> <span class="n">ggx1</span> <span class="o">*</span> <span class="n">ggx2</span><span class="p">;</span> <span class="c1">// G = G1 * G2</span>
 <span class="p">}</span>
-</code></pre></div></div>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
 
-<h1 id="easyvulkan中的descriptorset">EasyVulkan中的DescriptorSet</h1>
+<p><strong>那么，为什么这种计算方式能够模拟遮挡？</strong></p>
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 创建一个包含uniform buffer和纹理的描述符集</span>
-<span class="k">auto</span> <span class="n">descriptorSet</span> <span class="o">=</span> <span class="n">builder</span>
-    <span class="c1">// 添加uniform buffer绑定</span>
-    <span class="p">.</span><span class="n">addBinding</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> 
-                <span class="n">VK_SHADER_STAGE_VERTEX_BIT</span><span class="p">)</span>
-    <span class="c1">// 添加纹理绑定</span>
-    <span class="p">.</span><span class="n">addBinding</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
-                <span class="n">VK_SHADER_STAGE_FRAGMENT_BIT</span><span class="p">)</span>
-    <span class="c1">// 添加uniform buffer描述符</span>
-    <span class="p">.</span><span class="n">addBufferDescriptor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">uniformBuffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">UniformBufferObject</span><span class="p">),</span>
-                        <span class="n">VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER</span><span class="p">)</span>
-    <span class="c1">// 添加纹理描述符（Sampler可以通过SamplerBuilder创建）</span>
-    <span class="p">.</span><span class="n">addImageDescriptor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">textureImageView</span><span class="p">,</span> <span class="n">textureSampler</span><span class="p">,</span>
-                       <span class="n">VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL</span><span class="p">,</span>
-                       <span class="n">VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER</span><span class="p">)</span>
-    <span class="c1">// 构建描述符集（name用于资源追踪）</span>
-    <span class="p">.</span><span class="n">buildWithLayout</span><span class="p">(</span><span class="s">"myMaterialDescriptorSet"</span><span class="p">);</span>
-</code></pre></div></div>
+<ol>
+  <li>
+<strong>关键参数 <code class="language-plaintext highlighter-rouge">k</code></strong>：<br>
+<code class="language-plaintext highlighter-rouge">k</code> 是由 <code class="language-plaintext highlighter-rouge">roughness</code> 计算得出的。
+    <ul>
+      <li>当 <code class="language-plaintext highlighter-rouge">roughness</code> = 0 (光滑)，<code class="language-plaintext highlighter-rouge">k</code> = (1*1)/8 = 0.125。</li>
+      <li>当 <code class="language-plaintext highlighter-rouge">roughness</code> = 1 (粗糙)，<code class="language-plaintext highlighter-rouge">k</code> = (2*2)/8 = 0.5。<br>
+<strong>所以，<code class="language-plaintext highlighter-rouge">k</code> 可以被理解为“粗糙度因子”。<code class="language-plaintext highlighter-rouge">k</code> 越大，表面越粗糙。</strong>
+</li>
+    </ul>
+  </li>
+  <li>
+<strong>关键变量 <code class="language-plaintext highlighter-rouge">NdotV</code></strong>：<br>
+<code class="language-plaintext highlighter-rouge">NdotV</code> (即 $n \cdot v$) 是宏观表面法线 <code class="language-plaintext highlighter-rouge">N</code> 和视线 <code class="language-plaintext highlighter-rouge">V</code> 的点积。它代表了观察角度的陡峭程度。
+    <ul>
+      <li>当 <code class="language-plaintext highlighter-rouge">NdotV</code> ≈ 1：我们几乎是垂直于表面向下看。</li>
+      <li>当 <code class="language-plaintext highlighter-rouge">NdotV</code> ≈ 0：我们正在以一个非常刁钻的、几乎平行于表面的角度（掠射角）观察。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>现在我们把 <code class="language-plaintext highlighter-rouge">k</code> 和 <code class="language-plaintext highlighter-rouge">NdotV</code> 结合起来看，分析两种极端情况：</p>
+
+<p><strong>情况一：垂直观察 (NdotV ≈ 1)</strong><br>
+无论表面有多粗糙（<code class="language-plaintext highlighter-rouge">k</code> 值是多少），将 <code class="language-plaintext highlighter-rouge">NdotV</code> = 1 代入分母：<br>
+<code class="language-plaintext highlighter-rouge">denom = 1 * (1 - k) + k = 1 - k + k = 1</code><br>
+此时，<code class="language-plaintext highlighter-rouge">G = num / denom = 1 / 1 = 1</code>。<br>
+<strong>物理意义</strong>：当从正上方看一个粗糙表面时，基本上能看到所有的“峡谷”底部，几乎没有遮蔽发生。所以几何衰减为1（即没有衰减），这是完全正确的。</p>
+
+<p><strong>情况二：掠射角观察 (NdotV ≈ 0)</strong><br>
+将 <code class="language-plaintext highlighter-rouge">NdotV</code> = 0 代入分母：<br>
+<code class="language-plaintext highlighter-rouge">denom = 0 * (1 - k) + k = k</code><br>
+此时，<code class="language-plaintext highlighter-rouge">G = num / denom = NdotV / k</code>。因为 <code class="language-plaintext highlighter-rouge">NdotV</code> 趋近于0，所以 <code class="language-plaintext highlighter-rouge">G</code> 也趋近于0。<br>
+<strong>物理意义</strong>：当以近乎平行的角度去看一个表面时，前景的“山峰”会完全挡住后面的“峡谷”，会看到大量的遮蔽。因此，可见的微表面比例急剧下降，趋近于0。</p>
+
+<p><strong>关键洞察</strong><br>
+这个公式实际上是一个巧妙的<strong>插值</strong>。它在 <code class="language-plaintext highlighter-rouge">NdotV = 1</code> (结果为1) 和 <code class="language-plaintext highlighter-rouge">NdotV = 0</code> (结果为0) 之间进行平滑过渡。</p>
+
+<ul>
+  <li>
+<strong>粗糙度因子 <code class="language-plaintext highlighter-rouge">k</code> 控制了这个过渡的剧烈程度。</strong>
+    <ul>
+      <li>对于<strong>光滑表面 (k很小)</strong>，分母 <code class="language-plaintext highlighter-rouge">NdotV * (1 - k) + k</code> 的值会非常接近 <code class="language-plaintext highlighter-rouge">NdotV</code> 本身。所以 <code class="language-plaintext highlighter-rouge">G</code> 的值在大部分角度下都接近1，只有在角度极其刁钻时才会快速下降。这模拟了光滑表面不易发生遮蔽的特性。</li>
+      <li>对于<strong>粗糙表面 (k很大)</strong>，分母会更快地偏离 <code class="language-plaintext highlighter-rouge">NdotV</code>，使得 <code class="language-plaintext highlighter-rouge">G</code> 的值随着 <code class="language-plaintext highlighter-rouge">NdotV</code> 变小而下降得更快、更早。这完美地模拟了粗糙表面在掠射角下，遮蔽现象非常严重的特性。</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="23-菲涅尔方程-f---fresnel_schlick">2.3 菲涅尔方程 (F) - <code class="language-plaintext highlighter-rouge">fresnel_schlick</code>
+</h3>
+
+<p>该函数描述了在不同观察角度下，表面反射光线所占的比例。</p>
+
+<ul>
+  <li>
+    <p><strong>模型</strong>: Schlick 近似法</p>
+  </li>
+  <li>
+    <p><strong>公式</strong>:<br>
+\(F(h, v) = F_0 + (1 - F_0)(1 - \max(0, h \cdot v))^5\)</p>
+
+    <ul>
+      <li>$F_0$ 是光线垂直入射（0度角）时的<strong>基础反射率</strong>。这是区分金属和非金属（电介质）的关键。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>代码实现</strong>:</p>
+
+    <div class="language-glsl highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="c1">// Schlick 近似公式</span>
+<span class="kt">vec3</span> <span class="nf">fresnel_schlick</span><span class="p">(</span><span class="kt">float</span> <span class="n">cosTheta</span><span class="p">,</span> <span class="kt">vec3</span> <span class="n">F0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// cosTheta 是 (h·v)</span>
+    <span class="k">return</span> <span class="n">F0</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">F0</span><span class="p">)</span> <span class="o">*</span> <span class="n">pow</span><span class="p">(</span><span class="n">clamp</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">cosTheta</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span> <span class="mi">5</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+
+    <p><code class="language-plaintext highlighter-rouge">F0</code> 的计算在 <code class="language-plaintext highlighter-rouge">cook_torrance_brdf</code> 函数中：</p>
+
+    <div class="language-glsl highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">F0</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mo">04</span><span class="p">);</span> <span class="c1">// 非金属的 F0 普遍近似为 0.04</span>
+<span class="c1">// 使用 metallic 值在非金属 F0 和金属 F0 (即其albedo颜色) 之间插值</span>
+<span class="n">F0</span> <span class="o">=</span> <span class="n">mix</span><span class="p">(</span><span class="n">F0</span><span class="p">,</span> <span class="n">albedo</span><span class="p">,</span> <span class="n">metallic</span><span class="p">);</span>
+
+<span class="c1">// ... 调用 fresnel_schlick</span>
+<span class="kt">vec3</span> <span class="n">F</span> <span class="o">=</span> <span class="n">fresnel_schlick</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">V</span><span class="p">),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span> <span class="n">F0</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="3-能量守恒-energy-conservation">3. 能量守恒 (Energy Conservation)</h2>
+
+<p>确保出射光线的总能量不超过入射光线，这是物理渲染的基础。程序通过 <code class="language-plaintext highlighter-rouge">kD</code> 和 <code class="language-plaintext highlighter-rouge">kS</code> 系数来控制能量在漫反射和镜面反射之间的分配。</p>
+
+<ul>
+  <li>
+    <p><strong>原理</strong>:<br>
+菲涅尔方程 <code class="language-plaintext highlighter-rouge">F</code> 的结果 (<code class="language-plaintext highlighter-rouge">kS</code>) 直接告诉我们光线中有多少比例被镜面反射了。那么剩下的 <code class="language-plaintext highlighter-rouge">1.0 - kS</code> 就是被折射进物体内部、可用于漫反射的能量比例 (<code class="language-plaintext highlighter-rouge">kD</code>)。</p>
+  </li>
+  <li>
+    <p><strong>代码实现</strong>:</p>
+
+    <div class="language-glsl highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">kS</span> <span class="o">=</span> <span class="n">F</span><span class="p">;</span> <span class="c1">// 镜面反射比例由菲涅尔项决定</span>
+<span class="kt">vec3</span> <span class="n">kD</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">kS</span><span class="p">;</span> <span class="c1">// 剩下的能量用于漫反射</span>
+
+<span class="c1">// 金属没有漫反射，所以当 metallic=1.0 时，kD 应为0</span>
+<span class="n">kD</span> <span class="o">*=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">metallic</span><span class="p">;</span>
+</code></pre></div>    </div>
+
+    <p>这段代码实现了能量守恒，并正确处理了金属材质（其 <code class="language-plaintext highlighter-rouge">metallic</code> 值为1.0，导致 <code class="language-plaintext highlighter-rouge">kD</code> 变为0，从而没有漫反射）。</p>
+  </li>
+</ul>
 
     <!-- see https://giscus.app/ -->
     <div class="giscus" id="giscus" style="margin: 4rem auto;"></div>
