@@ -201,6 +201,9 @@
         
     
 
+        
+    
+
     
     
     
@@ -259,6 +262,14 @@
                                 </div>
                             </li>
 </ul>
+</li>
+<li id="nav-second" aria-label="Liquid Glass">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Liquid Glass</span>
+                        </a>
+</div>
 </li>
 </ul>
 </li>
@@ -525,6 +536,538 @@
 </h1>
 <div id="category-list">
     <ul class="paginated-list" data-current-page="1" aria-live="polite">
+        <li class="paginated-item">
+                <div id="article_content">
+                    <div class="thumbnail_zone">
+                        
+                            <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html" class="thumbnail_post" loading="lazy" aria-label="thumbnail_post" style="background-image:url('https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908200721753.png') !important"></a>
+                        
+                    </div>
+                    <div class="box_contents">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html"><h1 class="title_post">Liquid Glass</h1></a>
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html" class="txt_post">
+                            Overview
+
+1. 坐标系统设置
+
+main 函数的前几行代码主要是为了建立一个以鼠标为中心的坐标系。
+
+vec2 uv = fragTexCoord;
+
+// 适配 Vulkan 的坐标系
+vec2 mouse = ubo.iMouse.xy;
+mouse.y = ubo.iResolution.y - mouse.y; // Shadertoy/OpenGL的原点在左下角，Vulkan在左上角，这里进行翻转
+if (length(mouse) &lt; 1.0) { // 如果鼠标坐标为(0,0)（通常是初始值），则将效果置于屏幕中心
+    mouse = ubo.iResolution.xy * 0.5;
+}
+
+// 将uv坐标的原点移动到鼠标位置，并进行归一化和放大
+// m2 的范围大致在 [-1.0, 1.0] 附近，中心点为 (0,0)
+vec2 m2 = (uv - mouse / ubo.iResolution.xy) * 2.0;
+
+
+这段代码的核心是计算出 m2。它代表了当前像素相对于鼠标位置的向量。如果一个像素正好在鼠标上，它的 m2 值就是 (0, 0)。
+
+
+
+2. 形状定义 (超椭圆)
+
+通过一个数学公式定义了玻璃的形状。
+
+// pow(|x|^p + |y|^p, 1/p) = r 是超椭圆公式
+// 这里 p = 8.0，创建了一个带有圆角的矩形（Squircle）
+float roundedBox = pow(abs(m2.x * ubo.iResolution.x / ubo.iResolution.y), 8.0) + pow(abs(m2.y), 8.0);
+
+
+这是一个超椭圆（Superellipse）的变体公式：
+\(|x/a|^p + |y/b|^p = 1\)
+
+
+  这里的 p 值是 8.0。当 $p &gt; 2$ 时，图形会趋向于一个矩形，但边角是圆滑的。$p$ 越大，形状越接近完美的矩形。
+  ubo.iResolution.x / ubo.iResolution.y 是为了修正屏幕的宽高比，确保即使屏幕不是正方形，我们的“玻璃”看起来也是规则的，而不是被拉伸的。
+  roundedBox 的值在形状的中心最小，向边缘逐渐变大。在形状的轮廓线上，这个值约等于 1.0。
+
+
+
+
+3. 区域分层 (Layers)
+
+代码利用 roundedBox 的值，通过 clamp 函数计算出了三个不同的遮罩（mask），用于定义玻璃的不同部分：主体、内边框和外高光。
+
+// rb1: 玻璃的主体区域，是一个实心遮罩
+float rb1 = clamp((1.0 - roundedBox * 10000.0) * 8.0, 0.0, 1.0);
+
+// rb2: 玻璃的内边框。通过两个 clamp 相减，得到一个细窄的环形区域
+float rb2 = clamp((0.95 - roundedBox * 9500.0) * 16.0, 0.0, 1.0) - clamp(pow(0.9 - roundedBox * 9500.0, 1.0) * 16.0, 0.0, 1.0);
+
+// rb3: 用于计算光照的另一个稍宽的环形区域
+float rb3 = (clamp((1.5 - roundedBox * 11000.0) * 2.0, 0.0, 1.0) - clamp(pow(1.0 - roundedBox * 11000.0, 1.0) * 2.0, 0.0, 1.0));
+
+
+这里的技巧是利用一个快速下降的函数 (C - roundedBox * K) 和 clamp 来精确地“切割”出不同的区域。rb1 是最内部的实体区域，rb2 和 rb3 则是通过相减制造出的窄环，用于后续的描边和高光。
+
+
+
+4. 效果实现 (The Effect)
+
+这是着色器的核心部分，只有在像素位于玻璃区域内时（transition &gt; 0.0）才会执行。
+
+// 使用 smoothstep 让 rb1 和 rb2 的组合边缘变得平滑，用于抗锯齿
+float transition = smoothstep(0.0, 1.0, rb1 + rb2);
+
+vec4 color;
+if (transition &gt; 0.0) {
+    // 1. 透镜效果 (Lensing/Refraction)
+    vec2 lens = ((uv - 0.5) * 1.0 * (1.0 - roundedBox * 5000.0) + 0.5);
+
+    // 2. 背景模糊 (Blur)
+    vec4 accum = vec4(0.0);
+    float total = 0.0;
+    for (int xi = -4; xi &lt;= 4; ++xi) {
+        for (int yi = -4; yi &lt;= 4; ++yi) {
+            // ...
+            accum += texture(texSampler, offset + lens);
+            // ...
+        }
+    }
+    color = accum / total; // Box Blur 算法
+
+    // 3. 光照和高光 (Lighting &amp; Highlight)
+    // 根据 m2.y (像素与中心的垂直距离) 计算一个从上到下的渐变
+    float gradient = clamp((clamp(m2.y, 0.0, 0.2) + 0.1) / 2.0, 0.0, 1.0) + clamp((clamp(-m2.y, -1000.0, 0.2) * rb3 + 0.1) / 2.0, 0.0, 1.0);
+    // 将模糊后的颜色、主体高光(rb1*gradient)和边框高光(rb2*0.3)叠加
+    vec4 lighting = clamp(color + vec4(rb1) * gradient + vec4(rb2) * 0.3, 0.0, 1.0);
+
+    // 4. 最终混合 (Final Mix)
+    // 使用 transition 遮罩，将原始背景和处理后的玻璃效果平滑地混合在一起
+    color = mix(texture(texSampler, uv), lighting, transition);
+
+} else {
+    // 如果不在区域内，直接显示原始背景
+    color = texture(texSampler, uv);
+}
+
+outColor = color;
+
+
+
+  透镜效果：lens 变量重新计算了纹理采样坐标。它根据 roundedBox 的值（即离中心的距离）对原始的 uv 坐标进行扭曲。这会产生一种中央放大、边缘压缩的视觉效果，模拟光线通过凸透镜的折射。
+  背景模糊：代码使用一个 9x9 的**盒状模糊（Box Blur）**算法。它对扭曲后的 lens 坐标周围的像素进行多次采样并取平均值，使得透过玻璃看到的背景变得模糊。
+  光照和高光：gradient 的计算模拟了从上方来的光源。它在玻璃的上半部分产生一个亮边，同时用 rb3 在下半部分也添加一些光照效果。然后，lighting 变量将这个光照效果叠加在模糊后的背景上。rb1 用于给主体区域上色，rb2 用于给内边框加上一个常量的亮边。
+  最终混合：最后，mix 函数根据 transition 的值（0.0 到 1.0）将原始背景颜色和我们精心制作的 lighting 颜色进行混合。这保证了玻璃的边缘是平滑过渡的，没有锯齿。
+
+
+超椭圆
+
+float roundedBox = pow(abs(m2.x * ubo.iResolution.x / ubo.iResolution.y), 8.0) + pow(abs(m2.y), 8.0);
+
+
+这行代码的本质是利用**超椭圆（Superellipse）**的数学公式来程序化地定义一个带圆角的矩形（通常称为“圆角矩”或 Squircle）。
+
+1. 基础数学公式：超椭圆
+
+标准的超椭圆方程为：
+
+\[\left| \frac{x}{a} \right|^p + \left| \frac{y}{b} \right|^p = 1\]
+
+
+  $(x, y)$ 是坐标点。
+  $a$ 和 $b$ 分别是椭圆在 x 轴和 y 轴上的半长轴/半短轴（半径）。
+  $p$ 是一个大于 0 的实数，它决定了形状的“方正”程度。
+
+
+我们来看看 $p$ 值的不同效果：
+
+
+  当 $p = 2$ 时，方程变为 $(\frac{x}{a})^2 + (\frac{y}{b})^2 = 1$，这是一个标准的椭圆。
+  
+    
+      
+        
+          当 $p = 1$ 时，方程变为 $
+          \frac{x}{a}
+          +
+          \frac{y}{b}
+          = 1$，这是一个菱形。
+        
+      
+    
+  
+  当 $p \to \infty$ 时，形状会无限趋近于一个矩形。
+  当 $p &gt; 2$ 时，形状介于椭圆和矩形之间，呈现出带有平滑圆角的矩形外观。$p$ 值越大，形状越方正，边角越锐利。
+
+
+在这个着色器中，选择 p = 8.0 就是为了创造一个非常接近矩形，但又具有平滑圆角的视觉效果，这正是 Apple UI 设计中常见的风格。
+
+2. 代码分步解析
+
+现在我们把公式和代码对应起来：
+
+float roundedBox = pow(abs(m2.x * ...), 8.0) + pow(abs(m2.y), 8.0);
+
+
+  
+    
+      这行代码实际上计算的是超椭圆公式的左半部分：$
+      x’
+      ^p +
+      y’
+      ^p$。
+    
+  
+
+
+
+  
+    m2:
+如前所述，m2 是以鼠标为中心的坐标系。所以 m2.x 和 m2.y 就对应了公式中的 $x$ 和 $y$。
+  
+  
+    abs(...):
+对应公式中的绝对值符号 $|…|$，确保无论像素在中心的哪个象限，计算方式都一样，使得图形是中心对称的。
+  
+  
+    ubo.iResolution.x / ubo.iResolution.y:
+这是宽高比校正（Aspect Ratio Correction）。
+
+    
+      为什么需要？ m2 坐标是从屏幕的 uv 坐标（通常范围是 0 到 1）计算来的。如果屏幕分辨率是 1920x1080，那么它不是一个正方形。在这样的非正方形空间里，水平方向上移动 0.1 单位和垂直方向上移动 0.1 单位所跨越的实际像素数是不同的。如果不进行校正，我们的“圆角矩”在屏幕上看起来会被压扁或拉伸。
+      如何工作？ 通过将 x 坐标 m2.x 乘以 宽度 / 高度，我们人为地“拉伸”了 x 轴，使得在这个新的坐标空间里，x 和 y 方向的单位长度所代表的像素距离变得相等。这样就保证了我们定义的形状不会变形。这相当于在超椭圆公式中设置了不同的 $a$ 和 $b$ 来抵消屏幕的非正方性。
+    
+  
+  
+    pow(..., 8.0):
+这对应了公式中的指数 $p$。如上所述，8.0 这个值创造了一个非常“方”的圆角矩形。
+  
+
+
+3. roundedBox 值的含义
+
+最终计算出的 roundedBox 是一个浮点数，它的值代表了当前像素离这个超椭圆中心的“数学距离”。
+注意，这里并不是由二次关系定义的欧氏距离，而是一个和欧氏距离正相关的距离关系。数值变化如下图所示：
+
+
+
+  在形状中心 (m2 为 (0,0))：roundedBox 的值为 0。
+  在形状的边界上：根据公式，roundedBox 的值约等于 1.0。
+  在形状内部：roundedBox 的值在 0.0 和 1.0 之间。
+  在形状外部：roundedBox 的值会大于 1.0。
+
+
+这个值不是一个简单的“是”或“否”（0 或 1），而是一个从中心向外平滑增长的连续值。这就像一个距离场（Distance Field）。正因为它是连续的，后续的代码才能利用它来计算出平滑的边缘过渡、边框和光照效果。例如，可以通过检查 roundedBox 是否在 0.95 到 1.0 之间来精确地绘制边框。
+
+区域分层
+核心目标
+这部分代码的目标是，基于前一步计算出的、从中心 (0.0) 到边缘 (~1.0) 平滑变化的 roundedBox 值，“雕刻”出三个不同的遮罩（Mask）。每个遮罩都是一个 0.0 到 1.0 之间的浮点数，它们分别定义了：
+
+
+  rb1: 玻璃的主体实心区域。
+  rb2: 玻璃内部的一圈高光边框。
+  rb3: 用于光照计算的另一圈光晕区域。
+
+
+关键工具：clamp() 函数
+
+理解这部分代码的关键是理解 clamp(value, min, max) 函数和一种特定的用法模式。
+
+
+  clamp(value, min, max): 这个函数会把 value 限制在 [min, max] 区间内。如果 value 小于 min，结果就是 min；如果大于 max，结果就是 max。
+  模式: clamp((C - x) * K, 0.0, 1.0)
+    
+      C - x: 这是一个临界点判断。当 x &lt; C 时，结果为正；当 x &gt; C 时，结果为负。
+      * K: K 是一个很大的数，它充当锐化因子。它会让 (C - x) 的结果在 x 跨越 C 点时急剧地从一个大的正数变为一个大的负数，从而创造出非常清晰、陡峭的边缘。
+      clamp(..., 0.0, 1.0): 将这个急剧变化的结果“拍扁”到 [0, 1] 区间，最终形成一个边缘清晰的遮罩。
+    
+  
+
+
+
+
+逐层解析
+
+1. rb1: 主体填充层 (The Core Fill Layer)
+
+float rb1 = clamp((1.0 - roundedBox * 10000.0) * 8.0, 0.0, 1.0);
+
+
+
+  逻辑: 1.0 - roundedBox * 10000.0
+    
+      这里的 10000.0 是一个很大的缩放系数，用于微调边缘的位置。我们主要关注 1.0 这个临界值。
+      当 roundedBox 非常小（靠近中心）时，roundedBox * 10000.0 远小于 1.0，1.0 - ... 是一个正数。
+      当 roundedBox 增大到某个值，使得 roundedBox * 10000.0 接近 1.0 时，1.0 - ... 的结果会迅速从正数变为 0，然后变为负数。
+    
+  
+  锐化: 乘以 8.0 让这个过渡更加陡峭。
+  clamp: 将最终结果限制在 [0, 1]。
+  结果: rb1 在形状的绝大部分内部区域都为 1.0（纯白），在非常靠近边缘的地方会快速平滑地过渡到 0.0（纯黑）。它定义了玻璃的主体部分。
+
+
+
+
+2. rb2: 内边框层 (The Inner Border Layer)
+
+float rb2 = clamp((0.95 - roundedBox * 9500.0) * 16.0, 0.0, 1.0) - clamp(pow(0.9 - roundedBox * 9500.0, 1.0) * 16.0, 0.0, 1.0);
+
+
+这里的技巧是用一个大图形减去一个小图形，从而得到一个环。
+
+
+  
+    第一部分 (大图形): clamp((0.95 - roundedBox * 9500.0) * 16.0, 0.0, 1.0)
+
+    
+      这会创建一个实心遮罩，其边界由 roundedBox * 9500.0 ≈ 0.95 定义。
+    
+  
+  
+    第二部分 (小图形): clamp(pow(0.9 - roundedBox * 9500.0, 1.0) * 16.0, 0.0, 1.0)
+
+    
+      这会创建另一个实心遮罩，其边界由 roundedBox * 9500.0 ≈ 0.9 定义。这个图形比第一个要小一些。（pow(..., 1.0) 不改变值，可以忽略）。
+    
+  
+  
+    减法: 大图形 - 小图形
+
+    
+      在两个图形都为 1.0 的重叠区域（中心区域），结果是 1.0 - 1.0 = 0.0。
+      在两个图形都为 0.0 的外部区域，结果是 0.0 - 0.0 = 0.0。
+      只有在大图形为 1.0 而小图形为 0.0 的那一圈窄窄的环形区域，结果才是 1.0 - 0.0 = 1.0。
+    
+  
+  
+    结果: rb2 是一个非常细的环形遮罩，正好位于 rb1 区域的内边缘，完美地用于创建边框高光。
+  
+
+
+
+
+3. rb3: 外光晕层 (The Outer Glow/Lighting Layer)
+
+float rb3 = (clamp((1.5 - roundedBox * 11000.0) * 2.0, 0.0, 1.0) - clamp(pow(1.0 - roundedBox * 11000.0, 1.0) * 2.0, 0.0, 1.0));
+
+
+
+  逻辑: rb3 使用了和 rb2 完全相同的“大图形减小图形”的技巧来创建一个环形。
+  区别: 它使用的临界值是 1.5 和 1.0，并且缩放系数是 11000.0。这意味着它定义的环形区域与 rb2 的位置和宽度都不同，这个遮罩将被用于后续光照计算中的另一个特定效果（例如底部的高光）。
+
+
+3. 可视化分层区域
+
+图(0,2)将rb1～rb3放在了同一张图中，对比位置关系。
+注意，rb3和rb1+rb2定义的区域部分重叠，在白线外的区域是非重叠区域。
+
+效果实现
+
+前置步骤：平滑过渡遮罩
+
+在进入核心效果计算之前，代码首先准备了一个高质量的遮罩：
+
+float transition = smoothstep(0.0, 1.0, rb1 + rb2);
+
+
+
+  目标: 创建一个边缘平滑、用于抗锯齿的最终遮罩。
+  代码分析:
+    
+      rb1 + rb2: 将主体填充层 (rb1) 和内边框层 (rb2) 合并成一个单一的遮罩。
+      smoothstep(edge0, edge1, x): 这是一个非常重要的 GLSL 内置函数。
+    
+  
+  数学原理: smoothstep 函数接受一个输入 x，并在两个阈值 edge0 和 edge1 之间进行平滑的 S 型曲线插值。其标准化的数学表达式（当 edge0=0, edge1=1 时）为：
+\(S(x) = 3x^2 - 2x^3, \quad x \in [0, 1]\)
+相比于线性的 clamp，smoothstep 的导数在起点和终点都为 0，这使得过渡的开始和结束都非常缓和，视觉上看起来比线性过渡更加自然、平滑。在这里，它将 rb1+rb2 产生的硬边缘变成柔和的渐变，是实现高质量抗锯齿的关键。
+
+
+
+
+1. 透镜/折射效果 (Lensing Effect)
+
+这一步通过扭曲纹理坐标，模拟光线穿过凸透镜时发生的折射现象，产生放大镜的效果。
+
+vec2 lens = ((uv - 0.5) * 1.0 * (1.0 - roundedBox * 5000.0) + 0.5);
+
+
+
+  
+    目标: 计算出经过透镜扭曲后，当前像素应该去采样背景纹理的哪个新坐标。
+  
+  
+    代码与数学分步解析: 让我们将这个坐标变换拆解开来，假设原始坐标为 $\vec{uv}$:
+
+    
+      
+        uv - 0.5: 坐标中心化。
+
+        
+          数学: $\vec{v}_{centered} = \vec{uv} - (0.5, 0.5)$
+          解释: 将坐标原点从左上角 (0,0) 移动到屏幕中心 (0.5, 0.5)。这样一来，后续的缩放操作就会以屏幕中心为基准点，而不是左上角。
+        
+      
+      * (1.0 - roundedBox * 5000.0): 应用一个基于距离的缩放因子。
+        
+          数学: 设缩放因子 $S = 1.0 - roundedBox \times 5000.0$。那么新的向量是 $\vec{v}{scaled} = \vec{v}{centered} \times S$。
+          解释:
+            
+              在玻璃的正中心，roundedBox = 0，所以缩放因子 $S = 1.0$。坐标没有任何变化。
+              从中心向边缘移动，roundedBox 值变大，导致 roundedBox * 5000.0 也变大，因此缩放因子 $S$ 小于 1.0。
+              一个向量乘以一个小于 1 的标量，会使其长度变短。这意味着，我们正在用一个更小的向量去采样背景。
+              视觉效果: 从一个更靠近中心的点采样纹理，并把它显示在当前离中心更远的位置上，这就产生了**放大（Magnification）**效果。想象一下，你把背景图的一小块区域拉伸，覆盖到了屏幕上更大的一块区域。
+              备注：* (1.0 - roundedBox * 5000.0)对应的大于0的区域相比于rb1+rb2定义的区域更大一些，因此不存在S&lt;0的情况。
+            
+          
+        
+      
+      
+        + 0.5: 坐标原点移回。
+
+        
+          数学: $\vec{uv}{lens} = \vec{v}{scaled} + (0.5, 0.5)$
+          解释: 将坐标系从以中心为原点移回到以左上角为原点，得到最终可以用于 texture() 函数的采样坐标 lens。
+        
+      
+    
+  
+
+
+
+
+
+
+2. 背景模糊 (Background Blur)
+
+这一步模拟了当焦点在玻璃上时，背景会失焦而变得模糊的景深效果。这里使用的是一个低质量的box模糊，效果可以进一步优化。
+
+vec4 accum = vec4(0.0);
+float total = 0.0;
+for (int xi = -4; xi &lt;= 4; ++xi) {
+    for (int yi = -4; yi &lt;= 4; ++yi) {
+        vec2 offset = vec2(float(xi), float(yi)) * 0.5 / ubo.iResolution.xy;
+        accum += texture(texSampler, offset + lens);
+        total += 1.0;
+    }
+}
+color = accum / total;
+
+
+
+  目标: 计算当前像素透过玻璃看到的模糊背景色。
+  代码与数学原理: 这里实现的是一种名为**盒状模糊（Box Blur）**的卷积算法。
+    
+      卷积（Convolution）: 图像处理中的一个基本操作，一个像素的最终颜色由它和它邻域内其他像素的颜色加权平均得到。
+      数学: 盒状模糊的公式为：
+\(C_{out} = \frac{1}{N} \sum_{i=1}^{N} C_{i}\)
+其中 $C_{i}$ 是采样点颜色， $N$ 是总采样数。
+      实现:
+        
+          for 循环创建了一个 9x9 的采样网格（从 -4 到 4，共 9 个点）。总采样数 $N = 9 \times 9 = 81$。
+          offset: 计算每个邻域采样点相对于中心点的偏移量。
+            
+              vec2(float(xi), float(yi)): 这是像素空间的偏移，例如 (-4, -4), (-4, -3) …
+              / ubo.iResolution.xy: 将像素空间的偏移转换为纹理坐标（UV）空间的偏移。这是因为UV坐标是从 0 到 1 覆盖整个纹理的，一个像素的UV宽度是 1.0 / width。
+              * 0.5: 这是一个调整因子，它缩小了模糊的半径，使得模糊不会过于发散，效果更细腻。
+            
+          
+          accum += texture(texSampler, offset + lens): 在经过透镜扭曲后的坐标 lens 上，再叠加上邻域偏移 offset 进行采样，并将颜色累加到 accum 中。
+          color = accum / total: 将累加的总颜色值除以总采样数，得到平均颜色，即模糊后的颜色。
+
+—–
+补充：一个很直接的加速方法是预制模糊图像，在shader中实现模糊效果时直接从模糊图像上采样。
+        
+      
+    
+  
+
+
+3. 光照与高光 (Lighting &amp; Highlights)
+
+这是赋予玻璃质感和立体感的关键步骤，它并非基于物理的精确光照模型。
+float gradient = clamp((clamp(m2.y, 0.0, 0.2) + 0.1) / 2.0, 0.0, 1.0) + clamp((clamp(-m2.y, -1000.0, 0.2) * rb3 + 0.1) / 2.0, 0.0, 1.0);
+vec4 lighting = clamp(color + vec4(rb1) * gradient + vec4(rb2) * 0.3, 0.0, 1.0);
+
+
+
+  
+    目标: 在模糊背景的基础上，叠加模拟的顶部高光和边缘高光。
+  
+  
+    gradient 计算解析:
+
+    
+      第一部分 (底部微光): clamp((clamp(m2.y, 0.0, 0.2) + 0.1) / 2.0, 0.0, 1.0)
+        
+          m2.y 是像素相对于鼠标中心的垂直坐标（负值为上，正值为下）。
+          clamp(m2.y, 0.0, 0.2) 会在玻璃下半部分靠近中心的一条带状区域产生一个从 0 到 0.2 的梯度值。
+        
+      
+      第二部分 (顶部主高光): clamp((clamp(-m2.y, -1000.0, 0.2) * rb3 + 0.1) / 2.0, 0.0, 1.0)
+        
+          -m2.y 将坐标翻转，所以 clamp(-m2.y, ...) 作用于玻璃的上半部分。
+          * rb3: 这个高光被我们之前计算的环形遮罩 rb3 所调制，意味着高光只会出现在 rb3 所定义的那个光晕区域内，形状更可控。
+        
+      
+      gradient 最终是这两部分的叠加，形成了一个非对称的、主要集中在顶部的光照效果。
+    
+  
+  
+    lighting 最终颜色合成:
+
+    
+      数学: 这是一个简单的加法混合模型：$C_{final} = C_{blur} + C_{highlight1} + C_{highlight2}$
+      color: 模糊后的背景色作为基础层。
+      + vec4(rb1) * gradient: 将计算出的 gradient 高光应用在玻璃的主体 rb1 区域。
+      + vec4(rb2) * 0.3: 在内边框 rb2 区域，直接加上一个固定的亮度值 0.3，形成一道清晰锐利的边缘高光。
+      clamp(..., 0.0, 1.0): 最后进行一次 clamp，防止颜色因叠加而超出 1.0（过曝）。
+
+    
+  
+
+
+
+
+4. 最终混合 (Final Compositing)
+这里和ShaderToy中的实现保持一致，但是实际上的抗锯齿效果不明显。
+
+color = mix(texture(texSampler, uv), lighting, transition);
+
+
+
+  目标: 根据抗锯齿遮罩，将效果无缝地绘制到屏幕上。
+  mix 函数与数学原理: mix(A, B, x) 执行的是线性插值（Linear Interpolation）。
+    
+      数学: $Result = A \times (1 - x) + B \times x$
+      A 是 texture(texSampler, uv)，即原始未处理的背景。
+      B 是 lighting，即我们完成的玻璃效果。
+      x 是 transition，我们带有平滑边缘的遮罩。
+    
+  
+  解释:
+    
+      当像素在玻璃外部，transition = 0，公式变为 $A \times (1 - 0) + B \times 0 = A$，显示原始背景。
+      当像素在玻璃内部，transition = 1，公式变为 $A \times (1 - 1) + B \times 1 = B$，显示玻璃效果。
+      在玻璃的柔和边缘，transition 在 0 和 1 之间，公式会按比例混合原始背景和玻璃效果，从而创造出完美的抗锯齿边缘。
+    
+  
+
+
+未使用混合：
+
+使用混合：
+
+
+                        </a>
+                        <div class="info-post">
+                                <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0" class="category">技术学习</a>
+                            
+                                <span class="date">· 2025-09-08</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+        
+        
         <li class="paginated-item">
                 <div id="article_content">
                     <div class="thumbnail_zone">
@@ -8521,6 +9064,17 @@ Asynchronous compute
             'url'      : "/3D%20SDF/4.PBR.html",
             'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250907153024105.png",
             'date'     : "2025-09-07"
+        });
+    
+
+        posts.push({
+            'title'    : "Liquid Glass",
+            'path'     : "技术学习",
+            'type'     : "post",
+            'tags'     : "Liquid Glass, Vulkan",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908200721753.png",
+            'date'     : "2025-09-08"
         });
     
 

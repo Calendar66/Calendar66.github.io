@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>
+    
+        Liquid Glass
+    
+</title>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Liquid Glass | Calendar’s Blog</title>
+<meta name="generator" content="Jekyll v4.3.4">
+<meta property="og:title" content="Liquid Glass">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Overview">
+<meta property="og:description" content="Overview">
+<link rel="canonical" href="http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html">
+<meta property="og:url" content="http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html">
+<meta property="og:site_name" content="Calendar’s Blog">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-08T00:00:00+08:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Liquid Glass">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-08T00:00:00+08:00","datePublished":"2025-09-08T00:00:00+08:00","description":"Overview","headline":"Liquid Glass","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html"},"url":"http://localhost:4000/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link rel="shortcut icon" type="image/png" href="/assets/img/favicon.webp">
+<style>
+@font-face {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-display: optional;
+    src: local('Nunito Sans'),
+         url("/assets/fonts/NunitoSans-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: 'Righteous';
+    font-style: normal;
+    font-weight: 600;
+    font-display: optional;
+    src: local('Righteous'),
+         url("/assets/fonts/Righteous-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-display: optional;
+    src: local('Lato'),
+         url("/assets/fonts/Lato-Regular.woff2") format("woff2");
+}
+</style>
+
+<script src="/assets/js/fontfaceobserver.js" type="text/javascript"></script>
+<script type="text/javascript">
+    const nunitoObserver = new FontFaceObserver('Nunito Sans');
+    const righteousObserver = new FontFaceObserver('Righteous');
+    const latoObserver = new FontFaceObserver('Lato');
+  
+    Promise.all([
+        nunitoObserver.load(),
+        righteousObserver.load(),
+        latoObserver.load(),
+    ]).then(function(){
+        document.documentElement.className += " fonts-loaded";
+    });
+</script>
+
+<meta name="baseurl" content="">
+<meta name="description" content="A graduate student majoring in computer graphics from Xiamen University.">
+        <link rel="preload" href="/assets/img/profile.jpg" as="image">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+              tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+              }
+            });
+          </script>
+              
+            <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+            
+                <script data-goatcounter="https://calendar.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+            
+
+            <meta name="giscus_repo" content="Calendar66/Calendar66.github.io">
+            <meta name="giscus_repoId" content="R_kgDONlocmA">
+            <meta name="giscus_category" content="Q&amp;A">
+            <meta name="giscus_categoryId" content="DIC_kwDONlocmM4Cl8UB">
+
+            
+                <style>
+                        .thumbnail {
+                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908200721753.png");
+                        }
+                    
+                </style>
+            
+        
+    </head>
+    <body>
+        <script type="text/javascript">
+            let currentTheme = localStorage.getItem('theme');
+        
+            document.body.classList[currentTheme === 'dark' ? 'add' : 'remove']('dark-theme');
+        </script>
+        <canvas id="stars" width="100%" height="100%"></canvas>
+        <div class="sidebar sidebar-left">
+    <div class="side-banner">
+        <h1 class="site-tab">
+            <a href="/" class="site-name">
+                <img src="/assets/img/icon/house.webp" alt="" loading="lazy">
+                <mark>Calendar's Blog</mark>
+            </a>
+            <button id="btn-brightness" aria-label="brightness-button">
+                <svg class="ico-dark" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg>
+                <svg class="ico-light" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"></path></svg>
+            </button>
+            <button id="btn-search" aria-label="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
+            </button>
+            <button id="btn-nav" aria-pressed="false" aria-label="menu-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"></path></svg>
+            </button>
+        </h1>
+        <a href="/" class="site-avatar" aria-label="site-avatar">
+            <img src="/assets/img/profile.jpg" loading="lazy" alt="homepage" aria-label="homepage-button">
+        </a>
+    </div>
+    <div class="side-info">
+        <nav id="navigation">
+    
+    
+    
+
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+        
+    
+
+    
+    
+    
+
+    <ul class="nav-list">
+<li id="nav-first" aria-label="技术学习">
+            <div class="nav-item">
+                <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>技术学习</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in 技术学习 category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list">
+<li id="nav-second" aria-label="交换链的多重缓冲机制">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E4%BA%A4%E6%8D%A2%E9%93%BE%E7%9A%84%E5%A4%9A%E9%87%8D%E7%BC%93%E5%86%B2%E6%9C%BA%E5%88%B6.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>交换链的多重缓冲机制</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="图像降采样">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>图像降采样</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="GPU通用计算">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>GPU通用计算</span>
+                        </a><button class="nav-list-expander" aria-label="toggle items in GPU通用计算 category" aria-pressed="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                        </button>
+</div>
+<ul class="nav-list">
+<li id="nav-third" aria-label="Vulkan compute shader">
+                                <div class="nav-item">
+                                    <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>Vulkan compute shader</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="integral Image计算">
+                                <div class="nav-item">
+                                    <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>integral Image计算</span>
+                                    </a>
+                                </div>
+                            </li>
+</ul>
+</li>
+<li id="nav-second" aria-label="Liquid Glass">
+                    <div class="nav-item">
+                        <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Liquid Glass</span>
+                        </a>
+</div>
+</li>
+</ul>
+</li>
+<li id="nav-first" aria-label="模糊阴影视效研究">
+            <div class="nav-item">
+                <a href="/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>模糊阴影视效研究</span>
+                </a>
+</div>
+</li>
+<li id="nav-first" aria-label="2D矢量图元绘制技术研究">
+            <div class="nav-item">
+                <a href="/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>2D矢量图元绘制技术研究</span>
+                </a>
+</div>
+</li>
+<li id="nav-first" aria-label="3D SDF">
+            <div class="nav-item">
+                <a href="/3D%20SDF/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>3D SDF</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in 3D SDF category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list">
+<li id="nav-second" aria-label="1.预备知识和基于3D SDF的康奈尔盒子">
+                    <div class="nav-item">
+                        <a href="/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>1.预备知识和基于3D SDF的康奈尔盒子</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="2.RSM阴影和一次间接光照">
+                    <div class="nav-item">
+                        <a href="/3D%20SDF/2.RSM%E9%98%B4%E5%BD%B1%E5%92%8C%E4%B8%80%E6%AC%A1%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>2.RSM阴影和一次间接光照</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="3.优化VPL采样">
+                    <div class="nav-item">
+                        <a href="/3D%20SDF/3.%E4%BC%98%E5%8C%96VPL%E9%87%87%E6%A0%B7.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>3.优化VPL采样</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="4.PBR">
+                    <div class="nav-item">
+                        <a href="/3D%20SDF/4.PBR.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>4.PBR</span>
+                        </a>
+</div>
+</li>
+</ul>
+</li>
+<li id="nav-first" aria-label="EasyVulkan">
+            <div class="nav-item">
+                <a href="/EasyVulkan/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>EasyVulkan</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in EasyVulkan category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list">
+<li id="nav-second" aria-label="Builder类">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/Builder%E7%B1%BB/" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Builder类</span>
+                        </a><button class="nav-list-expander" aria-label="toggle items in Builder类 category" aria-pressed="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                        </button>
+</div>
+<ul class="nav-list">
+<li id="nav-third" aria-label="CommandBuffer">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>CommandBuffer</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="DescriptorSet">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>DescriptorSet</span>
+                                    </a>
+                                </div>
+                            </li>
+<li id="nav-third" aria-label="RenderPass">
+                                <div class="nav-item">
+                                    <a href="/EasyVulkan/Builder%E7%B1%BB/RenderPass.html" class="nav-list-link nav-sh">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                                        <span>RenderPass</span>
+                                    </a>
+                                </div>
+                            </li>
+</ul>
+</li>
+<li id="nav-second" aria-label="ResourceManager中的内存泄露">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/ResourceManager%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>ResourceManager中的内存泄露</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="VMA">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/VMA.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>VMA</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="Vulkan初始化">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Vulkan初始化</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="Vulkan同步机制">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/Vulkan%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>Vulkan同步机制</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="VulkanDebug">
+                    <div class="nav-item">
+                        <a href="/EasyVulkan/VulkanDebug.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>VulkanDebug</span>
+                        </a>
+</div>
+</li>
+</ul>
+</li>
+<li id="nav-first" aria-label="Home">
+            <div class="nav-item">
+                <a href="/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>Home</span>
+                </a>
+</div>
+</li>
+<li id="nav-first" aria-label="noBug">
+            <div class="nav-item">
+                <a href="/noBug/" class="nav-list-link nav-lh">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"></path></svg>
+                    <span>noBug</span>
+                </a><button class="nav-list-expander" aria-label="toggle items in noBug category" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+                </button>
+</div>
+<ul class="nav-list">
+<li id="nav-second" aria-label="色彩空间问题">
+                    <div class="nav-item">
+                        <a href="/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>色彩空间问题</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="std140数据对齐">
+                    <div class="nav-item">
+                        <a href="/noBug/std140%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>std140数据对齐</span>
+                        </a>
+</div>
+</li>
+<li id="nav-second" aria-label="vector.back()引发的指针错误">
+                    <div class="nav-item">
+                        <a href="/noBug/vector.back()%E5%BC%95%E5%8F%91%E7%9A%84%E6%8C%87%E9%92%88%E9%94%99%E8%AF%AF.html" class="nav-list-link nav-sh">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path></svg>
+                            <span>vector.back()引发的指针错误</span>
+                        </a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+        <div id="contact">
+            <hr>
+            <h3>Contact</h3>
+            <ul class="contact-list">
+                
+                    <li><a aria-label="My Github" href="https://github.com/Calendar66">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3 .3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5 .3-6.2 2.3zm44.2-1.7c-2.9 .7-4.9 2.6-4.6 4.9 .3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3 .7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3 .3 2.9 2.3 3.9 1.6 1 3.6 .7 4.3-.7 .7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3 .7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3 .7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+                    </a></li>
+                
+                
+                    <li><a aria-label="My Email" href="mailto:guangzez67@gmaill.com">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"></path></svg>
+                    </a></li>
+                
+                
+                    <li><a aria-label="My Bilibili" href="https://space.bilibili.com/233488614">
+                        <svg viewbox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4552" width="10" height="21"><path d="M253.568 577.6c2.496 18.176 5.056 36.48 7.552 55.36 15.488-11.584 30.272-23.04 45.248-34.304C304.384 596.096 263.296 579.776 253.568 577.6z" p-id="4553"></path><path d="M610.176 577.6c2.496 18.176 5.056 36.48 7.552 55.36 15.488-11.584 30.272-23.04 45.248-34.304C660.992 596.096 619.904 579.776 610.176 577.6z" p-id="4554"></path><path d="M515.648 63.296c-244.224 0-442.176 197.952-442.176 442.176s197.952 442.176 442.176 442.176 442.176-197.952 442.176-442.176S759.872 63.296 515.648 63.296zM490.56 447.36l14.656 0c2.496 0 3.712 0.832 3.712 3.84l0 42.752 0 3.392c-5.888-0.32-11.968-0.512-18.304-0.832L490.624 447.36zM390.464 441.856c1.664 0 2.496 1.024 2.88 3.008 1.536 15.488 2.88 30.592 4.544 46.592-5.888 0.704-11.456 0.832-17.664 1.344-2.176-16.96-4.224-33.472-6.4-50.624C379.584 441.856 385.088 441.856 390.464 441.856zM366.592 444.544c2.368-0.32 1.664 1.664 2.048 3.008 0.512 5.696 1.152 11.072 1.664 16.64 0.832 8.768 2.048 17.152 2.88 25.92l0 3.392-13.632 2.368c-3.008-16.32-5.888-32.448-8.896-49.088C356.032 446.208 361.216 444.992 366.592 444.544zM364.096 603.456c-2.176 7.232-7.232 12.928-13.44 17.664-14.656 11.584-29.76 21.696-47.424 27.584-12.416 4.224-25.088 7.232-38.016 9.28-16.832 2.496-33.984 3.712-51.136 5.376-3.52 0.512-6.912 0-10.624 0-1.664 0-2.176-0.832-2.176-2.496-0.192-7.552-0.832-15.488-1.344-23.36-0.832-10.112-1.856-20.032-3.008-30.08-1.664-14.144-3.392-27.776-5.056-41.856-1.664-14.784-3.712-29.44-5.376-44.096-1.664-14.464-3.008-28.736-5.056-43.072-2.368-16.32-4.544-32.448-7.04-49.088-2.496-19.2-6.208-38.528-11.264-57.344-0.32-0.832 0.512-2.496 1.024-3.008 16.64-6.4 33.152-12.928 49.792-19.712 5.376-2.368 5.888-3.2 5.888 3.84 0 29.76 0 59.392 0.512 89.152 0.32 15.488 0.832 30.976 2.048 46.4 1.344 18.496 3.392 37.312 5.056 56.192 0 0.832 0.512 1.536 0.512 2.048 6.4-0.32 12.608-0.832 18.816-0.832 26.432-0.704 52.288 2.88 77.056 12.608 12.096 4.864 23.872 10.432 34.304 18.304C366.784 583.488 368.768 591.552 364.096 603.456zM386.432 641.984C377.728 598.4 369.28 555.52 360.896 511.616c7.04-0.832 13.824-2.048 20.544-2.88 4.864-0.704 9.92-0.704 14.656-1.152 2.688-0.32 4.352 0.832 4.736 3.392 1.024 6.72 2.176 13.44 3.008 20.544 1.536 11.456 2.496 23.04 3.712 34.496 1.152 10.112 2.176 20.032 3.392 30.08 1.152 10.624 2.496 21.376 3.84 32.448 0.32 3.008 0.832 6.4 1.152 9.728C406.144 639.488 396.544 640.64 386.432 641.984zM458.304 629.376c-8.768-0.832-17.152-1.344-26.432-2.176-7.936-79.872-14.656-160.448-29.76-240.896 4.864-0.512 9.92-1.152 14.976-1.664 5.888-0.32 11.584-0.704 17.472-1.152 4.864-0.32 6.72 0.832 7.04 5.568l2.496 38.016c1.152 17.152 2.496 34.304 3.712 51.456 0.832 12.416 1.344 24.704 2.496 37.184 1.152 13.632 2.496 27.072 3.712 40.512 1.152 9.728 2.048 20.032 2.88 29.76 1.152 10.624 2.368 21.376 3.008 32.448l0.832 9.28C460.8 629.376 459.968 629.696 458.304 629.376zM481.472 447.232c2.176 0 3.008 0.512 3.008 3.008-0.32 6.72 0 13.824 0 20.544l0 25.536c-5.056 0.512-9.6 0.832-14.144 1.152-1.344-16.32-2.496-32.768-3.84-50.304L481.472 447.168zM484.032 644.864c-0.832 0-2.176-1.344-2.176-2.176-1.344-14.656-2.496-29.248-3.84-43.904-1.152-13.44-2.496-27.264-3.712-40.704-1.152-13.824-2.496-27.776-3.712-41.856 0-0.832 0-1.664-0.32-2.88 3.392-0.704 6.4-1.152 9.728-1.152 8.768 0 17.664 0.192 26.432 0.512 2.176 0 3.392 1.664 3.392 3.712 0.192 4.544 0.512 8.768 0.512 13.312 0 20.544-0.32 41.408 0 61.888 0.32 16.64 0.832 32.832 1.152 49.472 0 0.832 0 2.048 0.32 3.84C502.336 644.864 492.928 645.184 484.032 644.864zM847.168 447.36l14.656 0c2.496 0 3.712 0.832 3.712 3.84l0 42.752 0 3.392c-5.888-0.32-11.968-0.512-18.304-0.832L847.232 447.36zM747.072 441.856c1.664 0 2.496 1.024 2.88 3.008 1.536 15.488 2.88 30.592 4.544 46.592-5.888 0.704-11.456 0.832-17.664 1.344-2.176-16.96-4.224-33.472-6.4-50.624C736.128 441.856 741.696 441.856 747.072 441.856zM723.2 444.544c2.368-0.32 1.664 1.664 2.048 3.008 0.512 5.696 1.152 11.072 1.664 16.64 0.832 8.768 2.048 17.152 2.88 25.92l0 3.392-13.632 2.368c-3.008-16.32-5.888-32.448-8.896-49.088C712.576 446.208 717.824 444.992 723.2 444.544zM720.512 603.328c-2.176 7.232-7.232 12.928-13.44 17.664-14.656 11.584-29.76 21.696-47.424 27.584-12.416 4.224-25.088 7.232-38.016 9.28-16.832 2.496-33.984 3.712-51.136 5.376-3.52 0.512-6.912 0-10.624 0-1.664 0-2.176-0.832-2.176-2.496-0.192-7.552-0.832-15.488-1.344-23.36-0.832-10.112-1.856-20.032-3.008-30.08-1.664-14.144-3.392-27.776-5.056-41.856-1.664-14.784-3.712-29.44-5.376-44.096-1.664-14.464-3.008-28.736-5.056-43.072-2.368-16.32-4.544-32.448-7.04-49.088-2.496-19.2-6.208-38.528-11.264-57.344-0.192-0.832 0.704-2.496 1.152-2.88 16.64-6.4 33.152-12.928 49.792-19.712 5.376-2.368 5.888-3.2 5.888 3.84 0 29.76 0 59.392 0.512 89.152 0.32 15.488 0.832 30.976 2.048 46.4 1.344 18.496 3.392 37.312 5.056 56.192 0 0.832 0.512 1.536 0.512 2.048 6.4-0.32 12.608-0.832 18.816-0.832 26.432-0.704 52.288 2.88 77.056 12.608 12.096 4.864 23.872 10.432 34.304 18.304C723.392 583.488 725.376 591.552 720.512 603.328zM743.04 641.984c-8.768-43.584-17.152-86.464-25.536-130.368 7.04-0.832 13.824-2.048 20.544-2.88 4.864-0.704 9.92-0.704 14.656-1.152 2.688-0.32 4.352 0.832 4.736 3.392 1.024 6.72 2.176 13.44 3.008 20.544 1.536 11.456 2.496 23.04 3.712 34.496 1.152 10.112 2.176 20.032 3.392 30.08 1.152 10.624 2.496 21.376 3.84 32.448 0.32 3.008 0.832 6.4 1.152 9.728C762.752 639.488 753.152 640.64 743.04 641.984zM814.848 629.376c-8.768-0.832-17.152-1.344-26.432-2.176-7.936-79.872-14.656-160.448-29.76-240.896 4.864-0.512 9.92-1.152 14.976-1.664 5.888-0.32 11.584-0.704 17.472-1.152 4.864-0.32 6.72 0.832 7.04 5.568l2.496 38.016c1.152 17.152 2.496 34.304 3.712 51.456 0.832 12.416 1.344 24.704 2.496 37.184 1.152 13.632 2.496 27.072 3.712 40.512 1.152 9.728 2.048 20.032 2.88 29.76 1.152 10.624 2.368 21.376 3.008 32.448l0.832 9.28C817.408 629.376 816.576 629.696 814.848 629.376zM838.08 447.232c2.176 0 3.008 0.512 3.008 3.008-0.32 6.72 0 13.824 0 20.544l0 25.536c-5.056 0.512-9.6 0.832-14.144 1.152-1.344-16.32-2.496-32.768-3.84-50.304L838.08 447.168zM840.64 644.864c-0.832 0-2.176-1.344-2.176-2.176-1.344-14.656-2.496-29.248-3.84-43.904-1.152-13.44-2.496-27.264-3.712-40.704-1.152-13.824-2.496-27.776-3.712-41.856 0-0.832 0-1.664-0.32-2.88 3.392-0.704 6.4-1.152 9.728-1.152 8.768 0 17.664 0.192 26.432 0.512 2.176 0 3.392 1.664 3.392 3.712 0.192 4.544 0.512 8.768 0.512 13.312 0 20.544-0.32 41.408 0 61.888 0.32 16.64 0.832 32.832 1.152 49.472 0 0.832 0 2.048 0.32 3.84C858.944 644.864 849.536 645.184 840.64 644.864z" p-id="4555"></path></svg>                
+                
+                
+                
+            </a></li>
+</ul>
+            <hr>
+            <span>
+                Copyright © 2025 | <a href="/">Calendar</a>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="sidebar sidebar-right">
+    <div class="tools">
+        <button id="btn-brightness" aria-label="brightness-button">
+            <svg class="ico-dark" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg>
+            <svg class="ico-light" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"></path></svg>
+        </button>
+        <button id="btn-search" aria-label="search-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
+        </button>
+    </div>
+<div class="toc">
+        <span class="toc-header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"></path></svg>
+            Contents
+        </span>
+        <div class="toc-board"></div>
+    </div>
+</div>
+
+        <div id="post">
+            <div class="inner-header">
+                <span class="dot" style="background-color: #F86158;"></span>
+                <span class="dot" style="background-color: #FBBF2D;"></span>
+                <span class="dot" style="background-color: #2ACB45;"></span>
+            </div>
+            <div class="inner-content">
+                <div class="category-tree">
+<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg>
+    <p>
+                <a href="/">Home</a>
+                &gt;
+            <a href="/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">技术学习</a>
+                &gt;
+            
+                
+                    Liquid Glass
+                
+            </p>
+</div>
+                
+                    <div class="post-header">
+    <div class="thumbnail">
+        <div class="transbox">
+            
+                <span class="post-title">Liquid Glass</span>
+            
+            <div class="post-info">
+                
+                    <span class="info-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M384 480h48c11.4 0 21.9-6 27.6-15.9l112-192c5.8-9.9 5.8-22.1 .1-32.1S555.5 224 544 224H144c-11.4 0-21.9 6-27.6 15.9L48 357.1V96c0-8.8 7.2-16 16-16H181.5c4.2 0 8.3 1.7 11.3 4.7l26.5 26.5c21 21 49.5 32.8 79.2 32.8H416c8.8 0 16 7.2 16 16v32h48V160c0-35.3-28.7-64-64-64H298.5c-17 0-33.3-6.7-45.3-18.7L226.7 50.7c-12-12-28.3-18.7-45.3-18.7H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H87.7 384z"></path></svg>
+                        <span>None</span>
+                    </span>
+                
+                <span class="info-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"></path></svg>
+                    <span>
+                            2025-09-08
+                        
+                    </span>
+                </span>
+                
+                    <span class="info-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"></path></svg>
+                        <span id="page-hits" usercode="calendar">-</span>
+                    </span>
+                
+                <a class="info-box" id="comments-counter">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4l0 0 0 0 0 0 0 0 .3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"></path></svg>
+                    <span id="num-comments">-</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tag-box">
+<span class="tag theme-0" contentid="Liquid Glass">
+            Liquid Glass
+        </span><span class="tag theme-1" contentid="Vulkan">
+            Vulkan
+        </span>
+</div>
+<main>
+    <h1 id="overview">Overview</h1>
+
+<h2 id="1-坐标系统设置">1. 坐标系统设置</h2>
+
+<p><code class="language-plaintext highlighter-rouge">main</code> 函数的前几行代码主要是为了建立一个以鼠标为中心的坐标系。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec2</span> <span class="n">uv</span> <span class="o">=</span> <span class="n">fragTexCoord</span><span class="p">;</span>
+
+<span class="c1">// 适配 Vulkan 的坐标系</span>
+<span class="kt">vec2</span> <span class="n">mouse</span> <span class="o">=</span> <span class="n">ubo</span><span class="p">.</span><span class="n">iMouse</span><span class="p">.</span><span class="n">xy</span><span class="p">;</span>
+<span class="n">mouse</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">ubo</span><span class="p">.</span><span class="n">iResolution</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">mouse</span><span class="p">.</span><span class="n">y</span><span class="p">;</span> <span class="c1">// Shadertoy/OpenGL的原点在左下角，Vulkan在左上角，这里进行翻转</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">mouse</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 如果鼠标坐标为(0,0)（通常是初始值），则将效果置于屏幕中心</span>
+    <span class="n">mouse</span> <span class="o">=</span> <span class="n">ubo</span><span class="p">.</span><span class="n">iResolution</span><span class="p">.</span><span class="n">xy</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 将uv坐标的原点移动到鼠标位置，并进行归一化和放大</span>
+<span class="c1">// m2 的范围大致在 [-1.0, 1.0] 附近，中心点为 (0,0)</span>
+<span class="kt">vec2</span> <span class="n">m2</span> <span class="o">=</span> <span class="p">(</span><span class="n">uv</span> <span class="o">-</span> <span class="n">mouse</span> <span class="o">/</span> <span class="n">ubo</span><span class="p">.</span><span class="n">iResolution</span><span class="p">.</span><span class="n">xy</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>这段代码的核心是计算出 <code class="language-plaintext highlighter-rouge">m2</code>。它代表了当前像素相对于鼠标位置的向量。如果一个像素正好在鼠标上，它的 <code class="language-plaintext highlighter-rouge">m2</code> 值就是 <code class="language-plaintext highlighter-rouge">(0, 0)</code>。</p>
+
+<hr>
+
+<h2 id="2-形状定义-超椭圆">2. 形状定义 (超椭圆)</h2>
+
+<p>通过一个数学公式定义了玻璃的形状。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// pow(|x|^p + |y|^p, 1/p) = r 是超椭圆公式</span>
+<span class="c1">// 这里 p = 8.0，创建了一个带有圆角的矩形（Squircle）</span>
+<span class="kt">float</span> <span class="n">roundedBox</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">m2</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">ubo</span><span class="p">.</span><span class="n">iResolution</span><span class="p">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">ubo</span><span class="p">.</span><span class="n">iResolution</span><span class="p">.</span><span class="n">y</span><span class="p">),</span> <span class="mi">8</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">pow</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">m2</span><span class="p">.</span><span class="n">y</span><span class="p">),</span> <span class="mi">8</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>这是一个超椭圆（Superellipse）的变体公式：<br>
+\(|x/a|^p + |y/b|^p = 1\)</p>
+
+<ul>
+  <li>这里的 <code class="language-plaintext highlighter-rouge">p</code> 值是 <code class="language-plaintext highlighter-rouge">8.0</code>。当 $p &gt; 2$ 时，图形会趋向于一个矩形，但边角是圆滑的。$p$ 越大，形状越接近完美的矩形。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">ubo.iResolution.x / ubo.iResolution.y</code> 是为了<strong>修正屏幕的宽高比</strong>，确保即使屏幕不是正方形，我们的“玻璃”看起来也是规则的，而不是被拉伸的。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">roundedBox</code> 的值在形状的中心最小，向边缘逐渐变大。在形状的轮廓线上，这个值约等于 <code class="language-plaintext highlighter-rouge">1.0</code>。</li>
+</ul>
+
+<hr>
+
+<h2 id="3-区域分层-layers">3. 区域分层 (Layers)</h2>
+
+<p>代码利用 <code class="language-plaintext highlighter-rouge">roundedBox</code> 的值，通过 <code class="language-plaintext highlighter-rouge">clamp</code> 函数计算出了三个不同的遮罩（mask），用于定义玻璃的不同部分：主体、内边框和外高光。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// rb1: 玻璃的主体区域，是一个实心遮罩</span>
+<span class="kt">float</span> <span class="n">rb1</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">((</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">10000</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="c1">// rb2: 玻璃的内边框。通过两个 clamp 相减，得到一个细窄的环形区域</span>
+<span class="kt">float</span> <span class="n">rb2</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">((</span><span class="mi">0</span><span class="p">.</span><span class="mi">95</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">9500</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">16</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">clamp</span><span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">9</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">9500</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">16</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="c1">// rb3: 用于计算光照的另一个稍宽的环形区域</span>
+<span class="kt">float</span> <span class="n">rb3</span> <span class="o">=</span> <span class="p">(</span><span class="n">clamp</span><span class="p">((</span><span class="mi">1</span><span class="p">.</span><span class="mi">5</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">11000</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">clamp</span><span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">11000</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p>这里的技巧是利用一个快速下降的函数 <code class="language-plaintext highlighter-rouge">(C - roundedBox * K)</code> 和 <code class="language-plaintext highlighter-rouge">clamp</code> 来精确地“切割”出不同的区域。<code class="language-plaintext highlighter-rouge">rb1</code> 是最内部的实体区域，<code class="language-plaintext highlighter-rouge">rb2</code> 和 <code class="language-plaintext highlighter-rouge">rb3</code> 则是通过相减制造出的窄环，用于后续的描边和高光。</p>
+
+<hr>
+
+<h2 id="4-效果实现-the-effect">4. 效果实现 (The Effect)</h2>
+
+<p>这是着色器的核心部分，只有在像素位于玻璃区域内时（<code class="language-plaintext highlighter-rouge">transition &gt; 0.0</code>）才会执行。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 使用 smoothstep 让 rb1 和 rb2 的组合边缘变得平滑，用于抗锯齿</span>
+<span class="kt">float</span> <span class="n">transition</span> <span class="o">=</span> <span class="n">smoothstep</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">rb1</span> <span class="o">+</span> <span class="n">rb2</span><span class="p">);</span>
+
+<span class="kt">vec4</span> <span class="n">color</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">transition</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 1. 透镜效果 (Lensing/Refraction)</span>
+    <span class="kt">vec2</span> <span class="n">lens</span> <span class="o">=</span> <span class="p">((</span><span class="n">uv</span> <span class="o">-</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">5000</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">);</span>
+
+    <span class="c1">// 2. 背景模糊 (Blur)</span>
+    <span class="kt">vec4</span> <span class="n">accum</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">xi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="p">;</span> <span class="n">xi</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">xi</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">yi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="p">;</span> <span class="n">yi</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">yi</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// ...</span>
+            <span class="n">accum</span> <span class="o">+=</span> <span class="n">texture</span><span class="p">(</span><span class="n">texSampler</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">lens</span><span class="p">);</span>
+            <span class="c1">// ...</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">accum</span> <span class="o">/</span> <span class="n">total</span><span class="p">;</span> <span class="c1">// Box Blur 算法</span>
+
+    <span class="c1">// 3. 光照和高光 (Lighting &amp; Highlight)</span>
+    <span class="c1">// 根据 m2.y (像素与中心的垂直距离) 计算一个从上到下的渐变</span>
+    <span class="kt">float</span> <span class="n">gradient</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">((</span><span class="n">clamp</span><span class="p">(</span><span class="n">m2</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">clamp</span><span class="p">((</span><span class="n">clamp</span><span class="p">(</span><span class="o">-</span><span class="n">m2</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">rb3</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+    <span class="c1">// 将模糊后的颜色、主体高光(rb1*gradient)和边框高光(rb2*0.3)叠加</span>
+    <span class="kt">vec4</span> <span class="n">lighting</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">color</span> <span class="o">+</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">rb1</span><span class="p">)</span> <span class="o">*</span> <span class="n">gradient</span> <span class="o">+</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">rb2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="c1">// 4. 最终混合 (Final Mix)</span>
+    <span class="c1">// 使用 transition 遮罩，将原始背景和处理后的玻璃效果平滑地混合在一起</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">mix</span><span class="p">(</span><span class="n">texture</span><span class="p">(</span><span class="n">texSampler</span><span class="p">,</span> <span class="n">uv</span><span class="p">),</span> <span class="n">lighting</span><span class="p">,</span> <span class="n">transition</span><span class="p">);</span>
+
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// 如果不在区域内，直接显示原始背景</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">texSampler</span><span class="p">,</span> <span class="n">uv</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">outColor</span> <span class="o">=</span> <span class="n">color</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ol>
+  <li>
+<strong>透镜效果</strong>：<code class="language-plaintext highlighter-rouge">lens</code> 变量重新计算了纹理采样坐标。它根据 <code class="language-plaintext highlighter-rouge">roundedBox</code> 的值（即离中心的距离）对原始的 <code class="language-plaintext highlighter-rouge">uv</code> 坐标进行扭曲。这会产生一种中央放大、边缘压缩的视觉效果，模拟光线通过凸透镜的折射。</li>
+  <li>
+<strong>背景模糊</strong>：代码使用一个 9x9 的**盒状模糊（Box Blur）**算法。它对扭曲后的 <code class="language-plaintext highlighter-rouge">lens</code> 坐标周围的像素进行多次采样并取平均值，使得透过玻璃看到的背景变得模糊。</li>
+  <li>
+<strong>光照和高光</strong>：<code class="language-plaintext highlighter-rouge">gradient</code> 的计算模拟了从上方来的光源。它在玻璃的上半部分产生一个亮边，同时用 <code class="language-plaintext highlighter-rouge">rb3</code> 在下半部分也添加一些光照效果。然后，<code class="language-plaintext highlighter-rouge">lighting</code> 变量将这个光照效果叠加在模糊后的背景上。<code class="language-plaintext highlighter-rouge">rb1</code> 用于给主体区域上色，<code class="language-plaintext highlighter-rouge">rb2</code> 用于给内边框加上一个常量的亮边。</li>
+  <li>
+<strong>最终混合</strong>：最后，<code class="language-plaintext highlighter-rouge">mix</code> 函数根据 <code class="language-plaintext highlighter-rouge">transition</code> 的值（0.0 到 1.0）将原始背景颜色和我们精心制作的 <code class="language-plaintext highlighter-rouge">lighting</code> 颜色进行混合。这保证了玻璃的边缘是平滑过渡的，没有锯齿。</li>
+</ol>
+
+<h1 id="超椭圆">超椭圆</h1>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">roundedBox</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">m2</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">ubo</span><span class="p">.</span><span class="n">iResolution</span><span class="p">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">ubo</span><span class="p">.</span><span class="n">iResolution</span><span class="p">.</span><span class="n">y</span><span class="p">),</span> <span class="mi">8</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">pow</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">m2</span><span class="p">.</span><span class="n">y</span><span class="p">),</span> <span class="mi">8</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>这行代码的本质是利用**超椭圆（Superellipse）**的数学公式来程序化地定义一个带圆角的矩形（通常称为“圆角矩”或 Squircle）。</p>
+
+<h3 id="1-基础数学公式超椭圆">1. 基础数学公式：超椭圆</h3>
+
+<p>标准的超椭圆方程为：</p>
+
+\[\left| \frac{x}{a} \right|^p + \left| \frac{y}{b} \right|^p = 1\]
+
+<ul>
+  <li>$(x, y)$ 是坐标点。</li>
+  <li>$a$ 和 $b$ 分别是椭圆在 x 轴和 y 轴上的半长轴/半短轴（半径）。</li>
+  <li>$p$ 是一个大于 0 的实数，它决定了形状的“方正”程度。</li>
+</ul>
+
+<p>我们来看看 $p$ 值的不同效果：</p>
+
+<ul>
+  <li>当 $p = 2$ 时，方程变为 $(\frac{x}{a})^2 + (\frac{y}{b})^2 = 1$，这是一个标准的<strong>椭圆</strong>。</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>当 $p = 1$ 时，方程变为 $</td>
+          <td>\frac{x}{a}</td>
+          <td>+</td>
+          <td>\frac{y}{b}</td>
+          <td>= 1$，这是一个<strong>菱形</strong>。</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>当 $p \to \infty$ 时，形状会无限趋近于一个<strong>矩形</strong>。</li>
+  <li>当 $p &gt; 2$ 时，形状介于椭圆和矩形之间，呈现出带有平滑圆角的矩形外观。<strong>$p$ 值越大，形状越方正，边角越锐利。</strong>
+</li>
+</ul>
+
+<p>在这个着色器中，选择 <code class="language-plaintext highlighter-rouge">p = 8.0</code> 就是为了创造一个非常接近矩形，但又具有平滑圆角的视觉效果，这正是 Apple UI 设计中常见的风格。</p>
+
+<h3 id="2-代码分步解析">2. 代码分步解析</h3>
+
+<p>现在我们把公式和代码对应起来：</p>
+
+<p><code class="language-plaintext highlighter-rouge">float roundedBox = pow(abs(m2.x * ...), 8.0) + pow(abs(m2.y), 8.0);</code></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>这行代码实际上计算的是超椭圆公式的左半部分：$</td>
+      <td>x’</td>
+      <td>^p +</td>
+      <td>y’</td>
+      <td>^p$。</td>
+    </tr>
+  </tbody>
+</table>
+
+<ol>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">m2</code></strong>:<br>
+如前所述，<code class="language-plaintext highlighter-rouge">m2</code> 是以鼠标为中心的坐标系。所以 <code class="language-plaintext highlighter-rouge">m2.x</code> 和 <code class="language-plaintext highlighter-rouge">m2.y</code> 就对应了公式中的 $x$ 和 $y$。</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">abs(...)</code></strong>:<br>
+对应公式中的绝对值符号 $|…|$，确保无论像素在中心的哪个象限，计算方式都一样，使得图形是中心对称的。</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">ubo.iResolution.x / ubo.iResolution.y</code></strong>:<br>
+这是<strong>宽高比校正（Aspect Ratio Correction）</strong>。</p>
+
+    <ul>
+      <li>
+<strong>为什么需要？</strong> <code class="language-plaintext highlighter-rouge">m2</code> 坐标是从屏幕的 <code class="language-plaintext highlighter-rouge">uv</code> 坐标（通常范围是 0 到 1）计算来的。如果屏幕分辨率是 1920x1080，那么它不是一个正方形。在这样的非正方形空间里，水平方向上移动 0.1 单位和垂直方向上移动 0.1 单位所跨越的实际像素数是不同的。如果不进行校正，我们的“圆角矩”在屏幕上看起来会被压扁或拉伸。</li>
+      <li>
+<strong>如何工作？</strong> 通过将 x 坐标 <code class="language-plaintext highlighter-rouge">m2.x</code> 乘以 <code class="language-plaintext highlighter-rouge">宽度 / 高度</code>，我们人为地“拉伸”了 x 轴，使得在这个新的坐标空间里，x 和 y 方向的单位长度所代表的像素距离变得相等。这样就保证了我们定义的形状不会变形。这相当于在超椭圆公式中设置了不同的 $a$ 和 $b$ 来抵消屏幕的非正方性。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">pow(..., 8.0)</code></strong>:<br>
+这对应了公式中的指数 $p$。如上所述，<code class="language-plaintext highlighter-rouge">8.0</code> 这个值创造了一个非常“方”的圆角矩形。</p>
+  </li>
+</ol>
+
+<h3 id="3-roundedbox-值的含义">3. <code class="language-plaintext highlighter-rouge">roundedBox</code> 值的含义</h3>
+
+<p>最终计算出的 <code class="language-plaintext highlighter-rouge">roundedBox</code> 是一个浮点数，它的值代表了当前像素离这个超椭圆中心的“数学距离”。<br>
+<em>注意，这里并不是由二次关系定义的欧氏距离，而是一个和欧氏距离正相关的距离关系。数值变化如下图所示：</em><br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908193314215.png" alt="image.png" loading="lazy"></p>
+
+<ul>
+  <li>
+<strong>在形状中心</strong> (<code class="language-plaintext highlighter-rouge">m2</code> 为 (0,0))：<code class="language-plaintext highlighter-rouge">roundedBox</code> 的值为 <strong>0</strong>。</li>
+  <li>
+<strong>在形状的边界上</strong>：根据公式，<code class="language-plaintext highlighter-rouge">roundedBox</code> 的值约等于 <strong>1.0</strong>。</li>
+  <li>
+<strong>在形状内部</strong>：<code class="language-plaintext highlighter-rouge">roundedBox</code> 的值在 <strong>0.0 和 1.0 之间</strong>。</li>
+  <li>
+<strong>在形状外部</strong>：<code class="language-plaintext highlighter-rouge">roundedBox</code> 的值会<strong>大于 1.0</strong>。</li>
+</ul>
+
+<p>这个值不是一个简单的“是”或“否”（0 或 1），而是一个从中心向外平滑增长的连续值。这就像一个<strong>距离场（Distance Field）</strong>。正因为它是连续的，后续的代码才能利用它来计算出平滑的边缘过渡、边框和光照效果。例如，可以通过检查 <code class="language-plaintext highlighter-rouge">roundedBox</code> 是否在 <code class="language-plaintext highlighter-rouge">0.95</code> 到 <code class="language-plaintext highlighter-rouge">1.0</code> 之间来精确地绘制边框。</p>
+
+<h1 id="区域分层">区域分层</h1>
+<h3 id="核心目标">核心目标</h3>
+<p>这部分代码的目标是，基于前一步计算出的、从中心 (0.0) 到边缘 (~1.0) 平滑变化的 <code class="language-plaintext highlighter-rouge">roundedBox</code> 值，“雕刻”出三个不同的<strong>遮罩（Mask）</strong>。每个遮罩都是一个 0.0 到 1.0 之间的浮点数，它们分别定义了：</p>
+
+<ol>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">rb1</code></strong>: 玻璃的主体实心区域。</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">rb2</code></strong>: 玻璃内部的一圈高光边框。</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">rb3</code></strong>: 用于光照计算的另一圈光晕区域。</li>
+</ol>
+
+<h3 id="关键工具clamp-函数">关键工具：<code class="language-plaintext highlighter-rouge">clamp()</code> 函数</h3>
+
+<p>理解这部分代码的关键是理解 <code class="language-plaintext highlighter-rouge">clamp(value, min, max)</code> 函数和一种特定的用法模式。</p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">clamp(value, min, max)</code>: 这个函数会把 <code class="language-plaintext highlighter-rouge">value</code> 限制在 <code class="language-plaintext highlighter-rouge">[min, max]</code> 区间内。如果 <code class="language-plaintext highlighter-rouge">value</code> 小于 <code class="language-plaintext highlighter-rouge">min</code>，结果就是 <code class="language-plaintext highlighter-rouge">min</code>；如果大于 <code class="language-plaintext highlighter-rouge">max</code>，结果就是 <code class="language-plaintext highlighter-rouge">max</code>。</li>
+  <li>
+<strong>模式</strong>: <code class="language-plaintext highlighter-rouge">clamp((C - x) * K, 0.0, 1.0)</code>
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">C - x</code>: 这是一个临界点判断。当 <code class="language-plaintext highlighter-rouge">x &lt; C</code> 时，结果为正；当 <code class="language-plaintext highlighter-rouge">x &gt; C</code> 时，结果为负。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">* K</code>: <code class="language-plaintext highlighter-rouge">K</code> 是一个很大的数，它充当<strong>锐化因子</strong>。它会让 <code class="language-plaintext highlighter-rouge">(C - x)</code> 的结果在 <code class="language-plaintext highlighter-rouge">x</code> 跨越 <code class="language-plaintext highlighter-rouge">C</code> 点时急剧地从一个大的正数变为一个大的负数，从而创造出非常清晰、陡峭的边缘。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">clamp(..., 0.0, 1.0)</code>: 将这个急剧变化的结果“拍扁”到 <code class="language-plaintext highlighter-rouge">[0, 1]</code> 区间，最终形成一个边缘清晰的遮罩。</li>
+    </ul>
+  </li>
+</ul>
+
+<hr>
+
+<h3 id="逐层解析">逐层解析</h3>
+
+<h4 id="1-rb1-主体填充层-the-core-fill-layer">1. <code class="language-plaintext highlighter-rouge">rb1</code>: 主体填充层 (The Core Fill Layer)</h4>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">rb1</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">((</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">10000</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong>逻辑</strong>: <code class="language-plaintext highlighter-rouge">1.0 - roundedBox * 10000.0</code>
+    <ul>
+      <li>这里的 <code class="language-plaintext highlighter-rouge">10000.0</code> 是一个很大的缩放系数，用于微调边缘的位置。我们主要关注 <code class="language-plaintext highlighter-rouge">1.0</code> 这个临界值。</li>
+      <li>当 <code class="language-plaintext highlighter-rouge">roundedBox</code> 非常小（靠近中心）时，<code class="language-plaintext highlighter-rouge">roundedBox * 10000.0</code> 远小于 <code class="language-plaintext highlighter-rouge">1.0</code>，<code class="language-plaintext highlighter-rouge">1.0 - ...</code> 是一个正数。</li>
+      <li>当 <code class="language-plaintext highlighter-rouge">roundedBox</code> 增大到某个值，使得 <code class="language-plaintext highlighter-rouge">roundedBox * 10000.0</code> 接近 <code class="language-plaintext highlighter-rouge">1.0</code> 时，<code class="language-plaintext highlighter-rouge">1.0 - ...</code> 的结果会迅速从正数变为 0，然后变为负数。</li>
+    </ul>
+  </li>
+  <li>
+<strong>锐化</strong>: 乘以 <code class="language-plaintext highlighter-rouge">8.0</code> 让这个过渡更加陡峭。</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">clamp</code></strong>: 将最终结果限制在 <code class="language-plaintext highlighter-rouge">[0, 1]</code>。</li>
+  <li>
+<strong>结果</strong>: <code class="language-plaintext highlighter-rouge">rb1</code> 在形状的绝大部分内部区域都为 <code class="language-plaintext highlighter-rouge">1.0</code>（纯白），在非常靠近边缘的地方会快速平滑地过渡到 <code class="language-plaintext highlighter-rouge">0.0</code>（纯黑）。它定义了玻璃的主体部分。</li>
+</ul>
+
+<hr>
+
+<h4 id="2-rb2-内边框层-the-inner-border-layer">2. <code class="language-plaintext highlighter-rouge">rb2</code>: 内边框层 (The Inner Border Layer)</h4>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">rb2</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">((</span><span class="mi">0</span><span class="p">.</span><span class="mi">95</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">9500</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">16</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">clamp</span><span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">9</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">9500</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">16</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>这里的技巧是<strong>用一个大图形减去一个小图形，从而得到一个环</strong>。</p>
+
+<ul>
+  <li>
+    <p><strong>第一部分 (大图形)</strong>: <code class="language-plaintext highlighter-rouge">clamp((0.95 - roundedBox * 9500.0) * 16.0, 0.0, 1.0)</code></p>
+
+    <ul>
+      <li>这会创建一个实心遮罩，其边界由 <code class="language-plaintext highlighter-rouge">roundedBox * 9500.0 ≈ 0.95</code> 定义。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>第二部分 (小图形)</strong>: <code class="language-plaintext highlighter-rouge">clamp(pow(0.9 - roundedBox * 9500.0, 1.0) * 16.0, 0.0, 1.0)</code></p>
+
+    <ul>
+      <li>这会创建另一个实心遮罩，其边界由 <code class="language-plaintext highlighter-rouge">roundedBox * 9500.0 ≈ 0.9</code> 定义。这个图形比第一个要小一些。（<code class="language-plaintext highlighter-rouge">pow(..., 1.0)</code> 不改变值，可以忽略）。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>减法</strong>: <code class="language-plaintext highlighter-rouge">大图形 - 小图形</code></p>
+
+    <ul>
+      <li>在两个图形都为 <code class="language-plaintext highlighter-rouge">1.0</code> 的重叠区域（中心区域），结果是 <code class="language-plaintext highlighter-rouge">1.0 - 1.0 = 0.0</code>。</li>
+      <li>在两个图形都为 <code class="language-plaintext highlighter-rouge">0.0</code> 的外部区域，结果是 <code class="language-plaintext highlighter-rouge">0.0 - 0.0 = 0.0</code>。</li>
+      <li>只有在大图形为 <code class="language-plaintext highlighter-rouge">1.0</code> 而小图形为 <code class="language-plaintext highlighter-rouge">0.0</code> 的那一圈窄窄的<strong>环形区域</strong>，结果才是 <code class="language-plaintext highlighter-rouge">1.0 - 0.0 = 1.0</code>。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>结果</strong>: <code class="language-plaintext highlighter-rouge">rb2</code> 是一个非常细的环形遮罩，正好位于 <code class="language-plaintext highlighter-rouge">rb1</code> 区域的内边缘，完美地用于创建边框高光。</p>
+  </li>
+</ul>
+
+<hr>
+
+<h4 id="3-rb3-外光晕层-the-outer-glowlighting-layer">3. <code class="language-plaintext highlighter-rouge">rb3</code>: 外光晕层 (The Outer Glow/Lighting Layer)</h4>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">rb3</span> <span class="o">=</span> <span class="p">(</span><span class="n">clamp</span><span class="p">((</span><span class="mi">1</span><span class="p">.</span><span class="mi">5</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">11000</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">clamp</span><span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">11000</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong>逻辑</strong>: <code class="language-plaintext highlighter-rouge">rb3</code> 使用了和 <code class="language-plaintext highlighter-rouge">rb2</code> 完全相同的“大图形减小图形”的技巧来创建一个环形。</li>
+  <li>
+<strong>区别</strong>: 它使用的临界值是 <code class="language-plaintext highlighter-rouge">1.5</code> 和 <code class="language-plaintext highlighter-rouge">1.0</code>，并且缩放系数是 <code class="language-plaintext highlighter-rouge">11000.0</code>。这意味着它定义的环形区域与 <code class="language-plaintext highlighter-rouge">rb2</code> 的位置和宽度都不同，这个遮罩将被用于后续光照计算中的另一个特定效果（例如底部的高光）。</li>
+</ul>
+
+<h4 id="3-可视化分层区域">3. 可视化分层区域</h4>
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908195721578.png" alt="image.png" loading="lazy"><br>
+图(0,2)将rb1～rb3放在了同一张图中，对比位置关系。<br>
+<em>注意，rb3和rb1+rb2定义的区域部分重叠，在白线外的区域是非重叠区域。</em></p>
+
+<h1 id="效果实现">效果实现</h1>
+
+<h3 id="前置步骤平滑过渡遮罩">前置步骤：平滑过渡遮罩</h3>
+
+<p>在进入核心效果计算之前，代码首先准备了一个高质量的遮罩：</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">transition</span> <span class="o">=</span> <span class="n">smoothstep</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">rb1</span> <span class="o">+</span> <span class="n">rb2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong>目标</strong>: 创建一个边缘平滑、用于抗锯齿的最终遮罩。</li>
+  <li>
+<strong>代码分析</strong>:
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">rb1 + rb2</code>: 将主体填充层 (<code class="language-plaintext highlighter-rouge">rb1</code>) 和内边框层 (<code class="language-plaintext highlighter-rouge">rb2</code>) 合并成一个单一的遮罩。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">smoothstep(edge0, edge1, x)</code>: 这是一个非常重要的 GLSL 内置函数。</li>
+    </ul>
+  </li>
+  <li>
+<strong>数学原理</strong>: <code class="language-plaintext highlighter-rouge">smoothstep</code> 函数接受一个输入 <code class="language-plaintext highlighter-rouge">x</code>，并在两个阈值 <code class="language-plaintext highlighter-rouge">edge0</code> 和 <code class="language-plaintext highlighter-rouge">edge1</code> 之间进行平滑的 S 型曲线插值。其标准化的数学表达式（当 <code class="language-plaintext highlighter-rouge">edge0=0</code>, <code class="language-plaintext highlighter-rouge">edge1=1</code> 时）为：<br>
+\(S(x) = 3x^2 - 2x^3, \quad x \in [0, 1]\)<br>
+相比于线性的 <code class="language-plaintext highlighter-rouge">clamp</code>，<code class="language-plaintext highlighter-rouge">smoothstep</code> 的导数在起点和终点都为 0，这使得过渡的开始和结束都非常缓和，视觉上看起来比线性过渡更加自然、平滑。在这里，它将 <code class="language-plaintext highlighter-rouge">rb1+rb2</code> 产生的硬边缘变成柔和的渐变，是实现高质量抗锯齿的关键。</li>
+</ul>
+
+<hr>
+
+<h3 id="1-透镜折射效果-lensing-effect">1. 透镜/折射效果 (Lensing Effect)</h3>
+
+<p>这一步通过扭曲纹理坐标，模拟光线穿过凸透镜时发生的折射现象，产生放大镜的效果。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec2</span> <span class="n">lens</span> <span class="o">=</span> <span class="p">((</span><span class="n">uv</span> <span class="o">-</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">roundedBox</span> <span class="o">*</span> <span class="mi">5000</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><strong>目标</strong>: 计算出经过透镜扭曲后，当前像素应该去采样背景纹理的哪个新坐标。</p>
+  </li>
+  <li>
+    <p><strong>代码与数学分步解析</strong>: 让我们将这个坐标变换拆解开来，假设原始坐标为 $\vec{uv}$:</p>
+
+    <ol>
+      <li>
+        <p><strong><code class="language-plaintext highlighter-rouge">uv - 0.5</code></strong>: 坐标中心化。</p>
+
+        <ul>
+          <li>
+<strong>数学</strong>: $\vec{v}_{centered} = \vec{uv} - (0.5, 0.5)$</li>
+          <li>
+<strong>解释</strong>: 将坐标原点从左上角 <code class="language-plaintext highlighter-rouge">(0,0)</code> 移动到屏幕中心 <code class="language-plaintext highlighter-rouge">(0.5, 0.5)</code>。这样一来，后续的缩放操作就会以屏幕中心为基准点，而不是左上角。</li>
+        </ul>
+      </li>
+      <li>
+<strong><code class="language-plaintext highlighter-rouge">* (1.0 - roundedBox * 5000.0)</code></strong>: 应用一个基于距离的缩放因子。
+        <ul>
+          <li>
+<strong>数学</strong>: 设缩放因子 $S = 1.0 - roundedBox \times 5000.0$。那么新的向量是 $\vec{v}<em>{scaled} = \vec{v}</em>{centered} \times S$。</li>
+          <li>
+<strong>解释</strong>:
+            <ul>
+              <li>在玻璃的<strong>正中心</strong>，<code class="language-plaintext highlighter-rouge">roundedBox = 0</code>，所以缩放因子 $S = 1.0$。坐标没有任何变化。</li>
+              <li>从中心向<strong>边缘</strong>移动，<code class="language-plaintext highlighter-rouge">roundedBox</code> 值变大，导致 <code class="language-plaintext highlighter-rouge">roundedBox * 5000.0</code> 也变大，因此缩放因子 $S$ <strong>小于 1.0</strong>。</li>
+              <li>一个向量乘以一个小于 1 的标量，会使其长度<strong>变短</strong>。这意味着，我们正在用一个<strong>更小</strong>的向量去采样背景。</li>
+              <li>
+<strong>视觉效果</strong>: 从一个更靠近中心的点采样纹理，并把它显示在当前离中心更远的位置上，这就产生了**放大（Magnification）**效果。想象一下，你把背景图的一小块区域拉伸，覆盖到了屏幕上更大的一块区域。</li>
+              <li>备注：<code class="language-plaintext highlighter-rouge">* (1.0 - roundedBox * 5000.0)</code>对应的大于0的区域相比于rb1+rb2定义的区域更大一些，因此不存在S&lt;0的情况。</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p><strong><code class="language-plaintext highlighter-rouge">+ 0.5</code></strong>: 坐标原点移回。</p>
+
+        <ul>
+          <li>
+<strong>数学</strong>: $\vec{uv}<em>{lens} = \vec{v}</em>{scaled} + (0.5, 0.5)$</li>
+          <li>
+<strong>解释</strong>: 将坐标系从以中心为原点移回到以左上角为原点，得到最终可以用于 <code class="language-plaintext highlighter-rouge">texture()</code> 函数的采样坐标 <code class="language-plaintext highlighter-rouge">lens</code>。</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908200329674.png" alt="image.png" loading="lazy"></p>
+
+<hr>
+
+<h3 id="2-背景模糊-background-blur">2. 背景模糊 (Background Blur)</h3>
+
+<p>这一步模拟了当焦点在玻璃上时，背景会失焦而变得模糊的景深效果。这里使用的是一个低质量的box模糊，效果可以进一步优化。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec4</span> <span class="n">accum</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+<span class="kt">float</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">xi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="p">;</span> <span class="n">xi</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">xi</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">yi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="p">;</span> <span class="n">yi</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">yi</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">vec2</span> <span class="n">offset</span> <span class="o">=</span> <span class="kt">vec2</span><span class="p">(</span><span class="kt">float</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span> <span class="kt">float</span><span class="p">(</span><span class="n">yi</span><span class="p">))</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span> <span class="o">/</span> <span class="n">ubo</span><span class="p">.</span><span class="n">iResolution</span><span class="p">.</span><span class="n">xy</span><span class="p">;</span>
+        <span class="n">accum</span> <span class="o">+=</span> <span class="n">texture</span><span class="p">(</span><span class="n">texSampler</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">lens</span><span class="p">);</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">color</span> <span class="o">=</span> <span class="n">accum</span> <span class="o">/</span> <span class="n">total</span><span class="p">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong>目标</strong>: 计算当前像素透过玻璃看到的模糊背景色。</li>
+  <li>
+<strong>代码与数学原理</strong>: 这里实现的是一种名为**盒状模糊（Box Blur）**的卷积算法。
+    <ul>
+      <li>
+<strong>卷积（Convolution）</strong>: 图像处理中的一个基本操作，一个像素的最终颜色由它和它邻域内其他像素的颜色加权平均得到。</li>
+      <li>
+<strong>数学</strong>: 盒状模糊的公式为：<br>
+\(C_{out} = \frac{1}{N} \sum_{i=1}^{N} C_{i}\)<br>
+其中 $C_{i}$ 是采样点颜色， $N$ 是总采样数。</li>
+      <li>
+<strong>实现</strong>:
+        <ul>
+          <li>
+<code class="language-plaintext highlighter-rouge">for</code> 循环创建了一个 9x9 的采样网格（从 -4 到 4，共 9 个点）。总采样数 $N = 9 \times 9 = 81$。</li>
+          <li>
+<code class="language-plaintext highlighter-rouge">offset</code>: 计算每个邻域采样点相对于中心点的偏移量。
+            <ul>
+              <li>
+<code class="language-plaintext highlighter-rouge">vec2(float(xi), float(yi))</code>: 这是像素空间的偏移，例如 <code class="language-plaintext highlighter-rouge">(-4, -4)</code>, <code class="language-plaintext highlighter-rouge">(-4, -3)</code> …</li>
+              <li>
+<code class="language-plaintext highlighter-rouge">/ ubo.iResolution.xy</code>: 将像素空间的偏移转换为纹理坐标（UV）空间的偏移。这是因为UV坐标是从 0 到 1 覆盖整个纹理的，一个像素的UV宽度是 <code class="language-plaintext highlighter-rouge">1.0 / width</code>。</li>
+              <li>
+<code class="language-plaintext highlighter-rouge">* 0.5</code>: 这是一个调整因子，它缩小了模糊的半径，使得模糊不会过于发散，效果更细腻。</li>
+            </ul>
+          </li>
+          <li>
+<code class="language-plaintext highlighter-rouge">accum += texture(texSampler, offset + lens)</code>: 在<strong>经过透镜扭曲后的坐标 <code class="language-plaintext highlighter-rouge">lens</code></strong> 上，再叠加上邻域偏移 <code class="language-plaintext highlighter-rouge">offset</code> 进行采样，并将颜色累加到 <code class="language-plaintext highlighter-rouge">accum</code> 中。</li>
+          <li>
+<code class="language-plaintext highlighter-rouge">color = accum / total</code>: 将累加的总颜色值除以总采样数，得到平均颜色，即模糊后的颜色。<br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908200431687.png" alt="image.png" loading="lazy"><br>
+—–<br>
+<strong>补充：一个很直接的加速方法是预制模糊图像，在shader中实现模糊效果时直接从模糊图像上采样。</strong>
+</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="3-光照与高光-lighting--highlights">3. 光照与高光 (Lighting &amp; Highlights)</h3>
+
+<p>这是赋予玻璃质感和立体感的关键步骤，它并非基于物理的精确光照模型。</p>
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">gradient</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">((</span><span class="n">clamp</span><span class="p">(</span><span class="n">m2</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">clamp</span><span class="p">((</span><span class="n">clamp</span><span class="p">(</span><span class="o">-</span><span class="n">m2</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">rb3</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+<span class="kt">vec4</span> <span class="n">lighting</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">color</span> <span class="o">+</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">rb1</span><span class="p">)</span> <span class="o">*</span> <span class="n">gradient</span> <span class="o">+</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">rb2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><strong>目标</strong>: 在模糊背景的基础上，叠加模拟的顶部高光和边缘高光。</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">gradient</code> 计算解析</strong>:</p>
+
+    <ul>
+      <li>
+<strong>第一部分 (底部微光)</strong>: <code class="language-plaintext highlighter-rouge">clamp((clamp(m2.y, 0.0, 0.2) + 0.1) / 2.0, 0.0, 1.0)</code>
+        <ul>
+          <li>
+<code class="language-plaintext highlighter-rouge">m2.y</code> 是像素相对于鼠标中心的垂直坐标（负值为上，正值为下）。</li>
+          <li>
+<code class="language-plaintext highlighter-rouge">clamp(m2.y, 0.0, 0.2)</code> 会在玻璃下半部分靠近中心的一条带状区域产生一个从 0 到 0.2 的梯度值。</li>
+        </ul>
+      </li>
+      <li>
+<strong>第二部分 (顶部主高光)</strong>: <code class="language-plaintext highlighter-rouge">clamp((clamp(-m2.y, -1000.0, 0.2) * rb3 + 0.1) / 2.0, 0.0, 1.0)</code>
+        <ul>
+          <li>
+<code class="language-plaintext highlighter-rouge">-m2.y</code> 将坐标翻转，所以 <code class="language-plaintext highlighter-rouge">clamp(-m2.y, ...)</code> 作用于玻璃的上半部分。</li>
+          <li>
+<code class="language-plaintext highlighter-rouge">* rb3</code>: 这个高光被我们之前计算的环形遮罩 <code class="language-plaintext highlighter-rouge">rb3</code> 所<strong>调制</strong>，意味着高光只会出现在 <code class="language-plaintext highlighter-rouge">rb3</code> 所定义的那个光晕区域内，形状更可控。</li>
+        </ul>
+      </li>
+      <li>
+<code class="language-plaintext highlighter-rouge">gradient</code> 最终是这两部分的叠加，形成了一个非对称的、主要集中在顶部的光照效果。</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">lighting</code> 最终颜色合成</strong>:</p>
+
+    <ul>
+      <li>
+<strong>数学</strong>: 这是一个简单的加法混合模型：$C_{final} = C_{blur} + C_{highlight1} + C_{highlight2}$</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">color</code>: 模糊后的背景色作为基础层。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">+ vec4(rb1) * gradient</code>: 将计算出的 <code class="language-plaintext highlighter-rouge">gradient</code> 高光应用在玻璃的主体 <code class="language-plaintext highlighter-rouge">rb1</code> 区域。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">+ vec4(rb2) * 0.3</code>: 在内边框 <code class="language-plaintext highlighter-rouge">rb2</code> 区域，直接加上一个固定的亮度值 <code class="language-plaintext highlighter-rouge">0.3</code>，形成一道清晰锐利的边缘高光。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">clamp(..., 0.0, 1.0)</code>: 最后进行一次 <code class="language-plaintext highlighter-rouge">clamp</code>，防止颜色因叠加而超出 1.0（过曝）。<br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908200511716.png" alt="image.png" loading="lazy">
+</li>
+    </ul>
+  </li>
+</ul>
+
+<hr>
+
+<h3 id="4-最终混合-final-compositing">4. 最终混合 (Final Compositing)</h3>
+<p>这里和ShaderToy中的实现保持一致，<strong>但是实际上的抗锯齿效果不明显。</strong></p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">color</span> <span class="o">=</span> <span class="n">mix</span><span class="p">(</span><span class="n">texture</span><span class="p">(</span><span class="n">texSampler</span><span class="p">,</span> <span class="n">uv</span><span class="p">),</span> <span class="n">lighting</span><span class="p">,</span> <span class="n">transition</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong>目标</strong>: 根据抗锯齿遮罩，将效果无缝地绘制到屏幕上。</li>
+  <li>
+<strong><code class="language-plaintext highlighter-rouge">mix</code> 函数与数学原理</strong>: <code class="language-plaintext highlighter-rouge">mix(A, B, x)</code> 执行的是线性插值（Linear Interpolation）。
+    <ul>
+      <li>
+<strong>数学</strong>: $Result = A \times (1 - x) + B \times x$</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">A</code> 是 <code class="language-plaintext highlighter-rouge">texture(texSampler, uv)</code>，即<strong>原始未处理的背景</strong>。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">B</code> 是 <code class="language-plaintext highlighter-rouge">lighting</code>，即<strong>我们完成的玻璃效果</strong>。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">x</code> 是 <code class="language-plaintext highlighter-rouge">transition</code>，我们带<strong>有平滑边缘的遮罩</strong>。</li>
+    </ul>
+  </li>
+  <li>
+<strong>解释</strong>:
+    <ul>
+      <li>当像素在玻璃外部，<code class="language-plaintext highlighter-rouge">transition = 0</code>，公式变为 $A \times (1 - 0) + B \times 0 = A$，显示原始背景。</li>
+      <li>当像素在玻璃内部，<code class="language-plaintext highlighter-rouge">transition = 1</code>，公式变为 $A \times (1 - 1) + B \times 1 = B$，显示玻璃效果。</li>
+      <li>在玻璃的柔和边缘，<code class="language-plaintext highlighter-rouge">transition</code> 在 0 和 1 之间，公式会按比例混合原始背景和玻璃效果，从而创造出完美的抗锯齿边缘。</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>未使用混合：</strong><br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908200654880.png" alt="image.png" loading="lazy"><br>
+<strong>使用混合：</strong><br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908200721753.png" alt="image.png|274" loading="lazy"></p>
+
+    <!-- see https://giscus.app/ -->
+    <div class="giscus" id="giscus" style="margin: 4rem auto;"></div>
+    <div id="related-box">
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M278.5 215.6L23 471c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l74.8-74.8c7.4 4.6 15.3 8.2 23.8 10.5C200.3 452.8 270 454.5 338 409.4c12.2-8.1 5.8-25.4-8.8-25.4l-16.1 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l97.7-29.3c3.4-1 6.4-3.1 8.4-6.1c4.4-6.4 8.6-12.9 12.6-19.6c6.2-10.3-1.5-23-13.5-23l-38.6 0c-5.1 0-9.2-4.1-9.2-9.2c0-4.1 2.7-7.6 6.5-8.8l80.9-24.3c4.6-1.4 8.4-4.8 10.2-9.3C494.5 163 507.8 86.1 511.9 36.8c.8-9.9-3-19.6-10-26.6s-16.7-10.8-26.6-10C391.5 7 228.5 40.5 137.4 131.6C57.3 211.7 56.7 302.3 71.3 356.4c2.1 7.9 12 9.6 17.8 3.8L253.6 195.8c6.2-6.2 16.4-6.2 22.6 0c5.4 5.4 6.1 13.6 2.2 19.8z"></path></svg>
+            You May Also Like
+        </span>
+        <ul id="related-posts"></ul>
+    </div>
+</main>
+<div class="top-arrow">
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"></path></svg>
+</div>
+                
+            </div>
+        </div>
+        <div id="search">
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+
+    <div class="search-box">
+        <mark>Touch background to close</mark>
+        <div class="input-box">
+            <input id="search-input" type="search" tabindex="1" spellcheck="false" placeholder="Search...">
+            <button id="btn-clear">
+                <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg>
+            </button>
+        </div>
+        <ul id="search-result"></ul>
+    </div>
+</div>
+    </body>
+    <script defer src="/assets/js/background.js"></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+
+    gtag('js', new Date());
+    gtag('config', '');
+</script>
+    
+        <script src="/assets/js/post.js"></script>
+        <link rel="preload" href="/assets/css/highlight.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/assets/css/highlight.min.css"></noscript>
+        <script defer src="/assets/js/highlight.min.js"></script>
+    
+    <script src="/assets/js/common.js"></script>
+    <script defer>
+    var posts = [];
+
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "2D矢量图元绘制技术研究",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/2D%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%85%83%E7%BB%98%E5%88%B6%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "3D SDF",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/3D%20SDF/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "EasyVulkan",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/EasyVulkan/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "noBug",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/noBug/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "技术学习",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Index",
+            'path'     : "模糊阴影视效研究",
+            'type'     : "category",
+            'tags'     : "",
+            'url'      : "/%E6%A8%A1%E7%B3%8A%E9%98%B4%E5%BD%B1%E8%A7%86%E6%95%88%E7%A0%94%E7%A9%B6/index.html",
+            'image'    : "/assets/img/thumbnail/empty.jpg",
+            'date'     : "1900-01-01"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan Compute Shader",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "post",
+            'tags'     : "GPU, Vulkan, ComputeShader",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/Vulkan%20compute%20shader.html",
+            'image'    : "https://paminerva.github.io/docs/LearnVulkan/images/02/F/hardware-model.png",
+            'date'     : "2024-03-12"
+        });
+    
+
+        posts.push({
+            'title'    : "How to compute integral image on GPU?",
+            'path'     : "技术学习 > GPU通用计算",
+            'type'     : "post",
+            'tags'     : "user manual, markdown, writing format",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/GPU%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97/integral%20Image%E8%AE%A1%E7%AE%97.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250102174554.png",
+            'date'     : "2025-01-03"
+        });
+    
+
+        posts.push({
+            'title'    : "图像降采样",
+            'path'     : "技术学习",
+            'type'     : "post",
+            'tags'     : "Image Processing, Vulkan, Opengl, 降采样",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E5%9B%BE%E5%83%8F%E9%99%8D%E9%87%87%E6%A0%B7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250112201138.png",
+            'date'     : "2025-01-12"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan初始化",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan",
+            'url'      : "/EasyVulkan/Vulkan%E5%88%9D%E5%A7%8B%E5%8C%96.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250124230354.png",
+            'date'     : "2025-01-24"
+        });
+    
+
+        posts.push({
+            'title'    : "VMA",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, VMA",
+            'url'      : "/EasyVulkan/VMA.html",
+            'image'    : "https://docs.vulkan.org/guide/latest/_images/memory_allocation_sub_allocation.png",
+            'date'     : "2025-01-26"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan命令缓冲区",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, CommandBuffer",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/CommandBuffer.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011015.png",
+            'date'     : "2025-01-27"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan描述符集",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, DescriptorSet",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/DescriptorSet.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202011726.png",
+            'date'     : "2025-01-27"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan渲染通道",
+            'path'     : "EasyVulkan > Builder类",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, RenderPass, Subpass, Attachment, Subpass Dependency",
+            'url'      : "/EasyVulkan/Builder%E7%B1%BB/RenderPass.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202012410.png",
+            'date'     : "2025-01-29"
+        });
+    
+
+        posts.push({
+            'title'    : "Vulkan同步机制",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, VMA",
+            'url'      : "/EasyVulkan/Vulkan%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202013124.png",
+            'date'     : "2025-02-01"
+        });
+    
+
+        posts.push({
+            'title'    : "vector.back()引发的指针错误",
+            'path'     : "noBug",
+            'type'     : "post",
+            'tags'     : "指针, Vulkan, Bug",
+            'url'      : "/noBug/vector.back()%E5%BC%95%E5%8F%91%E7%9A%84%E6%8C%87%E9%92%88%E9%94%99%E8%AF%AF.html",
+            'image'    : "https://www.kawabangga.com/wp-content/uploads/2015/04/logo-cpp.jpg",
+            'date'     : "2025-02-06"
+        });
+    
+
+        posts.push({
+            'title'    : "色彩空间错误导致图像亮度增加",
+            'path'     : "noBug",
+            'type'     : "post",
+            'tags'     : "Color Space, Vulkan, Bug",
+            'url'      : "/noBug/%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E9%97%AE%E9%A2%98.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/color_Conversion.png",
+            'date'     : "2025-02-09"
+        });
+    
+
+        posts.push({
+            'title'    : "共享内存中的std140对齐",
+            'path'     : "noBug",
+            'type'     : "post",
+            'tags'     : "数据对齐, Vulkan, Bug",
+            'url'      : "/noBug/std140%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250214000847.png",
+            'date'     : "2025-02-13"
+        });
+    
+
+        posts.push({
+            'title'    : "交换链的多重缓冲机制",
+            'path'     : "技术学习",
+            'type'     : "post",
+            'tags'     : "交换链缓冲, Vulkan",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/%E4%BA%A4%E6%8D%A2%E9%93%BE%E7%9A%84%E5%A4%9A%E9%87%8D%E7%BC%93%E5%86%B2%E6%9C%BA%E5%88%B6.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250228142753.png",
+            'date'     : "2025-02-27"
+        });
+    
+
+        posts.push({
+            'title'    : "VK_EXT_debug_utils扩展的技术应用与分析",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, Debug",
+            'url'      : "/EasyVulkan/VulkanDebug.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250513124719.png",
+            'date'     : "2025-05-11"
+        });
+    
+
+        posts.push({
+            'title'    : "EasyVulkan资源管理中的内存泄漏问题",
+            'path'     : "EasyVulkan",
+            'type'     : "post",
+            'tags'     : "Vulkan, EasyVulkan, ResourceManager",
+            'url'      : "/EasyVulkan/ResourceManager%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/LOGO.png",
+            'date'     : "2025-07-07"
+        });
+    
+
+        posts.push({
+            'title'    : "1.预备知识和基于3D SDF的康奈尔盒子",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, Ray Marching, Shadow",
+            'url'      : "/3D%20SDF/1.%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%92%8C%E5%9F%BA%E4%BA%8E3D%20SDF%E7%9A%84%E5%BA%B7%E5%A5%88%E5%B0%94%E7%9B%92%E5%AD%90.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250822133530.png",
+            'date'     : "2025-08-12"
+        });
+    
+
+        posts.push({
+            'title'    : "2.RSM阴影和一次间接光照",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, RSM, Shadow, Ray Marching, Indirect lighting",
+            'url'      : "/3D%20SDF/2.RSM%E9%98%B4%E5%BD%B1%E5%92%8C%E4%B8%80%E6%AC%A1%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250902115532.png",
+            'date'     : "2025-08-25"
+        });
+    
+
+        posts.push({
+            'title'    : "3.优化VPLs采样",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, RSM, Ray Marching, Indirect lighting",
+            'url'      : "/3D%20SDF/3.%E4%BC%98%E5%8C%96VPL%E9%87%87%E6%A0%B7.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250902104454.png",
+            'date'     : "2025-08-25"
+        });
+    
+
+        posts.push({
+            'title'    : "4.基于物理的渲染",
+            'path'     : "3D SDF",
+            'type'     : "post",
+            'tags'     : "3D SDF, Vulkan, PBR",
+            'url'      : "/3D%20SDF/4.PBR.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250907153024105.png",
+            'date'     : "2025-09-07"
+        });
+    
+
+        posts.push({
+            'title'    : "Liquid Glass",
+            'path'     : "技术学习",
+            'type'     : "post",
+            'tags'     : "Liquid Glass, Vulkan",
+            'url'      : "/%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/Liquid%20Glass.html",
+            'image'    : "https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250908200721753.png",
+            'date'     : "2025-09-08"
+        });
+    
+
+    searchPost(posts);
+
+    
+        searchRelated(posts);
+    
+</script>
+</html>
