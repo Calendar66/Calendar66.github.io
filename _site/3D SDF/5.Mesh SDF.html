@@ -7,25 +7,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>
     
-        Vulkan渲染通道
+        5.SDF Mesh表达
     
 </title>
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Vulkan渲染通道 | Calendar’s Blog</title>
+<title>5.SDF Mesh表达 | Calendar’s Blog</title>
 <meta name="generator" content="Jekyll v4.3.4">
-<meta property="og:title" content="Vulkan渲染通道">
+<meta property="og:title" content="5.SDF Mesh表达">
 <meta property="og:locale" content="en_US">
-<meta name="description" content="引言 在Vulkan图形API的渲染管线中，渲染通道（Render Pass）是构建高效渲染流程的核心组件,它不仅描述了一次渲染操作中的渲染目标（attachments）的使用方式，还决定了多个渲染阶段（subpass）之间的执行顺序和数据依赖关系。本文将深入探讨Vulkan渲染通道的工作原理及其关键要素的实现细节。">
-<meta property="og:description" content="引言 在Vulkan图形API的渲染管线中，渲染通道（Render Pass）是构建高效渲染流程的核心组件,它不仅描述了一次渲染操作中的渲染目标（attachments）的使用方式，还决定了多个渲染阶段（subpass）之间的执行顺序和数据依赖关系。本文将深入探讨Vulkan渲染通道的工作原理及其关键要素的实现细节。">
-<link rel="canonical" href="http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/RenderPass.html">
-<meta property="og:url" content="http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/RenderPass.html">
+<meta name="description" content="SDF Mesh">
+<meta property="og:description" content="SDF Mesh">
+<link rel="canonical" href="http://localhost:4000/3D%20SDF/5.Mesh%20SDF.html">
+<meta property="og:url" content="http://localhost:4000/3D%20SDF/5.Mesh%20SDF.html">
 <meta property="og:site_name" content="Calendar’s Blog">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2025-01-29T00:00:00+08:00">
+<meta property="article:published_time" content="2025-09-18T00:00:00+08:00">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="Vulkan渲染通道">
+<meta property="twitter:title" content="5.SDF Mesh表达">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-01-29T00:00:00+08:00","datePublished":"2025-01-29T00:00:00+08:00","description":"引言 在Vulkan图形API的渲染管线中，渲染通道（Render Pass）是构建高效渲染流程的核心组件,它不仅描述了一次渲染操作中的渲染目标（attachments）的使用方式，还决定了多个渲染阶段（subpass）之间的执行顺序和数据依赖关系。本文将深入探讨Vulkan渲染通道的工作原理及其关键要素的实现细节。","headline":"Vulkan渲染通道","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/RenderPass.html"},"url":"http://localhost:4000/EasyVulkan/Builder%E7%B1%BB/RenderPass.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-18T00:00:00+08:00","datePublished":"2025-09-18T00:00:00+08:00","description":"SDF Mesh","headline":"5.SDF Mesh表达","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/3D%20SDF/5.Mesh%20SDF.html"},"url":"http://localhost:4000/3D%20SDF/5.Mesh%20SDF.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -102,7 +102,7 @@
             
                 <style>
                         .thumbnail {
-                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250202012410.png");
+                            background-image: url("https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250920123106149.png");
                         }
                     
                 </style>
@@ -567,13 +567,11 @@
     <p>
                 <a href="/">Home</a>
                 &gt;
-            <a href="/EasyVulkan/">EasyVulkan</a>
-                &gt;
-            <a href="/EasyVulkan/Builder%E7%B1%BB/">Builder类</a>
+            <a href="/3D%20SDF/">3D SDF</a>
                 &gt;
             
                 
-                    Vulkan渲染通道
+                    5.SDF Mesh表达
                 
             </p>
 </div>
@@ -582,19 +580,19 @@
     <div class="thumbnail">
         <div class="transbox">
             
-                <span class="post-title">Vulkan渲染通道</span>
+                <span class="post-title">5.SDF Mesh表达</span>
             
             <div class="post-info">
                 
-                    <a class="info-box category-box" href="/EasyVulkan">
+                    <span class="info-box">
                         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><path d="M384 480h48c11.4 0 21.9-6 27.6-15.9l112-192c5.8-9.9 5.8-22.1 .1-32.1S555.5 224 544 224H144c-11.4 0-21.9 6-27.6 15.9L48 357.1V96c0-8.8 7.2-16 16-16H181.5c4.2 0 8.3 1.7 11.3 4.7l26.5 26.5c21 21 49.5 32.8 79.2 32.8H416c8.8 0 16 7.2 16 16v32h48V160c0-35.3-28.7-64-64-64H298.5c-17 0-33.3-6.7-45.3-18.7L226.7 50.7c-12-12-28.3-18.7-45.3-18.7H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H87.7 384z"></path></svg>
-                        <span>EasyVulkan</span>
-                    </a>
+                        <span>None</span>
+                    </span>
                 
                 <span class="info-box">
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"></path></svg>
                     <span>
-                            2025-01-29
+                            2025-09-18
                         
                     </span>
                 </span>
@@ -613,205 +611,364 @@
     </div>
 </div>
 <div class="tag-box">
-<span class="tag theme-0" contentid="Vulkan">
+<span class="tag theme-0" contentid="3D SDF">
+            3D SDF
+        </span><span class="tag theme-1" contentid="Vulkan">
             Vulkan
-        </span><span class="tag theme-1" contentid="EasyVulkan">
-            EasyVulkan
-        </span><span class="tag theme-2" contentid="RenderPass">
-            RenderPass
-        </span><span class="tag theme-0" contentid="Subpass">
-            Subpass
-        </span><span class="tag theme-1" contentid="Attachment">
-            Attachment
-        </span><span class="tag theme-2" contentid="Subpass Dependency">
-            Subpass Dependency
+        </span><span class="tag theme-2" contentid="PBR">
+            PBR
         </span>
 </div>
 <main>
-    <h1 id="引言">引言</h1>
-<p>在Vulkan图形API的渲染管线中，渲染通道（Render Pass）是构建高效渲染流程的核心组件,它不仅描述了一次渲染操作中的<strong>渲染目标（attachments）的使用方式</strong>，还决定了多个渲染阶段（subpass）之间的<strong>执行顺序和数据依赖关系</strong>。本文将深入探讨Vulkan渲染通道的工作原理及其关键要素的实现细节。</p>
+    <h1 id="sdf-mesh">SDF Mesh</h1>
 
-<h2 id="渲染通道的本质">渲染通道的本质</h2>
-<p>渲染通道（VkRenderPass）定义了渲染操作期间使用的帧缓冲附件集合及其使用方式。它通过明确指定附件的生命周期和依赖关系，允许驱动进行深层次优化。相较于传统图形API的隐式状态管理，Vulkan的显式声明机制可降低内存带宽消耗达30%以上。<br>
-渲染通道主要负责描述：</p>
-<ul>
-  <li>
-<strong>渲染目标</strong>（Attachments） 的格式、加载/存储操作、采样数等属性；</li>
-  <li>
-<strong>子通道</strong>（Subpasses） 中每个阶段如何使用这些渲染目标；</li>
-  <li>子通道间的<strong>依赖关系</strong>（Pipeline Dependencies），用于保证数据正确性和同步。</li>
-</ul>
+<h2 id="一动机与背景">一、动机与背景</h2>
+<video controls="" width="100%">
+    <source src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/SDF%20Mesh.mov"></source>
+    抱歉，您的浏览器不支持内嵌视频。
+</video>
 
-<h2 id="设计哲学">设计哲学</h2>
-<p>显式控制：开发者必须明确指定所有附件和子流程<br>
-执行优化：提前声明渲染流程使驱动能优化资源布局<br>
-依赖管理：精确控制子流程间的内存和执行顺序</p>
+<p>实时渲染（例如 UE5 的 Lumen）把性能与真实感推到了新的高度。其中，SDF（有向距离场）因求交高效、表达统一，被广泛用于描述与追踪几何体。</p>
 
-<h1 id="attachment简介与创建方法">Attachment简介与创建方法</h1>
-<p>Attachment 通常指的是帧缓冲区中的渲染目标，比如颜色缓冲、深度缓冲或模板缓冲。每个attachment都需要在创建渲染通道时进行详细的描述，主要包括以下几个方面：</p>
-<ul>
-  <li>格式（Format）：如 VK_FORMAT_B8G8R8A8_UNORM、VK_FORMAT_D32_SFLOAT 等。</li>
-  <li>采样数（Samples）：多重采样时使用的采样数。</li>
-  <li>加载/存储操作（Load/Store Operations）：如在渲染开始时是清除还是保留已有数据，在渲染结束时是存储还是丢弃数据。</li>
-  <li>初始与最终布局（InitialLayout/FinalLayout）：表明attachment在渲染开始前和结束后的内存布局状态，便于Vulkan内部进行布局转换。</li>
-</ul>
+<p>但传统 SDF 多依赖解析式（球、盒等），遇到复杂形状就会受限。受 Lumen 启发，我们把任意网格（Mesh）预烘焙成 SDF，在光线步进（Ray Marching）中像采样贴图一样使用它。</p>
 
-<p>在创建渲染通道时，需要通过一个 VkAttachmentDescription 数组来描述所有的attachment。例如：</p>
+<p>这正是本文的 <strong>SDF Mesh</strong>：先把模型的距离场写入三维纹理（3D/Volume Texture），渲染时直接采样，得到任意点到表面的距离。</p>
 
-<pre><code class="language-C++">VkAttachmentDescription colorAttachment = {};
-colorAttachment.format = swapchainImageFormat; // 指定Format
-colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT; // 指定采样数
-colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; // 指定加载操作
-colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE; // 指定存储操作
-// For depth/stencil attachments
-colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // 指定模板加载操作
-colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE; // 指定模板存储操作
-// End for depth/stencil attachments
-colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; // 指定初始布局
-colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // 指定最终布局
-</code></pre>
+<p>如下是效果图：</p>
 
-<h1 id="subpass简介与创建方法">Subpass简介与创建方法</h1>
-<p>Subpass 是渲染通道中的一个阶段，每个subpass描述了在该阶段中如何使用和依赖attachment。</p>
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250920123041442.png" alt="image.png" loading="lazy"></p>
 
-<p>在创建渲染通道时，需要使用 VkSubpassDescription 结构体来描述每个subpass。一个subpass通常至少需要描述以下信息：</p>
-<ul>
-  <li>Pipeline Bind Point：通常为 VK_PIPELINE_BIND_POINT_GRAPHICS，指明当前subpass将用于图形管线。</li>
-  <li>颜色附件引用（Color Attachments）：指明渲染阶段中将写入颜色数据的attachment。</li>
-  <li>输入附件引用（Input Attachments）：在一个subpass中可以读取之前subpass生成的数据。</li>
-  <li>深度/模板附件引用（Depth/Stencil Attachment）：如果需要使用深度或模板测试，则需要指定对应的attachment。<br>
-如下代码创建了一个简单的subpass：</li>
-</ul>
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250920123106149.png" alt="image.png" loading="lazy"></p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VkAttachmentReference colorAttachmentRef = {};
-colorAttachmentRef.attachment = 0;  // 引用上面定义的第一个attachment
-colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+<h2 id="二理解sdf数据结构">二、理解SDF数据结构</h2>
 
-VkSubpassDescription subpass = {};
-subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-subpass.colorAttachmentCount = 1;
-subpass.pColorAttachments = &amp;colorAttachmentRef;
+<p>在我们深入代码之前，首先需要理解SDF Mesh的数据是如何组织的。这通常是一个自定义的二进制或文本文件，包含了重建SDF场景所需的所有元数据。以我们项目中使用的 <code class="language-plaintext highlighter-rouge">.sdf</code> 文件为例，其结构非常直观：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>27 17 15
+-0.13 -0.08 -0.04
+0.01
+...
+-0.015
+-0.005
+0.005
+0.015
+...
 </code></pre></div></div>
-<p>在这个例子中，我们创建了一个渲染阶段，该阶段会把渲染结果写入第0号attachment，并且要求该attachment处于 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL 布局状态。</p>
 
-<h2 id="为什么需要subpass">为什么需要subpass？</h2>
-<p>Vulkan采用subpass的设计模式，除了在API层面给出了更明确的渲染流程以外，还带来了以下好处：</p>
+<p>各行含义如下：</p>
+
 <ol>
-  <li>利用On-chip memory，减少内存带宽消耗。<br>
- 在移动端等功耗敏感型设备上，GPU普遍采用了TBR设计，减少对内存带宽的占用，其主要思想是在小块（tile）区域内完成大部分渲染操作，然后统一写回到内存。subpass 非常适合这种架构：在同一个 render pass 内的多个 subpass 可以在同一tile 的生命周期内连续处理(数据传输发生在On-chip memory上)，不必频繁地将数据在片上和内存之间来回传输。</li>
-  <li>避免全局同步。<br>
- 传统渲染流水线中，可能需要使用全局的内存屏障来确保数据一致性，而在 subpass 内部，由于数据依赖关系已被明确定义，驱动和硬件就可以局部地处理同步，减少不必要的等待。</li>
+  <li>
+    <p><strong>第1行：体素分辨率 (Resolution)</strong><br>
+<code class="language-plaintext highlighter-rouge">27 17 15</code> 表示这个SDF数据场在X, Y, Z三个轴向上被划分成了 $27 \times 17 \times 15$ 个网格单元（Voxel）。分辨率越高，细节越丰富，但文件也越大。</p>
+  </li>
+  <li>
+    <p><strong>第2行：空间原点 (Origin)</strong><br>
+<code class="language-plaintext highlighter-rouge">-0.13 -0.08 -0.04</code> 定义了这个三维网格在模型局部空间中的起始坐标。它像是整个数据场的“锚点”。</p>
+  </li>
+  <li>
+    <p><strong>第3行：体素尺寸 (Voxel Size / Precision)</strong><br>
+<code class="language-plaintext highlighter-rouge">0.01</code> 定义了每个小格子的边长。这个值至关重要，它将无单位的格子索引与真实的空间尺度关联起来。</p>
+  </li>
+  <li>
+    <p><strong>第4行及以后：距离场数据 (Distance Field Data)</strong><br>
+从这里开始，文件逐行列出每个网格顶点的SDF值。这些浮点数遵循SDF的经典定义：</p>
+
+    <ul>
+      <li>
+<strong>负数</strong>：该点位于物体<strong>内部</strong>。</li>
+      <li>
+<strong>正数</strong>：该点位于物体<strong>外部</strong>。</li>
+      <li>
+<strong>零</strong>：该点恰好位于物体<strong>表面</strong>。</li>
+    </ul>
+  </li>
 </ol>
 
-<h1 id="subpass-dependency简介与创建方法">Subpass Dependency简介与创建方法</h1>
-<p>在一个渲染通道中，多个subpass之间或subpass与外部操作之间往往存在数据依赖关系。为了确保数据的正确性和避免竞态条件，需要在渲染通道中明确声明这些依赖关系。这就是管线Dependency（Pipeline Dependency）的作用。</p>
+<p>在加载阶段，我们会解析这个文件，将元数据（分辨率、原点、尺寸）保存起来，并将所有的距离数据上传到GPU，形成一个3D纹理，也就是我们Shader中将要采样的 <code class="language-plaintext highlighter-rouge">sampler3D</code> 对象。</p>
 
-<p>管线Dependency 允许开发者在subpass之间定义内存屏障和执行屏障，确保：</p>
-<ul>
-  <li>某个subpass的写操作完成后，下一个subpass读取数据时能够获得最新的结果；</li>
-  <li>在执行特定渲染操作前，所有前置的操作已经完成并且内存访问已经同步。</li>
-</ul>
+<p>补充说明：分辨率与 <code class="language-plaintext highlighter-rouge">cellSize</code> 决定了体素网格的物理尺度；<code class="language-plaintext highlighter-rouge">origin</code> 表示该网格在模型局部空间中的起点坐标。当前实现主要以包围盒 <code class="language-plaintext highlighter-rouge">meshHalfSize</code> 为基准做归一化映射；若需要引入 <code class="language-plaintext highlighter-rouge">origin</code>，可在着色器中先对 <code class="language-plaintext highlighter-rouge">local</code> 做平移，再进行 <code class="language-plaintext highlighter-rouge">local / halfSize</code> 的归一化。</p>
 
-<p>在Vulkan中，这种依赖关系通过 VkSubpassDependency 结构体进行描述。</p>
+<h2 id="三从空间点到sdf采样">三、从空间点到SDF采样</h2>
 
-<h2 id="如何使用管线依赖">如何使用管线依赖</h2>
-<p>假设有两个subpass：subpass0写入颜色数据，而subpass1需要读取这些数据作为输入attachment。在这种场景下，我们需要确保subpass0的写操作在subpass1开始读取之前已经完成。可以通过如下方式定义一个依赖：</p>
+<p>接下来一个核心问题是：在 Shader 中，给定任意一个世界空间点 $p$，如何从三维纹理中查询对应的 SDF 值？</p>
 
-<pre><code class="language-C++">VkSubpassDependency dependency = {};
-dependency.srcSubpass = 0;  // 依赖源subpass
-dependency.dstSubpass = 1;  // 依赖目标subpass
+<p>这个核心任务由 <code class="language-plaintext highlighter-rouge">sdfMeshShape</code> 函数完成。它的职责明确：接收一个世界空间点 $p$ ，返回该点到SDF网格物体表面的最短有向距离。</p>
 
-// 指定依赖的阶段与访问类型
-dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-dependency.dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-dependency.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-dependency.dstAccessMask = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+<h3 id="31-核心函数-sdfmeshshape">3.1 核心函数 <code class="language-plaintext highlighter-rouge">sdfMeshShape</code>
+</h3>
 
-// 对于跨subpass依赖，通常设置dependency.flags为0或VK_DEPENDENCY_BY_REGION_BIT
-dependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
-</code></pre>
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 采样SDF网格并将其约束在包围盒内</span>
+<span class="kt">float</span> <span class="nf">sdfMeshShape</span><span class="p">(</span><span class="kt">vec3</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 步骤 1: 坐标系转换 (世界空间 -&gt; 模型局部空间)</span>
+    <span class="kt">mat3</span> <span class="n">rot</span> <span class="o">=</span> <span class="n">rotateX</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">sphereRotation</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">rotateY</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">sphereRotation</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">rotateZ</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">sphereRotation</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+    <span class="kt">vec3</span> <span class="n">local</span> <span class="o">=</span> <span class="n">transpose</span><span class="p">(</span><span class="n">rot</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span><span class="p">;</span>
 
-<p>在上述例子中：</p>
-<ul>
-  <li>srcSubpass 指定了依赖的来源，即subpass0；</li>
-  <li>dstSubpass 指定了依赖的目标，即subpass1；</li>
-  <li>srcStageMask 和 dstStageMask 指明了涉及的管线阶段；</li>
-  <li>srcAccessMask 和 dstAccessMask 则描述了内存访问的类型。</li>
-</ul>
+    <span class="c1">// 步骤 2: 计算点到包围盒的距离</span>
+    <span class="kt">vec3</span> <span class="n">halfSize</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">meshHalfSize</span><span class="p">.</span><span class="n">xyz</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">boxSdf</span> <span class="o">=</span> <span class="n">sdBox</span><span class="p">(</span><span class="n">local</span><span class="p">,</span> <span class="n">halfSize</span><span class="p">);</span>
 
-<p>此外，对于一些特殊情况（如初始状态与最终状态的同步），也可以将 srcSubpass 或 dstSubpass 设置为 VK_SUBPASS_EXTERNAL，以描述与渲染通道外部的依赖关系。</p>
-
-<p>例如，定义一个计算预处理 -&gt; 图形渲染的依赖：</p>
-
-<pre><code class="language-C++">VkSubpassDependency compToGraphic = {
-    .srcSubpass = VK_SUBPASS_EXTERNAL, // 表示计算阶段
-    .dstSubpass = 0,                   // 图形子流程索引
-    .srcStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-    .dstStageMask = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT |
-                   VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-    .srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT,
-    .dstAccessMask = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT |
-                    VK_ACCESS_SHADER_READ_BIT,
-    .dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT
-};
-</code></pre>
-<p>又或者定义一个图形渲染 -&gt; 计算后处理的依赖：</p>
-
-<pre><code class="language-C++">VkSubpassDependency graphicToComp = {
-    .srcSubpass = 1,                    // 最后一个图形子流程
-    .dstSubpass = VK_SUBPASS_EXTERNAL,  // 后续计算阶段
-    .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-    .dstStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-    .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-    .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
-    .dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT
-};
-</code></pre>
-
-<h1 id="easyvulkan中的renderpass">EasyVulkan中的RenderPass</h1>
-
-<p><strong>构建一个含有颜色和深度附件的 Renderpass：</strong></p>
-
-<pre><code class="language-C++">// 创建一个简单的 Renderpass，其中包含颜色和深度附件
-auto renderPass = renderPassBuilder
-    .addColorAttachment(swapchainFormat)               // 添加颜色附件
-    .addDepthStencilAttachment(depthFormat)            // 添加深度/模板附件
-    .beginSubpass()                                      // 开始一个子通道
-    .addColorReference(0)                                // 子通道引用第 0 个附件作为颜色附件
-    .setDepthStencilReference(1)                         // 子通道引用第 1 个附件作为深度/模板附件
-    .endSubpass()                                        // 结束子通道
-    .build("mainRenderPass");                            // 构建 Renderpass，并命名为 "mainRenderPass"
-</code></pre>
-
-<p>对于复杂的渲染流程，经常需要设置多个子通道以及它们之间的依赖关系。以下示例展示了<strong>如何配置多个子通道</strong>，并在它们之间添加依赖：</p>
-
-<pre><code class="language-C++">// 构建一个拥有多个子通道的 Renderpass
-auto renderPass = renderPassBuilder
-    .addColorAttachment(colorFormat)                   // 添加颜色附件
-    .addDepthStencilAttachment(depthFormat)            // 添加深度/模板附件
-
-    // 第一个子通道配置：渲染到颜色附件和深度附件
-    .beginSubpass()
-    .addColorReference(0)
-    .setDepthStencilReference(1)
-    .endSubpass()
-
-    // 第二个子通道配置：使用第一个子通道的颜色输出作为输入附件，同时写入到另一个颜色附件（例如后续处理）
-    .beginSubpass()
-    .addInputReference(0)
-    .addColorReference(2)
-    .endSubpass()
-
-    // 添加子通道间依赖：确保第一个子通道的写入操作完成后，第二个子通道才能读取
-    .addDependency(0, 1,
-        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-        VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-        VK_ACCESS_SHADER_READ_BIT)
+    <span class="c1">// 步骤 3: 将局部空间坐标映射为3D纹理坐标 (UVW)</span>
+    <span class="kt">vec3</span> <span class="n">uvw</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">local</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">halfSize</span><span class="p">,</span> <span class="kt">vec3</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">))</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
     
-    .build("multiPassRender");                          // 构建 Renderpass
-</code></pre>
+    <span class="c1">// 步骤 4: 从3D纹理中采样SDF值并与包围盒组合</span>
+    <span class="kt">float</span> <span class="n">scaleMin</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">sdfParams0</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">hasTex</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">sdfParams0</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">dMesh</span> <span class="o">=</span> <span class="n">boxSdf</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">hasTex</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">float</span> <span class="n">dTex</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">sdfTex</span><span class="p">,</span> <span class="n">uvw</span><span class="p">).</span><span class="n">r</span><span class="p">;</span> <span class="c1">// 采样</span>
+        <span class="n">dMesh</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dTex</span> <span class="o">*</span> <span class="n">scaleMin</span><span class="p">,</span> <span class="n">boxSdf</span><span class="p">);</span> <span class="c1">// 组合</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">dMesh</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
+<h3 id="32-算法步骤详解">3.2 算法步骤详解</h3>
+
+<h4 id="步骤-1-坐标系转换-世界空间-rightarrow-模型局部空间">步骤 1: 坐标系转换 (世界空间 $\rightarrow$ 模型局部空间)</h4>
+
+<p>SDF纹理是在模型的<strong>局部空间（Model Space）</strong>下生成的，它不关心模型在世界中的位置和旋转。因此，采样的第一步，就是将世界空间的查询点 $p$ 转换回模型的局部空间。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">mat3</span> <span class="n">rot</span> <span class="o">=</span> <span class="n">rotateX</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">sphereRotation</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="nf">rotateY</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">sphereRotation</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">rotateZ</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">sphereRotation</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+<span class="kt">vec3</span> <span class="n">local</span> <span class="o">=</span> <span class="n">transpose</span><span class="p">(</span><span class="n">rot</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>这里直接使用旋转矩阵的转置。对正交矩阵（包含旋转）而言，逆矩阵等于转置矩阵。这样就能快速抵消世界空间下的旋转，得到局部空间坐标 <code class="language-plaintext highlighter-rouge">local</code>。</p>
+
+<h4 id="步骤-2-计算包围盒sdf">步骤 2: 计算包围盒SDF</h4>
+
+<p>3D纹理本身是无边界的，我们需要一个“容器”来约束它。一个简单的轴对齐包围盒（AABB）是理想的选择。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">halfSize</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">meshHalfSize</span><span class="p">.</span><span class="n">xyz</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">boxSdf</span> <span class="o">=</span> <span class="n">sdBox</span><span class="p">(</span><span class="n">local</span><span class="p">,</span> <span class="n">halfSize</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">boxSdf</code> 计算了局部点 <code class="language-plaintext highlighter-rouge">local</code> 到这个包围盒的距离。它有两个作用：</p>
+
+<ol>
+  <li>
+<strong>基础形状</strong>：如果SDF纹理未启用，物体就表现为一个简单的盒子。</li>
+  <li>
+<strong>裁剪边界</strong>：确保最终的SDF形状不会超出这个盒子的范围。</li>
+</ol>
+
+<h4 id="步骤-3-局部空间坐标到纹理坐标uvw的映射">步骤 3: 局部空间坐标到纹理坐标(UVW)的映射</h4>
+
+<p>这是整个流程的枢纽。我们需要将局部空间坐标 <code class="language-plaintext highlighter-rouge">local</code> 转换成用于纹理采样的、范围在 $[0, 1]$ 内的UVW坐标。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">uvw</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">local</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">halfSize</span><span class="p">,</span> <span class="kt">vec3</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">))</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>这行代码做了三件事：</p>
+
+<ol>
+  <li>
+    <p><strong>归一化</strong>: <code class="language-plaintext highlighter-rouge">local / halfSize</code></p>
+
+    <ul>
+      <li>将局部坐标从 $[-halfSize, +halfSize]$ 范围映射到 $[-1, 1]$ 范围。</li>
+      <li>数学上：$P_{norm} = (\frac{local.x}{halfSize.x}, \frac{local.y}{halfSize.y}, \frac{local.z}{halfSize.z})$</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>重映射</strong>: <code class="language-plaintext highlighter-rouge">... * 0.5 + 0.5</code></p>
+
+    <ul>
+      <li>将 $[-1, 1]$ 范围线性映射到 $[0, 1]$ 的标准纹理坐标范围。</li>
+      <li>数学上：$P_{uvw} = P_{norm} \times 0.5 + 0.5$</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>钳制</strong>: <code class="language-plaintext highlighter-rouge">clamp(..., 0.0, 1.0)</code></p>
+
+    <ul>
+      <li>一个安全措施，确保任何因浮点误差或处于盒子外部的点所计算出的坐标都能被强制拉回有效的 $[0, 1]$ 范围，避免采样越界。</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="步骤-4-采样缩放与组合">步骤 4: 采样、缩放与组合</h4>
+
+<p>最后一步，我们使用计算出的 <code class="language-plaintext highlighter-rouge">uvw</code> 坐标进行采样，并与包围盒进行组合。</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">dTex</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">sdfTex</span><span class="p">,</span> <span class="n">uvw</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+<span class="n">dMesh</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dTex</span> <span class="o">*</span> <span class="n">scaleMin</span><span class="p">,</span> <span class="n">boxSdf</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>这里有两个关键点：</p>
+
+<ul>
+  <li>
+    <p><strong>距离缩放 (<code class="language-plaintext highlighter-rouge">dTex * scaleMin</code>)</strong>: 3D纹理中存储的SDF值 <code class="language-plaintext highlighter-rouge">dTex</code> 通常是归一化的。<code class="language-plaintext highlighter-rouge">scaleMin</code> 参数作为一个从CPU传入的缩放因子，负责将这个无单位的相对距离值，转换为与场景尺度匹配的真实世界距离。这使得同一个SDF资产可以在场景中以不同的大小复用。我们将在后文详细探讨这一点。</p>
+  </li>
+  <li>
+    <p><strong>几何组合 (<code class="language-plaintext highlighter-rouge">max(A, B)</code>)</strong>: 在SDF的布尔运算中，<code class="language-plaintext highlighter-rouge">max(sdfA, sdfB)</code> 代表两个形状的<strong>交集 (Intersection)</strong>。这里的 <code class="language-plaintext highlighter-rouge">max(scaledDistance, boxSdf)</code> 意味着最终的形状是“SDF纹理定义的形状”与“包围盒定义的形状”的交集。这巧妙地将复杂的SDF几何体<strong>裁剪</strong>并约束在了包围盒的内部。</p>
+  </li>
+</ul>
+
+<h2 id="四性能优化与思考">四、性能优化与思考</h2>
+
+<p>在步进循环中，<code class="language-plaintext highlighter-rouge">sdfMeshShape</code> 会被反复调用，代价敏感。一个低成本的改进是：<strong>只有当查询点落在包围盒内部时，才进行 3D 纹理采样。</strong></p>
+
+<h3 id="41-冗余计算分析">4.1 冗余计算分析</h3>
+
+<p>若点在盒子外（<code class="language-plaintext highlighter-rouge">boxSdf &gt; 0</code>），最短距离就是到盒面的距离。此时再去计算 <code class="language-plaintext highlighter-rouge">uvw</code> 并采样 3D 纹理基本无助于结果，只会浪费带宽与算力。</p>
+
+<h3 id="42-引入分支进行优化">4.2 引入分支进行优化</h3>
+
+<p>我们可以通过一个简单的条件分支来避免这种冗余：</p>
+
+<p><strong>优化后的 <code class="language-plaintext highlighter-rouge">sdfMeshShape</code> 函数:</strong></p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="nf">sdfMeshShape_Optimized</span><span class="p">(</span><span class="kt">vec3</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// ... (步骤1: 坐标转换)</span>
+    <span class="kt">vec3</span> <span class="n">local</span> <span class="o">=</span> <span class="p">...;</span>
+    
+    <span class="c1">// ... (步骤2: 计算包围盒SDF)</span>
+    <span class="kt">vec3</span> <span class="n">halfSize</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">meshHalfSize</span><span class="p">.</span><span class="n">xyz</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">boxSdf</span> <span class="o">=</span> <span class="n">sdBox</span><span class="p">(</span><span class="n">local</span><span class="p">,</span> <span class="n">halfSize</span><span class="p">);</span>
+
+    <span class="c1">// 【核心优化】</span>
+    <span class="c1">// 如果点在包围盒外部，提前返回，避免不必要的计算</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">boxSdf</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">boxSdf</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// --- 仅当点在包围盒内部或表面时，才执行以下代码 ---</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">sdfParams0</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// hasTex</span>
+        <span class="kt">vec3</span> <span class="n">uvw</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">local</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">halfSize</span><span class="p">,</span> <span class="kt">vec3</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">))</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+        <span class="kt">float</span> <span class="n">dTex</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">sdfTex</span><span class="p">,</span> <span class="n">uvw</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">max</span><span class="p">(</span><span class="n">dTex</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">sdfParams0</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">boxSdf</span><span class="p">);</span> <span class="c1">// u.sdfParams0.x is scaleMin</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">boxSdf</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="43-分支的利弊权衡-the-trade-off">4.3 分支的利弊权衡 (The Trade-off)</h3>
+
+<p>在GPU编程中，引入分支需要警惕<strong>线程束发散 (Warp Divergence)</strong>。</p>
+
+<ul>
+  <li>
+<strong>优点</strong>: 当SDF物体在屏幕上占比较小时，绝大多数像素/光线都会在 <code class="language-plaintext highlighter-rouge">if (boxSdf &gt; 0.0)</code> 处被提前剔除，极大地节省了纹理带宽和计算开销，性能提升显著。</li>
+  <li>
+<strong>缺点</strong>: 当大量像素/光线恰好落在包围盒的边界时，一个线程束（Warp）内的线程可能会进入不同的分支路径，导致硬件需要串行执行两个分支，反而会降低性能。</li>
+</ul>
+
+<p>不过，在光线步进这类应用中，光线从远处逼近物体，绝大多数步进点都处于物体之外。因此，这种<strong>提前退出（Early Exit）</strong>的优化策略通常是利大于弊的。</p>
+
+<h2 id="五自由三维缩放">五、自由三维缩放</h2>
+
+<p>在本项目中，SDF 网格的“大小”和“非均匀缩放”由一个简单直观的包围盒参数 <code class="language-plaintext highlighter-rouge">u.meshHalfSize.xyz</code> 控制。它表示模型局部空间中包围盒在 X、Y、Z 方向上的“半长度”（Half Size）。</p>
+
+<p>回看前文 Shader 的核心采样映射：</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">halfSize</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">meshHalfSize</span><span class="p">.</span><span class="n">xyz</span><span class="p">;</span>
+<span class="kt">vec3</span> <span class="n">uvw</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">local</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">halfSize</span><span class="p">,</span> <span class="kt">vec3</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">))</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>这意味着：</p>
+
+<ul>
+  <li>
+<strong>设定半尺寸</strong>：若希望最终渲染物体的世界尺寸为 (L \times H \times W)，则将 <code class="language-plaintext highlighter-rouge">u.meshHalfSize</code> 设为 ((L/2, H/2, W/2))。</li>
+  <li>
+<strong>非均匀缩放天然支持</strong>：<code class="language-plaintext highlighter-rouge">halfSize.x/y/z</code> 可以分别不同，从而在三个轴向上独立缩放。</li>
+  <li>
+<strong>数值稳定性</strong>：使用 <code class="language-plaintext highlighter-rouge">max(halfSize, 1e-5)</code> 与 UI 侧的最小值钳制，避免除零与极小尺寸导致的不稳定。</li>
+</ul>
+
+<h3 id="51-运行时如何驱动-meshhalfsizeui-与-ubo">5.1 运行时如何驱动 meshHalfSize（UI 与 UBO）</h3>
+
+<p>界面侧通过 ImGui 提供了一个三维尺寸滑条（长度/高度/宽度），直接对应到 <code class="language-plaintext highlighter-rouge">boxSizeLWH</code>：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ImGui</span><span class="o">::</span><span class="n">Text</span><span class="p">(</span><span class="s">"Box Size (L/W/H)"</span><span class="p">);</span>
+<span class="c1">// Length-&gt;X, Width-&gt;Z, Height-&gt;Y</span>
+<span class="n">ImGui</span><span class="o">::</span><span class="n">SliderFloat3</span><span class="p">(</span><span class="s">"L/W/H"</span><span class="p">,</span> <span class="n">boxSizeLWH</span><span class="p">,</span> <span class="mf">0.2</span><span class="n">f</span><span class="p">,</span> <span class="mf">6.0</span><span class="n">f</span><span class="p">,</span> <span class="s">"%.2f"</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">"Reset Size"</span><span class="p">))</span> <span class="p">{</span> <span class="n">boxSizeLWH</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mf">2.4</span><span class="n">f</span><span class="p">;</span> <span class="n">boxSizeLWH</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mf">2.4</span><span class="n">f</span><span class="p">;</span> <span class="n">boxSizeLWH</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mf">2.4</span><span class="n">f</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>随后在更新 UBO 的阶段将其转换为 <code class="language-plaintext highlighter-rouge">meshHalfSize</code>（注意最小值钳制与轴向映射）：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Use the user-controlled box as the bounding box for the SDF mesh</span>
+<span class="kt">float</span> <span class="n">halfX</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="n">boxSizeLWH</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span> <span class="c1">// Length -&gt; X</span>
+<span class="kt">float</span> <span class="n">halfY</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="n">boxSizeLWH</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span> <span class="c1">// Height -&gt; Y</span>
+<span class="kt">float</span> <span class="n">halfZ</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mf">0.05</span><span class="n">f</span><span class="p">,</span> <span class="n">boxSizeLWH</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span><span class="n">f</span><span class="p">);</span> <span class="c1">// Width  -&gt; Z</span>
+<span class="n">u</span><span class="p">.</span><span class="n">meshHalfSize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">halfX</span><span class="p">;</span>
+<span class="n">u</span><span class="p">.</span><span class="n">meshHalfSize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">halfY</span><span class="p">;</span>
+<span class="n">u</span><span class="p">.</span><span class="n">meshHalfSize</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">halfZ</span><span class="p">;</span>
+<span class="n">u</span><span class="p">.</span><span class="n">meshHalfSize</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>由此，Shader 中 <code class="language-plaintext highlighter-rouge">local / halfSize</code> 的归一化会把 SDF 网格“挤压/拉伸”到这个包围盒内，从而实现可视上对物体的自由三维缩放。</p>
+
+<p><img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250920123133595.png" alt="image.png" loading="lazy"><br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250920123145879.png" alt="image.png" loading="lazy"><br>
+<img src="https://obsidian-picture-1313051055.cos.ap-nanjing.myqcloud.com/Obsidian/20250920123159227.png" alt="image.png" loading="lazy"></p>
+
+<h3 id="52-与距离缩放scalemin的关系">5.2 与距离缩放（scaleMin）的关系</h3>
+
+<p>当进行非均匀缩放时，为了保证光线步进的稳定性与保守性，CPU 侧会根据“原始 SDF 体素物理尺寸”和“目标包围盒尺寸”的比值，计算一个最小轴向缩放 <code class="language-plaintext highlighter-rouge">scaleMin</code> 并传入 <code class="language-plaintext highlighter-rouge">u.sdfParams0.x</code>：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">origLenX</span> <span class="o">=</span> <span class="n">sdfData</span><span class="p">.</span><span class="n">width</span>  <span class="o">*</span> <span class="n">sdfData</span><span class="p">.</span><span class="n">cellSize</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">origLenY</span> <span class="o">=</span> <span class="n">sdfData</span><span class="p">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">sdfData</span><span class="p">.</span><span class="n">cellSize</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">origLenZ</span> <span class="o">=</span> <span class="n">sdfData</span><span class="p">.</span><span class="n">depth</span>  <span class="o">*</span> <span class="n">sdfData</span><span class="p">.</span><span class="n">cellSize</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">boxLenX</span>  <span class="o">=</span> <span class="mf">2.0</span><span class="n">f</span> <span class="o">*</span> <span class="n">halfX</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">boxLenY</span>  <span class="o">=</span> <span class="mf">2.0</span><span class="n">f</span> <span class="o">*</span> <span class="n">halfY</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">boxLenZ</span>  <span class="o">=</span> <span class="mf">2.0</span><span class="n">f</span> <span class="o">*</span> <span class="n">halfZ</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">sx</span> <span class="o">=</span> <span class="p">(</span><span class="n">origLenX</span> <span class="o">&gt;</span> <span class="mf">1e-6</span><span class="n">f</span><span class="p">)</span> <span class="o">?</span> <span class="p">(</span><span class="n">boxLenX</span> <span class="o">/</span> <span class="n">origLenX</span><span class="p">)</span> <span class="o">:</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">sy</span> <span class="o">=</span> <span class="p">(</span><span class="n">origLenY</span> <span class="o">&gt;</span> <span class="mf">1e-6</span><span class="n">f</span><span class="p">)</span> <span class="o">?</span> <span class="p">(</span><span class="n">boxLenY</span> <span class="o">/</span> <span class="n">origLenY</span><span class="p">)</span> <span class="o">:</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">sz</span> <span class="o">=</span> <span class="p">(</span><span class="n">origLenZ</span> <span class="o">&gt;</span> <span class="mf">1e-6</span><span class="n">f</span><span class="p">)</span> <span class="o">?</span> <span class="p">(</span><span class="n">boxLenZ</span> <span class="o">/</span> <span class="n">origLenZ</span><span class="p">)</span> <span class="o">:</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">scaleMin</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">sy</span><span class="p">,</span> <span class="n">sz</span><span class="p">));</span>
+
+<span class="n">u</span><span class="p">.</span><span class="n">sdfParams0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaleMin</span><span class="p">;</span> <span class="c1">// 距离缩放（用于 Shader 中 dTex * scaleMin）</span>
+<span class="n">u</span><span class="p">.</span><span class="n">sdfParams0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sdfMeshTextureView</span> <span class="o">!=</span> <span class="n">VK_NULL_HANDLE</span><span class="p">)</span> <span class="o">?</span> <span class="mf">1.0</span><span class="n">f</span> <span class="o">:</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">;</span> <span class="c1">// hasTex</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong>直观理解</strong>：<code class="language-plaintext highlighter-rouge">meshHalfSize</code> 决定“几何体外形/体积”的缩放；<code class="language-plaintext highlighter-rouge">scaleMin</code> 决定“光线步进距离”的保守缩放。非均匀缩放下我们选取最小轴向比例，避免步长过大导致穿透。</li>
+  <li>
+<strong>Shader 侧组合</strong>：</li>
+</ul>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="n">dTex</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">sdfTex</span><span class="p">,</span> <span class="n">uvw</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">dMesh</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dTex</span> <span class="o">*</span> <span class="n">u</span><span class="p">.</span><span class="n">sdfParams0</span><span class="p">.</span><span class="n">x</span> <span class="cm">/*scaleMin*/</span><span class="p">,</span> <span class="n">boxSdf</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>这保证了即便进行了强烈的非均匀拉伸/压缩，步进仍然稳定。</p>
+
+<h3 id="53-操作建议">5.3 操作建议</h3>
+
+<ul>
+  <li>
+<strong>想要放大/缩小整体</strong>：三个滑条同步增减即可；想要某一方向拉伸，单独调整该轴对应的数值。</li>
+  <li>
+<strong>数值边界</strong>：保持每个半轴不小于 ~0.05，可避免极端情况下的数值不稳定；Shader 已额外使用 <code class="language-plaintext highlighter-rouge">1e-5</code> 防卫。</li>
+  <li>
+<strong>坐标系约定</strong>：文中 <code class="language-plaintext highlighter-rouge">Length-&gt;X</code>，<code class="language-plaintext highlighter-rouge">Height-&gt;Y</code>，<code class="language-plaintext highlighter-rouge">Width-&gt;Z</code>。保持 UI 与期望轴向一致，避免视觉/交互混淆。</li>
+</ul>
+
+<hr>
+
+<h2 id="六距离缩放">六、距离缩放</h2>
+<p>在采样得到SDF Mesh中距离值后，还需要进行缩放处理，即： <code class="language-plaintext highlighter-rouge">dTex * scaleMin</code> ：</p>
+
+<ol>
+  <li>
+    <p><strong>归一化存储的本质</strong>: SDF纹理资产在制作时，其内部的距离值被归一化到了一个标准范围（如 $[0,1]$）。这使得资产本身与具体尺寸解耦，便于管理和复用。</p>
+  </li>
+  <li>
+    <p><strong>匹配场景尺度</strong>: 我们的渲染场景工作在具体的“世界单位”下。光线步进的步长、碰撞检测的阈值，都依赖于SDF函数返回的真实距离。<code class="language-plaintext highlighter-rouge">scaleMin</code> 将纹理中无单位的相对距离，转换为场景中有意义的绝对距离。</p>
+  </li>
+</ol>
+
+<h2 id="七结语">七、结语</h2>
+
+<p>通过将复杂的几何体预计算为SDF 3D纹理，我们成功地打破了传统解析式SDF的局限，为光线步进的世界打开了渲染任意模型的大门。从坐标变换、边界定义，到核心的纹理坐标映射与采样，每一步都体现了计算机图形学中空间与数据巧妙结合的智慧。</p>
+
+<p>更重要的是，通过对算法的深入分析，我们发现了利用包围盒进行提前剔除的优化空间，并在实践中权衡了GPU分支带来的利弊。这提醒我们，在追求更高真实感的同时，对性能的极致探索同样是图形程序员永恒的课题。希望本文能为你在这条探索之路上提供一些有价值的参考。</p>
 
     <!-- see https://giscus.app/ -->
     <div class="giscus" id="giscus" style="margin: 4rem auto;"></div>
